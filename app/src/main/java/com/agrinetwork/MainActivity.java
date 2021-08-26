@@ -1,5 +1,6 @@
 package com.agrinetwork;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
@@ -16,21 +17,35 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.agrinetwork.config.Variables;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
+import java.io.IOException;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends Activity {
 
     private static final int RC_SIGN_IN = 1;
+
+    private FirebaseAuth firebaseAuth;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -44,9 +59,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         MaterialButton loginButton = findViewById(R.id.login_btn);
-        TextInputEditText usernameInput = findViewById(R.id.edit_text_username);
+        TextInputEditText inputEmail = findViewById(R.id.edit_text_email);
         TextInputEditText passwordInput = findViewById(R.id.edit_text_password);
         TextView moveToRegisterLink = findViewById(R.id.move_to_register);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         // Check network connection
         if(!isNetworkConnected()) {
@@ -64,11 +81,25 @@ public class MainActivity extends Activity {
         });
 
         loginButton.setOnClickListener(view -> {
-            String username = usernameInput.getText().toString();
+            String email = inputEmail.getText().toString();
             String password = passwordInput.getText().toString();
 
-            Toast.makeText(this, username + " - " + password, Toast.LENGTH_SHORT).show();
+           firebaseAuth.signInWithEmailAndPassword(email, password)
+                   .addOnCompleteListener(this, task -> {
+                        if(task.isSuccessful()) {
+                            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                            String name = currentUser.getDisplayName();
+                            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Log.w("LoginFailed", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                   });
         });
+
+
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -88,6 +119,23 @@ public class MainActivity extends Activity {
             startActivityForResult(ggSignInIntent, RC_SIGN_IN);
         });
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if(Objects.nonNull(currentUser)) {
+            currentUser.getIdToken(true)
+                    .addOnCompleteListener(task -> {
+                        if(task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+
+                        }
+                    });
+        }
     }
 
     @Override

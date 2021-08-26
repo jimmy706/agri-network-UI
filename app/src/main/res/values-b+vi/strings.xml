@@ -3,8 +3,14 @@
     <string name="sign_in_text">Đăng nhập</string>
     <string name="register_text">Đăng kí</string>
     <string name="no_account_ask">Chưa có tài khoản?</string>
+    <string name="have_account_ask">Đã có tài khoản?</string>
     <string name="or">Hoặc</string>
     <string name="username_label">Tên đăng nhập</string>
+    <string name="email_label">Địa chỉ mail</string>
+    <string name="first_name_label">Họ</string>
+    <string name="last_name_label">Tên</string>
+    <string name="user_type_label">Bạn là thành viên</string>
+    <string name="phone_label">Số điện thoại</string>
     <string name="password_label">Mật khẩu</string>
     <string name="no_network">Không có mạng</string>
     <string name="check_network">Kiểm tra kết nối mạng của bạn</string>
