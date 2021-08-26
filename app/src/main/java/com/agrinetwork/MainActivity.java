@@ -2,10 +2,12 @@ package com.agrinetwork;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.agrinetwork.auth.Register;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,6 +48,16 @@ public class MainActivity extends Activity {
         TextInputEditText passwordInput = findViewById(R.id.edit_text_password);
         TextView moveToRegisterLink = findViewById(R.id.move_to_register);
 
+        // Check network connection
+        if(!isNetworkConnected()) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(getResources().getString(R.string.no_network));
+            alertDialogBuilder.setMessage(getResources().getString(R.string.check_network));
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+
         moveToRegisterLink.setOnClickListener(v -> {
             Intent intent = new Intent(this, Register.class);
             startActivity(intent);
@@ -68,7 +79,7 @@ public class MainActivity extends Activity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
         if(Objects.nonNull(account)) {
-            redirectToFeedActivity();
+            redirectToFeedActivity(account);
         }
 
         SignInButton ggSignInButton = findViewById(R.id.gg_sign_in_button);
@@ -99,7 +110,14 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void redirectToFeedActivity() {
+    private void redirectToFeedActivity(GoogleSignInAccount account) {
+        Log.i("GGAcount", account.getIdToken());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return Objects.nonNull(cm.getActiveNetworkInfo()) && cm.getActiveNetworkInfo().isConnected();
 
     }
 }

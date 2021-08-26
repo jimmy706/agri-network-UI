@@ -6,4 +6,6 @@
     <string name="or">Or</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
+    <string name="no_network">No internet connection</string>
+    <string name="check_network">Check your network connection</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.agrinetwork.auth;
+package com.agrinetwork;
 
 import androidx.appcompat.app.AppCompatActivity;
 
