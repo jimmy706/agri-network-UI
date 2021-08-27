@@ -10,6 +10,7 @@
     <string name="first_name_label">Họ</string>
     <string name="last_name_label">Tên</string>
     <string name="user_type_label">Bạn là thành viên</string>
+    <string name="province_label">Bạn thuộc tỉnh/thành phố</string>
     <string name="phone_label">Số điện thoại</string>
     <string name="password_label">Mật khẩu</string>
     <string name="no_network">Không có mạng</string>

@@ -30,6 +30,7 @@ public class UserService {
                 .add("type", user.getType())
                 .add("avatar", "")
                 .add("phoneNumber", user.getPhoneNumber())
+                .add("province", user.getProvince())
                 .build();
 
         Request request = new Request.Builder()

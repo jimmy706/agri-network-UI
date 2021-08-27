@@ -14,5 +14,6 @@ public class User {
     private String avatar;
     private String phoneNumber;
     private String type;
+    private String province;
 
 }

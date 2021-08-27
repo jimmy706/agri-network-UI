@@ -13,15 +13,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.Province;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.entities.UserTypes;
+import com.agrinetwork.service.ProvinceService;
 import com.agrinetwork.service.UserService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +42,7 @@ import okhttp3.Response;
 public class Register extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private UserService userService;
+    private ProvinceService provinceService;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -48,14 +53,18 @@ public class Register extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         userService = new UserService(this);
+        provinceService = new ProvinceService(this);
 
         TextInputEditText emailInput = findViewById(R.id.edit_text_email);
         TextInputEditText phoneNumberInput = findViewById(R.id.edit_text_phone);
         TextInputEditText passwordInput = findViewById(R.id.edit_text_password);
         TextInputEditText firstNameInput = findViewById(R.id.edit_text_first_name);
         TextInputEditText lastNameInput = findViewById(R.id.edit_text_last_name);
-        MaterialAutoCompleteTextView userTypeInput = findViewById(R.id.edit_text_usertype);
 
+        MaterialAutoCompleteTextView provinceInput = findViewById(R.id.edit_text_province);
+        getAllProvinces(provinceInput);
+
+        MaterialAutoCompleteTextView userTypeInput = findViewById(R.id.edit_text_usertype);
         List<String> userTypes = Arrays.stream(UserTypes.values()).map(UserTypes::getLabel).collect(Collectors.toList());
         ArrayAdapter<String> userTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userTypes);
         userTypeInput.setAdapter(userTypeAdapter);
@@ -74,6 +83,7 @@ public class Register extends AppCompatActivity {
             String lastName = lastNameInput.getText().toString();
             String password = passwordInput.getText().toString();
             String userType = userTypeInput.getText().toString();
+            String province = provinceInput.getText().toString();
 
             User user = new User();
             user.setEmail(email);
@@ -81,15 +91,18 @@ public class Register extends AppCompatActivity {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setType(userType);
+            user.setProvince(province);
 
             requestAddUser(user);
 
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
-                            Toast.makeText(Register.this, "User created",
+                            Toast.makeText(Register.this, "Tạo tài khoản thành công, đăng nhập để tiếp tục",
                                     Toast.LENGTH_SHORT).show();
+
                             Intent intent = new Intent(Register.this, MainActivity.class);
+                            firebaseAuth.signOut(); // Require user login
                             startActivity(intent);
                         }
                         else {
@@ -111,6 +124,31 @@ public class Register extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 System.out.println(response);
+            }
+        });
+    }
+
+    private void getAllProvinces(MaterialAutoCompleteTextView provinceInput) {
+        provinceService.getAll().enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Gson gson = new Gson();
+                Province[] provinces = gson.fromJson(response.body().string(), Province[].class);
+                List<String> provinceNames = new ArrayList<>();
+                for(Province p : provinces) {
+                    provinceNames.add(p.getName());
+                }
+
+                Register.this.runOnUiThread(()-> {
+                    ArrayAdapter<String> provincesAdapter = new ArrayAdapter<>(Register.this, android.R.layout.simple_list_item_1, provinceNames);
+                    provinceInput.setAdapter(provincesAdapter);
+                });
             }
         });
     }

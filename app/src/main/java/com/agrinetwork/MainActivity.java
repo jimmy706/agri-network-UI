@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,14 +33,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
-import java.io.IOException;
+
 import java.util.Objects;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MainActivity extends Activity {
 
@@ -89,7 +85,9 @@ public class MainActivity extends Activity {
                         if(task.isSuccessful()) {
                             FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                             String name = currentUser.getDisplayName();
-                            Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+                            MainActivity.this.runOnUiThread(()-> {
+                                Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+                            });
                         }
                         else{
                             Log.w("LoginFailed", "signInWithEmail:failure", task.getException());
@@ -113,11 +111,11 @@ public class MainActivity extends Activity {
             redirectToFeedActivity(account);
         }
 
-        SignInButton ggSignInButton = findViewById(R.id.gg_sign_in_button);
-        ggSignInButton.setOnClickListener(view -> {
-            Intent ggSignInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(ggSignInIntent, RC_SIGN_IN);
-        });
+//        SignInButton ggSignInButton = findViewById(R.id.gg_sign_in_button);
+//        ggSignInButton.setOnClickListener(view -> {
+//            Intent ggSignInIntent = mGoogleSignInClient.getSignInIntent();
+//            startActivityForResult(ggSignInIntent, RC_SIGN_IN);
+//        });
 
     }
 
@@ -128,11 +126,20 @@ public class MainActivity extends Activity {
 
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if(Objects.nonNull(currentUser)) {
-            currentUser.getIdToken(true)
+            currentUser.getIdToken(false)
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
                             String idToken = task.getResult().getToken();
 
+                            MainActivity.this.runOnUiThread(()-> {
+                                // Store id app's data
+                                SharedPreferences sharedPref = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString(Variables.ID_TOKEN_LABEL, idToken);
+                                editor.apply();
+                                Toast.makeText(MainActivity.this, idToken, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(MainActivity.this, Feed.class));
+                            });
                         }
                     });
         }
