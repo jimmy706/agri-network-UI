@@ -1,6 +1,6 @@
 package com.agrinetwork;
 
-import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
@@ -19,19 +19,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.helpers.TextValidator;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
 
 
 import java.util.Objects;
@@ -42,6 +40,8 @@ public class MainActivity extends Activity {
     private static final int RC_SIGN_IN = 1;
 
     private FirebaseAuth firebaseAuth;
+
+    TextInputEditText inputEmail, passwordInput;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -55,9 +55,11 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         MaterialButton loginButton = findViewById(R.id.login_btn);
-        TextInputEditText inputEmail = findViewById(R.id.edit_text_email);
-        TextInputEditText passwordInput = findViewById(R.id.edit_text_password);
+        inputEmail = findViewById(R.id.edit_text_email);
+        passwordInput = findViewById(R.id.edit_text_password);
         TextView moveToRegisterLink = findViewById(R.id.move_to_register);
+
+        validateFields();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -77,16 +79,16 @@ public class MainActivity extends Activity {
         });
 
         loginButton.setOnClickListener(view -> {
-            String email = inputEmail.getText().toString();
-            String password = passwordInput.getText().toString();
+            String email = Objects.requireNonNull(inputEmail.getText()).toString();
+            String password = Objects.requireNonNull(passwordInput.getText()).toString();
 
            firebaseAuth.signInWithEmailAndPassword(email, password)
                    .addOnCompleteListener(this, task -> {
                         if(task.isSuccessful()) {
-                            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-                            String name = currentUser.getDisplayName();
+
                             MainActivity.this.runOnUiThread(()-> {
-                                Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(MainActivity.this, UserFeed.class));
                             });
                         }
                         else{
@@ -107,7 +109,7 @@ public class MainActivity extends Activity {
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        if(Objects.nonNull(account)) {
+        if(account != null) {
             redirectToFeedActivity(account);
         }
 
@@ -117,15 +119,15 @@ public class MainActivity extends Activity {
 //            startActivityForResult(ggSignInIntent, RC_SIGN_IN);
 //        });
 
+
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onStart() {
         super.onStart();
 
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if(Objects.nonNull(currentUser)) {
+        if(currentUser != null) {
             currentUser.getIdToken(false)
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
@@ -174,5 +176,24 @@ public class MainActivity extends Activity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return Objects.nonNull(cm.getActiveNetworkInfo()) && cm.getActiveNetworkInfo().isConnected();
 
+    }
+
+    private void validateFields() {
+        inputEmail.addTextChangedListener(new TextValidator(inputEmail) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.email_required));
+                }
+            }
+        });
+        passwordInput.addTextChangedListener(new TextValidator(passwordInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.password_required));
+                }
+            }
+        });
     }
 }

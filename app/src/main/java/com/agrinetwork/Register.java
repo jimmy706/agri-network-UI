@@ -16,6 +16,7 @@ import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.Province;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.entities.UserTypes;
+import com.agrinetwork.helpers.TextValidator;
 import com.agrinetwork.service.ProvinceService;
 import com.agrinetwork.service.UserService;
 import com.google.android.material.button.MaterialButton;
@@ -44,6 +45,10 @@ public class Register extends AppCompatActivity {
     private UserService userService;
     private ProvinceService provinceService;
 
+    private TextInputEditText emailInput, phoneNumberInput, passwordInput, firstNameInput, lastNameInput;
+
+    private MaterialAutoCompleteTextView provinceInput, userTypeInput;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,27 +60,31 @@ public class Register extends AppCompatActivity {
         userService = new UserService(this);
         provinceService = new ProvinceService(this);
 
-        TextInputEditText emailInput = findViewById(R.id.edit_text_email);
-        TextInputEditText phoneNumberInput = findViewById(R.id.edit_text_phone);
-        TextInputEditText passwordInput = findViewById(R.id.edit_text_password);
-        TextInputEditText firstNameInput = findViewById(R.id.edit_text_first_name);
-        TextInputEditText lastNameInput = findViewById(R.id.edit_text_last_name);
+        emailInput = findViewById(R.id.edit_text_email);
+        phoneNumberInput = findViewById(R.id.edit_text_phone);
+        passwordInput = findViewById(R.id.edit_text_password);
+        firstNameInput = findViewById(R.id.edit_text_first_name);
+        lastNameInput = findViewById(R.id.edit_text_last_name);
 
-        MaterialAutoCompleteTextView provinceInput = findViewById(R.id.edit_text_province);
+        provinceInput = findViewById(R.id.edit_text_province);
         getAllProvinces(provinceInput);
 
-        MaterialAutoCompleteTextView userTypeInput = findViewById(R.id.edit_text_usertype);
+
+        userTypeInput = findViewById(R.id.edit_text_usertype);
         List<String> userTypes = Arrays.stream(UserTypes.values()).map(UserTypes::getLabel).collect(Collectors.toList());
         ArrayAdapter<String> userTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userTypes);
         userTypeInput.setAdapter(userTypeAdapter);
 
-        MaterialButton registerButton = findViewById(R.id.register_btn);
+        validateFields();
+
         TextView signInLink = findViewById(R.id.move_to_sign_in);
+
         signInLink.setOnClickListener(v-> {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
 
+        MaterialButton registerButton = findViewById(R.id.register_btn);
         registerButton.setOnClickListener(v -> {
             String email = emailInput.getText().toString();
             String phoneNumber = phoneNumberInput.getText().toString();
@@ -149,6 +158,69 @@ public class Register extends AppCompatActivity {
                     ArrayAdapter<String> provincesAdapter = new ArrayAdapter<>(Register.this, android.R.layout.simple_list_item_1, provinceNames);
                     provinceInput.setAdapter(provincesAdapter);
                 });
+            }
+        });
+    }
+
+    private void validateFields() {
+        emailInput.addTextChangedListener(new TextValidator(emailInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.email_required));
+                }
+            }
+        });
+
+        phoneNumberInput.addTextChangedListener(new TextValidator(phoneNumberInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                textView.setError(getText(R.string.phone_required));
+            }
+        });
+
+        passwordInput.addTextChangedListener(new TextValidator(passwordInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.password_required));
+                }
+            }
+        });
+
+        firstNameInput.addTextChangedListener(new TextValidator(firstNameInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.first_name_required));
+                }
+            }
+        });
+
+        lastNameInput.addTextChangedListener(new TextValidator(lastNameInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.last_name_require));
+                }
+            }
+        });
+
+        userTypeInput.addTextChangedListener(new TextValidator(userTypeInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.usertype_require));
+                }
+            }
+        });
+
+        provinceInput.addTextChangedListener(new TextValidator(provinceInput) {
+            @Override
+            public void validate(TextView textView, String value) {
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.province_required));
+                }
             }
         });
     }

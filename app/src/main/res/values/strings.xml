@@ -15,5 +15,16 @@
     <string name="password_label">Mật khẩu</string>
     <string name="no_network">Không có mạng</string>
     <string name="check_network">Kiểm tra kết nối mạng của bạn</string>
+    <string name="title_activity_user_feed">UserFeed</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
+    <string name="email_required">Địa chỉ email không thể để trống</string>
+    <string name="phone_required">Sđt không thể để trống</string>
+    <string name="last_name_require">Tên không thể để trống</string>
+    <string name="first_name_required">Họ không thể để trống</string>
+    <string name="password_required">Mật khẩu không thể để trống</string>
+    <string name="usertype_require">Chọn loại thành viên</string>
+    <string name="province_required">Chọn tỉnh/thành phố</string>
 </resources>
