@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
                         }
                         else{
                             Log.w("LoginFailed", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "Đăng nhập thất bại!",
                                     Toast.LENGTH_SHORT).show();
                         }
                    });
@@ -139,8 +139,7 @@ public class MainActivity extends Activity {
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 editor.putString(Variables.ID_TOKEN_LABEL, idToken);
                                 editor.apply();
-                                Toast.makeText(MainActivity.this, idToken, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(MainActivity.this, Feed.class));
+                                startActivity(new Intent(MainActivity.this, UserFeed.class));
                             });
                         }
                     });
