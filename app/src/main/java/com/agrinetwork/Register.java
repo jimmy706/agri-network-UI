@@ -175,7 +175,9 @@ public class Register extends AppCompatActivity {
         phoneNumberInput.addTextChangedListener(new TextValidator(phoneNumberInput) {
             @Override
             public void validate(TextView textView, String value) {
-                textView.setError(getText(R.string.phone_required));
+                if(value.isEmpty()) {
+                    textView.setError(getText(R.string.phone_required));
+                }
             }
         });
 
