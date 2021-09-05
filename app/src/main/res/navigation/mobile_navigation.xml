@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -12,10 +12,24 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.agrinetwork.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_networks"
+        android:name="com.agrinetwork.ui.networks.MyNetworkFragment"
+        android:label="@string/title_networks"
+        tools:layout="@layout/fragment_my_network" />
+
+    <fragment
+        android:id="@+id/navigation_add_post"
+        android:name="com.agrinetwork.ui.post.AddPostFragment"
+        android:label="@string/title_add_post"
+        tools:layout="@layout/fragment_add_post"
+        />
+
+    <fragment
+        android:id="@+id/navigation_products"
+        android:name="com.agrinetwork.ui.products.ProductsFragment"
+        android:label="@string/title_products"
+        tools:layout="@layout/fragment_products"
+        />
 
     <fragment
         android:id="@+id/navigation_notifications"

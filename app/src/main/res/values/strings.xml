@@ -16,9 +16,13 @@
     <string name="no_network">Không có mạng</string>
     <string name="check_network">Kiểm tra kết nối mạng của bạn</string>
     <string name="title_activity_user_feed">UserFeed</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Trang chủ</string>
+    <string name="title_networks">Kết nối</string>
+    <string name="title_add">Thêm</string>
+    <string name="title_add_post">Tạo bài</string>
+    <string name="title_products">Sản phẩm</string>
+    <string name="title_notifications">Thông báo</string>
+    <string name="what_thinking">Bạn đang nghĩ gì?</string>
 
     <string name="email_required">Địa chỉ email không thể để trống</string>
     <string name="phone_required">Sđt không thể để trống</string>
@@ -27,4 +31,8 @@
     <string name="password_required">Mật khẩu không thể để trống</string>
     <string name="usertype_require">Chọn loại thành viên</string>
     <string name="province_required">Chọn tỉnh/thành phố</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>
