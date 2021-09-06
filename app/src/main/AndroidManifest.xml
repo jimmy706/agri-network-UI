@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,11 +17,14 @@
         android:theme="@style/Theme.AgriNetwork"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".UserFeed"
+            android:name=".CreatePostActivity"
+            android:exported="true" />
+        <activity
+            android:name=".UserFeedActivity"
             android:exported="true"
             android:label="@string/title_activity_user_feed" />
         <activity
-            android:name=".Register"
+            android:name=".RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

@@ -15,7 +15,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class UserService {
-    private Context context;
+    private final Context context;
     private OkHttpClient client = new OkHttpClient();
 
     public UserService(Context context) {

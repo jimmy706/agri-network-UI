@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.Province;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.entities.UserTypes;
@@ -33,14 +32,10 @@ import java.util.stream.Collectors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private UserService userService;
     private ProvinceService provinceService;
@@ -107,16 +102,16 @@ public class Register extends AppCompatActivity {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
-                            Toast.makeText(Register.this, "Tạo tài khoản thành công, đăng nhập để tiếp tục",
+                            Toast.makeText(RegisterActivity.this, "Tạo tài khoản thành công, đăng nhập để tiếp tục",
                                     Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(Register.this, MainActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             firebaseAuth.signOut(); // Require user login
                             startActivity(intent);
                         }
                         else {
                             Log.w("RegisterFailed", "signUpWithEmail:failure", task.getException());
-                            Toast.makeText(Register.this, task.getException().getMessage(),
+                            Toast.makeText(RegisterActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -154,8 +149,8 @@ public class Register extends AppCompatActivity {
                     provinceNames.add(p.getName());
                 }
 
-                Register.this.runOnUiThread(()-> {
-                    ArrayAdapter<String> provincesAdapter = new ArrayAdapter<>(Register.this, android.R.layout.simple_list_item_1, provinceNames);
+                RegisterActivity.this.runOnUiThread(()-> {
+                    ArrayAdapter<String> provincesAdapter = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_list_item_1, provinceNames);
                     provinceInput.setAdapter(provincesAdapter);
                 });
             }

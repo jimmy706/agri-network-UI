@@ -1,5 +1,6 @@
 package com.agrinetwork;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,7 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.agrinetwork.databinding.ActivityUserFeedBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class UserFeed extends AppCompatActivity {
+public class UserFeedActivity extends AppCompatActivity {
 
     private ActivityUserFeedBinding binding;
 
@@ -47,7 +48,7 @@ public class UserFeed extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         btnAddPost.setOnClickListener(v -> {
-            navController.navigate(R.id.navigation_add_post);
+            startActivity(new Intent(this, CreatePostActivity.class));
         });
     }
 

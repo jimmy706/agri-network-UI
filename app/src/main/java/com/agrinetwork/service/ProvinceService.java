@@ -10,7 +10,7 @@ import okhttp3.Request;
 
 public class ProvinceService {
     private OkHttpClient client = new OkHttpClient();
-    private Context context;
+    private final Context context;
 
     public ProvinceService(Context context) {
         this.context = context;

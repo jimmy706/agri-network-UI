@@ -30,6 +30,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 
 import java.util.Objects;
@@ -74,7 +75,7 @@ public class MainActivity extends Activity {
         }
 
         moveToRegisterLink.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Register.class);
+            Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);
         });
 
@@ -85,10 +86,11 @@ public class MainActivity extends Activity {
            firebaseAuth.signInWithEmailAndPassword(email, password)
                    .addOnCompleteListener(this, task -> {
                         if(task.isSuccessful()) {
-
+                            String idToken = Objects.requireNonNull(task.getResult().getUser()).getIdToken(true).getResult().getToken();
                             MainActivity.this.runOnUiThread(()-> {
                                 Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(MainActivity.this, UserFeed.class));
+                                setSharedToken(idToken);
+                                startActivity(new Intent(MainActivity.this, UserFeedActivity.class));
                             });
                         }
                         else{
@@ -98,8 +100,6 @@ public class MainActivity extends Activity {
                         }
                    });
         });
-
-
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -112,12 +112,6 @@ public class MainActivity extends Activity {
         if(account != null) {
             redirectToFeedActivity(account);
         }
-
-//        SignInButton ggSignInButton = findViewById(R.id.gg_sign_in_button);
-//        ggSignInButton.setOnClickListener(view -> {
-//            Intent ggSignInIntent = mGoogleSignInClient.getSignInIntent();
-//            startActivityForResult(ggSignInIntent, RC_SIGN_IN);
-//        });
 
 
     }
@@ -134,12 +128,8 @@ public class MainActivity extends Activity {
                             String idToken = task.getResult().getToken();
 
                             MainActivity.this.runOnUiThread(()-> {
-                                // Store id app's data
-                                SharedPreferences sharedPref = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString(Variables.ID_TOKEN_LABEL, idToken);
-                                editor.apply();
-                                startActivity(new Intent(MainActivity.this, UserFeed.class));
+                                setSharedToken(idToken);
+                                startActivity(new Intent(MainActivity.this, UserFeedActivity.class));
                             });
                         }
                     });
@@ -194,5 +184,13 @@ public class MainActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void setSharedToken(String idToken) {
+        // Store id app's data
+        SharedPreferences sharedPref = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Variables.ID_TOKEN_LABEL, idToken);
+        editor.apply();
     }
 }
