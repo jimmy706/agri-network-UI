@@ -7,38 +7,38 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.agrinetwork.components.SliderAdapter;
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.PostFormat;
+import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.service.MediaService;
+import com.agrinetwork.service.PostService;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -48,10 +48,15 @@ import okhttp3.Response;
 public class CreatePostActivity extends AppCompatActivity {
     private final List<Uri> pickedImageUris = new ArrayList<>();
     private final List<String> pickedImageUrls = new ArrayList<>();
+
+    private MediaService mediaService;
+    private PostService postService;
+    private String token;
+
     private final SliderAdapter sliderAdapter = new SliderAdapter(pickedImageUris);
     private RelativeLayout pickedImageWrapper;
-    private MediaService mediaService;
-    private String token;
+    private ProgressBar progressBar;
+
 
     // Register for pick image intent
     ActivityResultLauncher<Intent> pickImageResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
@@ -83,10 +88,12 @@ public class CreatePostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_post);
 
         mediaService = new MediaService(this);
+        postService = new PostService(this);
 
         token = getToken();
 
         ImageButton pickMediaBtn = findViewById(R.id.pick_media_btn);
+        progressBar = findViewById(R.id.progress_bar);
         pickMediaBtn.setOnClickListener(v -> {
             Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -108,11 +115,48 @@ public class CreatePostActivity extends AppCompatActivity {
             startActivity(new Intent(this, UserFeedActivity.class));
         });
 
-        toolbar.setOnClickListener(view -> {
-            int id = view.getId();
+        toolbar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
             if(id == R.id.add_post_action) {
-                // TODO: Call api add new post
+                showLoading();
+                TextInputEditText contentInput = findViewById(R.id.input_content);
+                String content = contentInput.getText().toString();
+
+                String format = PostFormat.REGULAR.getLabel();
+
+                PostItem postItem = new PostItem();
+                postItem.setContent(content);
+                postItem.setImages(pickedImageUrls);
+                postItem.setFormat(format);
+
+                Call call = postService.addPost(token, postItem);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        e.printStackTrace();
+                        CreatePostActivity.this.runOnUiThread(()-> {
+                            closeLoading();
+                            onCreatePostFailed();
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        CreatePostActivity.this.runOnUiThread(()-> {
+                            closeLoading();
+                            if(response.code() == 201) {
+                                onCreatePostSuccess();
+                            }
+                            else {
+                                onCreatePostFailed();
+                            }
+                        });
+
+                    }
+                });
+
             }
+            return false;
         });
     }
 
@@ -166,5 +210,22 @@ public class CreatePostActivity extends AppCompatActivity {
     private String getToken() {
         SharedPreferences sharedPref = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         return sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
+    }
+    
+    private void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void onCreatePostSuccess() {
+        Toast.makeText(CreatePostActivity.this, "Tạo bài đăng thành công", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(CreatePostActivity.this, UserFeedActivity.class));
+    }
+
+    private void onCreatePostFailed() {
+        Toast.makeText(CreatePostActivity.this, "Đã có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+    }
+
+    private void closeLoading() {
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }
