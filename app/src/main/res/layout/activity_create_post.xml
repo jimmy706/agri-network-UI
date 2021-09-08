@@ -59,7 +59,7 @@
                     android:layout_gravity="top"
                     android:gravity="top"
                     android:id="@+id/input_content"
-
+                    android:maxLength="255"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
