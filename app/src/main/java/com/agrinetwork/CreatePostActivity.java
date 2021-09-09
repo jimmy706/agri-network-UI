@@ -30,6 +30,7 @@ import com.agrinetwork.service.MediaService;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
 
@@ -190,8 +191,9 @@ public class CreatePostActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if(response.code() == 201) {
-                            String url = response.body().string();
+                            Gson gson = new Gson();
 
+                            String url = gson.fromJson(response.body().string(), String.class);
                             pickedImageUrls.add(url);
                         }
                     }

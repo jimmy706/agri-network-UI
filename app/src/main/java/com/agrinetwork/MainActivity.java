@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
            firebaseAuth.signInWithEmailAndPassword(email, password)
                    .addOnCompleteListener(this, task -> {
                         if(task.isSuccessful()) {
-                            String idToken = Objects.requireNonNull(task.getResult().getUser()).getIdToken(true).getResult().getToken();
+                            String idToken = task.getResult().getUser().getIdToken(false).getResult().getToken();
                             MainActivity.this.runOnUiThread(()-> {
                                 Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                                 setSharedToken(idToken);
