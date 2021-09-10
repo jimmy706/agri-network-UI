@@ -40,11 +40,7 @@ public class MediaService {
         String fileId = DocumentsContract.getDocumentId(uri);
         File file = new File(context.getCacheDir().getAbsolutePath() + "/" + fileId);
 
-
         writeFile(ips, file);
-        System.out.println("Type: " + fileType + ", File path: " + file.getAbsolutePath());
-
-
         String contentType = "image/jpeg";
         RequestBody fileBody = RequestBody.create(MediaType.parse(contentType), file);
 
