@@ -166,6 +166,7 @@ public class CreatePostActivity extends AppCompatActivity {
         if(pickedImageWrapper != null) {
             if(!pickedImageUris.isEmpty()){
                 pickedImageWrapper.setVisibility(View.VISIBLE);
+                pickedImageUrls.clear();
                 requestUploadImages();
             }
             else {
@@ -191,9 +192,8 @@ public class CreatePostActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         if(response.code() == 201) {
-                            Gson gson = new Gson();
 
-                            String url = gson.fromJson(response.body().string(), String.class);
+                            String url = response.body().string();
                             pickedImageUrls.add(url);
                         }
                     }
