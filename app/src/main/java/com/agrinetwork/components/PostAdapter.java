@@ -1,5 +1,8 @@
 package com.agrinetwork.components;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,28 +12,42 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.R;
 import com.agrinetwork.entities.PostItem;
+import com.smarteist.autoimageslider.SliderView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Date;
 import java.util.List;
 
 import lombok.Getter;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+    private static final String POST_DATE_FORMAT = "dd-MMM-yyyy hh:mm";
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(POST_DATE_FORMAT);
+    private final List<PostItem> posts;
 
-    private List<PostItem> posts;
+    public PostAdapter(List<PostItem> posts) {
+        this.posts = posts;
+    }
 
     @Getter
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView avatar;
-        private TextView displayName, postTag, context, commentCount, reactionCount;
-        private ImageButton moreActionBtn;
-        private LinearLayout imageWrapper;
-        private ImageView commentBtn, reactionBtn;
+        private final ImageView avatar;
+        private final TextView displayName, postTag, context, commentCount, reactionCount;
+        private final ImageButton moreActionBtn;
+        private final LinearLayout imageWrapper;
+        private final ImageView commentBtn, reactionBtn, postImage;
+        private final SliderView postImages;
 
 
         public ViewHolder(View itemView) {
@@ -46,6 +63,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             imageWrapper = itemView.findViewById(R.id.images_wrapper);
             commentBtn = itemView.findViewById(R.id.comment_button);
             reactionBtn = itemView.findViewById(R.id.reaction_button);
+            postImage = itemView.findViewById(R.id.image_view);
+            postImages = itemView.findViewById(R.id.image_slider);
         }
     }
 
@@ -56,9 +75,69 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        PostItem postItem = posts.get(position);
 
+        String avatarUrl = postItem.getPostedBy().getAvatar();
+        if(avatarUrl != null) {
+            Picasso.get().load(avatarUrl).centerCrop().resize(40, 40).into(holder.avatar);
+        }
+
+        String name = postItem.getPostedBy().getFirstName() + " " + postItem.getPostedBy().getLastName();
+        holder.displayName.setText(name);
+
+        Date lastedModify = postItem.getLastModified();
+        holder.postTag.setText(dateFormat.format(lastedModify));
+
+        String content = postItem.getContent();
+        holder.context.setText(content);
+
+        List<String> images = postItem.getImages();
+        if(!images.isEmpty()) {
+            holder.imageWrapper.setVisibility(View.VISIBLE);
+            Picasso picasso = Picasso.get();
+            if(images.size() == 1) {
+                String postImageUrl = images.get(0);
+
+                holder.postImages.setVisibility(View.GONE);
+                picasso.load(postImageUrl).into(holder.postImage);
+            }
+            else {
+                List<Bitmap> imageBitmaps = new ArrayList<>();
+                holder.postImage.setVisibility(View.GONE);
+                SliderAdapter<Bitmap> sliderAdapter = new SliderAdapter<>(imageBitmaps);
+                holder.postImages.setSliderAdapter(sliderAdapter);
+                System.out.println(images);
+
+                images.forEach(img -> {
+                    picasso.load(img).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            imageBitmaps.add(bitmap);
+                            System.out.println("Image added");
+                            sliderAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            e.printStackTrace();
+                            System.out.println("Load image failed");
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+
+                });
+            }
+        }
+        else {
+            holder.imageWrapper.setVisibility(View.GONE);
+        }
     }
 
     @Override

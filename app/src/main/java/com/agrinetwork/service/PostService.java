@@ -19,6 +19,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class PostService {
     private final Context context;
     private final OkHttpClient client = new OkHttpClient();
@@ -42,9 +43,24 @@ public class PostService {
         return client.newCall(request);
     }
 
+    public Call getPosts(String token, int page, int limit) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("page", page);
+        params.put("limit", limit);
+        UrlHelper<Integer> urlHelper = new UrlHelper<>();
+
+        Request request = new Request.Builder()
+                .header("Authorization", token)
+                .url(SERVICE_URL +"?" + urlHelper.convertFromMapToQueryString(params))
+                .get()
+                .build();
+
+        return client.newCall(request);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Call getPostsFromUser(String token, String uid, Integer page, Integer limit) {
-        UrlHelper urlHelper = new UrlHelper();
+        UrlHelper<Integer> urlHelper = new UrlHelper<>();
 
         Map<String, Integer> params = new HashMap<>();
         params.put("page", page);

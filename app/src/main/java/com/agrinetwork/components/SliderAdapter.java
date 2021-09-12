@@ -1,5 +1,6 @@
 package com.agrinetwork.components;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,11 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.List;
 
-public class SliderAdapter extends SliderViewAdapter<SliderAdapter.Holder> {
+public class SliderAdapter<T> extends SliderViewAdapter<SliderAdapter.Holder> {
 
-    List<Uri> images;
+    List<T> images;
 
-    public SliderAdapter(List<Uri> images) {
+    public SliderAdapter(List<T> images) {
         this.images = images;
     }
 
@@ -28,8 +29,15 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(Holder viewHolder, int position) {
-        Uri image = this.images.get(position);
-        viewHolder.imageView.setImageURI(image);
+        Object image = this.images.get(position);
+        if(image instanceof Uri) {
+            Uri imageUri = (Uri) this.images.get(position);
+            viewHolder.imageView.setImageURI(imageUri);
+        }
+        else if(image instanceof Bitmap) {
+            Bitmap imageBitmap = (Bitmap) this.images.get(position);
+            viewHolder.imageView.setImageBitmap(imageBitmap);
+        }
     }
 
     @Override

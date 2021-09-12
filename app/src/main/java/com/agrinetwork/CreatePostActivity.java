@@ -7,7 +7,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +29,6 @@ import com.agrinetwork.service.MediaService;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
 
@@ -54,7 +52,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private PostService postService;
     private String token;
 
-    private final SliderAdapter sliderAdapter = new SliderAdapter(pickedImageUris);
+    private final SliderAdapter<Uri> sliderAdapter = new SliderAdapter<>(pickedImageUris);
     private RelativeLayout pickedImageWrapper;
     private ProgressBar progressBar;
 
@@ -83,6 +81,7 @@ public class CreatePostActivity extends AppCompatActivity {
        }
     });
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -2,6 +2,7 @@
     <string name="app_name">AgriNetwork</string>
     <string name="sign_in_text">Đăng nhập</string>
     <string name="register_text">Đăng kí</string>
+    <string name="logout_text">Đăng xuất</string>
     <string name="no_account_ask">Chưa có tài khoản?</string>
     <string name="have_account_ask">Đã có tài khoản?</string>
     <string name="or">Hoặc</string>
