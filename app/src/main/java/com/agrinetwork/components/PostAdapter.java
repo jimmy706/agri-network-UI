@@ -109,21 +109,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 holder.postImage.setVisibility(View.GONE);
                 SliderAdapter<Bitmap> sliderAdapter = new SliderAdapter<>(imageBitmaps);
                 holder.postImages.setSliderAdapter(sliderAdapter);
-                System.out.println(images);
 
                 images.forEach(img -> {
                     picasso.load(img).into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                             imageBitmaps.add(bitmap);
-                            System.out.println("Image added");
                             sliderAdapter.notifyDataSetChanged();
                         }
 
                         @Override
                         public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                             e.printStackTrace();
-                            System.out.println("Load image failed");
                         }
 
                         @Override
