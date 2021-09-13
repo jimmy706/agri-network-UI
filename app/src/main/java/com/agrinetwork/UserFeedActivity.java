@@ -69,14 +69,6 @@ public class UserFeedActivity extends AppCompatActivity {
 
 
 
-        View viewNavigation = findViewById(R.id.navigation_bar);
-        viewNavigation.setOnClickListener(v ->{
-            startActivity((new Intent(this, ProfileMangerActivity.class)));
-        });
-
-
-
-
 
         Button logoutBtn = binding.logoutBtn;
         logoutBtn.setOnClickListener(v -> {

@@ -3,6 +3,7 @@ package com.agrinetwork.components;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,11 +17,13 @@ import com.agrinetwork.R;
 import com.agrinetwork.RegisterActivity;
 import com.agrinetwork.UserFeedActivity;
 
+import java.util.jar.Attributes;
+
 public class NavigationBar extends RelativeLayout {
 
 
-    public NavigationBar(Context context) {
-        super(context);
+    public NavigationBar(Context context, AttributeSet attrs) {
+        super(context, attrs);
         init(context);
     }
 
@@ -30,13 +33,10 @@ public class NavigationBar extends RelativeLayout {
         ImageView avatar = this.findViewById(R.id.avatar_user);
         EditText search = this.findViewById(R.id.search_text);
 
-//        avatar.setOnClickListener(v ->{
-//            context.startActivity((new Intent(v.getContext(), NavigationBar.class)));
-//        });
-
+         avatar.setOnClickListener(v ->{
+             context.startActivity(new Intent(context,ProfileMangerActivity.class));
+         });
 
     }
-
-
 
 }
