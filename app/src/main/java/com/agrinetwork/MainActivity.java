@@ -113,7 +113,6 @@ public class MainActivity extends Activity {
             redirectToFeedActivity(account);
         }
 
-
     }
 
     @Override
