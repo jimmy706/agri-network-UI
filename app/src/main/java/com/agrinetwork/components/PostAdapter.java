@@ -1,5 +1,7 @@
 package com.agrinetwork.components;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -10,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -33,11 +36,14 @@ import lombok.Getter;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private static final String POST_DATE_FORMAT = "dd-MMM-yyyy hh:mm";
+    @SuppressLint("SimpleDateFormat")
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(POST_DATE_FORMAT);
     private final List<PostItem> posts;
+    private final Context context;
 
-    public PostAdapter(List<PostItem> posts) {
+    public PostAdapter(List<PostItem> posts, Context context) {
         this.posts = posts;
+        this.context = context;
     }
 
     @Getter
@@ -111,9 +117,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 holder.postImages.setSliderAdapter(sliderAdapter);
 
                 images.forEach(img -> {
+                    System.out.println("Loading image from: " + img);
                     picasso.load(img).into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            System.out.println("Image added");
                             imageBitmaps.add(bitmap);
                             sliderAdapter.notifyDataSetChanged();
                         }
@@ -121,6 +129,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         @Override
                         public void onBitmapFailed(Exception e, Drawable errorDrawable) {
                             e.printStackTrace();
+                            System.out.println("Failed to load image: " + e.getMessage());
                         }
 
                         @Override
@@ -134,6 +143,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
         else {
             holder.imageWrapper.setVisibility(View.GONE);
+        }
+
+        holder.commentCount.setText(Integer.toString(postItem.getNumberOfComments()));
+        holder.reactionCount.setText(Integer.toString(postItem.getNumberOfReactions()));
+
+        boolean isLiked = postItem.isLiked();
+        if(isLiked) {
+            holder.reactionBtn.setImageResource(R.drawable.ic_fav);
+        }
+        else {
+            holder.reactionBtn.setImageResource(R.drawable.ic_fav_border);
         }
     }
 

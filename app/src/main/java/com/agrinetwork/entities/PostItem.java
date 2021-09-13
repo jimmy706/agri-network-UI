@@ -24,4 +24,6 @@ public class PostItem {
     private int numberOfReactions;
 
     private int numberOfComments;
+
+    private boolean isLiked;
 }

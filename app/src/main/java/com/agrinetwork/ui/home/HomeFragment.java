@@ -2,21 +2,21 @@ package com.agrinetwork.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+
+
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,15 +27,19 @@ import com.agrinetwork.components.PostAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.databinding.FragmentHomeBinding;
 import com.agrinetwork.entities.PaginationResponse;
+
 import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.service.PostService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 
 import okhttp3.Call;
@@ -49,9 +53,10 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private String token;
     private final List<PostItem> posts = new ArrayList<>();
-    private final PostAdapter postAdapter = new PostAdapter(posts);
+    private PostAdapter postAdapter;
     private int page = 1;
     private int limit = Variables.DEFAULT_LIMIT_POST;
+    private List<Boolean> loadedPostItems = new ArrayList<>();
 
     private SwipeRefreshLayout refreshLayout;
 
@@ -59,21 +64,50 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         postService = new PostService(getContext());
+
+        postAdapter = new PostAdapter(posts,getActivity());
+
         getTokenFromSharedPreference();
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+
         RecyclerView recyclerView = binding.feed;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(postAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                int firstVisibleIndex = linearLayoutManager.findFirstVisibleItemPosition();
+                int lastVisibleIndex = linearLayoutManager.findLastVisibleItemPosition();
+
+
+                PostItem postItemLast = posts.get(lastVisibleIndex);
+                PostItem postItemFirst = posts.get(firstVisibleIndex);
+
+                boolean shouldLoadedPostItemFirst = !loadedPostItems.get(firstVisibleIndex);
+                if(shouldLoadedPostItemFirst) {
+                    fetchPostCommentCountAndReactionCount(postItemFirst, firstVisibleIndex);
+                }
+
+                boolean shouldLoadPostItemLast = !loadedPostItems.get(lastVisibleIndex);
+                if(shouldLoadPostItemLast) {
+                    fetchPostCommentCountAndReactionCount(postItemLast, lastVisibleIndex);
+                }
+
+            }
+        });
 
         refreshLayout = binding.refreshLayout;
         refreshLayout.setOnRefreshListener(() -> {
             page = 1;
-
             posts.clear();
+            loadedPostItems.clear();
             fetchPosts();
         });
 
@@ -114,6 +148,10 @@ public class HomeFragment extends Fragment {
 
                         getActivity().runOnUiThread(()-> {
                             posts.addAll(responseData.getDocs());
+
+                            for(int i = 0; i < posts.size(); i++)
+                                loadedPostItems.add(false);
+
                             postAdapter.notifyDataSetChanged();
                             refreshLayout.setRefreshing(false);
                         });
@@ -121,6 +159,42 @@ public class HomeFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private void fetchPostCommentCountAndReactionCount(PostItem postItem, int postPosition) {
+        Call call = postService.getCommentsAndReactionsCountFromPost(token, postItem.get_id());
+        loadedPostItems.set(postPosition, true);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+                String body = response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(body);
+                    int countComments = jsonObject.getInt("countComments");
+                    int countReactions = jsonObject.getInt("countReactions");
+                    boolean isLiked = jsonObject.getBoolean("isLiked");
+
+                   getActivity().runOnUiThread(() -> {
+
+                       postItem.setNumberOfComments(countComments);
+                       postItem.setNumberOfReactions(countReactions);
+                       postItem.setLiked(isLiked);
+
+                       postAdapter.notifyItemChanged(postPosition);
+                   });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
 }

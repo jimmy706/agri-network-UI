@@ -75,9 +75,10 @@ public class PostService {
         return client.newCall(request);
     }
 
-    public Call getCommentsAndReactionsCountFromPost(String postId){
+    public Call getCommentsAndReactionsCountFromPost(String token, String postId){
         Request request = new Request.Builder()
                 .url(SERVICE_URL + "/" + postId + "/commentsAndReactionsCount")
+                .header("Authorization", token)
                 .get()
                 .build();
 
