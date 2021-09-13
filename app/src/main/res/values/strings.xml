@@ -25,6 +25,7 @@
     <string name="what_thinking">Bạn đang nghĩ gì?</string>
     <string name="pick_image_action">Chọn hình ảnh</string>
     <string name="picked_image_title">Hình ảnh đã chọn</string>
+    <string name="profile_user">Trang cá nhân</string>
 
     <string name="email_required">Địa chỉ email không thể để trống</string>
     <string name="phone_required">Sđt không thể để trống</string>

@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     >
 
+    <include layout="@layout/navigation_bar" android:id="@+id/navigation_bar"/>
+
     <fragment
         android:id="@+id/nav_host_fragment_activity_user_feed"
         android:name="androidx.navigation.fragment.NavHostFragment"

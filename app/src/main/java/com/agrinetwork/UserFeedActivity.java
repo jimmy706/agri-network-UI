@@ -1,9 +1,15 @@
 package com.agrinetwork;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.agrinetwork.components.NavigationBar;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -50,6 +56,16 @@ public class UserFeedActivity extends AppCompatActivity {
         btnAddPost.setOnClickListener(v -> {
             startActivity(new Intent(this, CreatePostActivity.class));
         });
+
+
+        View viewNavigation = findViewById(R.id.navigation_bar);
+        viewNavigation.setOnClickListener(v ->{
+            startActivity((new Intent(this, ProfileMangerActivity.class)));
+        });
+
+
+
+
     }
 
 }
