@@ -15,5 +15,6 @@ public class User {
     private String phoneNumber;
     private String type;
     private String province;
+    private String _id;
 
 }

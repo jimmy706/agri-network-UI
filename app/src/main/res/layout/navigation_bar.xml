@@ -9,18 +9,17 @@
         android:id="@+id/avatar_user"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/avatar_placeholder"/>
+        android:src="@drawable/avatar_placeholder" />
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="100dp"
         android:layout_toRightOf="@id/avatar_user"
-        app:startIconDrawable="@drawable/ic_search"
-        >
+        app:startIconDrawable="@drawable/ic_search">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_text"
@@ -29,12 +28,16 @@
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/text_search"
             android:hint="@string/hint_search"
-
             />
-
-
     </com.google.android.material.textfield.TextInputLayout>
 
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="270dp"
+        android:layout_toRightOf="@id/avatar_user"
+        android:text="Đăng xuất" />
 
 
 </RelativeLayout>
