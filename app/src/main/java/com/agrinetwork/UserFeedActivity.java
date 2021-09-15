@@ -1,16 +1,23 @@
 package com.agrinetwork;
 
 
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.view.View;
 
 
+import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.User;
+import com.agrinetwork.service.UserService;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,16 +26,25 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.agrinetwork.databinding.ActivityUserFeedBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class UserFeedActivity extends AppCompatActivity {
 
     private ActivityUserFeedBinding binding;
+    private UserService userService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        userService = new UserService(this);
         binding = ActivityUserFeedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         View viewFragment = findViewById(R.id.nav_host_fragment_activity_user_feed);
@@ -56,6 +72,30 @@ public class UserFeedActivity extends AppCompatActivity {
         });
 
 
+        fetchLoginUser();
+    }
+    private void fetchLoginUser() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        String token =  sharedPreferences.getString(Variables.ID_TOKEN_LABEL,"");
+
+        Call getUserLogin = userService.getUserLogin(token);
+        getUserLogin.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call getUserLogin, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call getUserLogin, @NonNull Response response) throws IOException {
+                Gson gson = new Gson();
+                String jsonData = response.body().string();
+                User user = gson.fromJson(jsonData, User.class);
+                String currentLoginUserId = user.get_id();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("currentLoginUserId", currentLoginUserId);
+                editor.apply();
+            }
+        });
     }
 
 }
