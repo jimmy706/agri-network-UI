@@ -3,8 +3,11 @@ package com.agrinetwork;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,18 +16,24 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.agrinetwork.components.CommentAdapter;
 import com.agrinetwork.components.SliderAdapter;
 import com.agrinetwork.config.Variables;
-import com.agrinetwork.databinding.ActivityPostDetailBinding;
+import com.agrinetwork.entities.Comment;
 import com.agrinetwork.entities.Post;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
@@ -44,14 +53,24 @@ public class PostDetailActivity extends AppCompatActivity {
     @SuppressLint("SimpleDateFormat")
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(Variables.POST_DATE_FORMAT);
     private PostService postService;
+
+    private final List<Comment> comments = new ArrayList<>();
+    private CommentAdapter commentAdapter;
     private String postId;
+    private Post post;
     private String token;
+
     private ProgressBar progressBar;
     private View postContentContainer;
     private ImageView userAvatar, imageView;
-    private TextView userDisplayName, postTag, context, commentCount, reactionCount;;
+    private ImageButton reactionBtn;
+    private TextView userDisplayName, postTag, context, commentCount, reactionCount, noCommentMessage;
     private View imagesWrapper;
     private SliderView imageSlider;
+    private ImageButton sendCommentBtn;
+    private TextInputEditText commentInput;
+    private RecyclerView commentsRecyclerView;
+
 
 
     @Override
@@ -60,6 +79,7 @@ public class PostDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post_detail);
 
         postService = new PostService(this);
+        commentAdapter = new CommentAdapter(this, comments);
 
         Intent intent = getIntent();
         postId = intent.getExtras().getString(Variables.POST_ID_LABEL);
@@ -81,8 +101,19 @@ public class PostDetailActivity extends AppCompatActivity {
         context = findViewById(R.id.post_context);
         commentCount = findViewById(R.id.comment_count);
         reactionCount = findViewById(R.id.reaction_count);
+        sendCommentBtn = findViewById(R.id.submit_comment);
+        commentInput = findViewById(R.id.comment_input);
+        commentsRecyclerView = findViewById(R.id.comment_list);
+        noCommentMessage = findViewById(R.id.no_comment_message);
+        reactionBtn = findViewById(R.id.reaction_button);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        commentsRecyclerView.setLayoutManager(linearLayoutManager);
+        commentsRecyclerView.setNestedScrollingEnabled(false);
+        commentsRecyclerView.setAdapter(commentAdapter);
 
         fetchPost();
+        handleEvents();
 
     }
 
@@ -101,10 +132,10 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 Gson gson = new Gson();
                 String jsonData = response.body().string();
-                Post post = gson.fromJson(jsonData, Post.class);
-
+                post = gson.fromJson(jsonData, Post.class);
                 PostDetailActivity.this.runOnUiThread(()-> {
-                    renderData(post);
+                    renderData();
+                    renderComments();
                 });
             }
         });
@@ -115,7 +146,7 @@ public class PostDetailActivity extends AppCompatActivity {
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
     }
 
-    private void renderData(Post post) {
+    private void renderData() {
         progressBar.setVisibility(View.GONE);
         postContentContainer.setVisibility(View.VISIBLE);
 
@@ -142,7 +173,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 SliderAdapter<Bitmap> sliderAdapter = new SliderAdapter<>(imageBitmaps);
                 imageSlider.setSliderAdapter(sliderAdapter);
                 postImages.forEach(img -> {
-                    System.out.println("Loading image from: " + img);
                     picasso.load(img).into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -178,5 +208,123 @@ public class PostDetailActivity extends AppCompatActivity {
 
         commentCount.setText(numberOfComments);
         reactionCount.setText(numberOfReactions);
+
+        if(post.isLiked()) {
+            reactionBtn.setImageResource(R.drawable.ic_fav);
+        }
+        else {
+            reactionBtn.setImageResource(R.drawable.ic_fav_border);
+        }
+    }
+
+    private void renderComments() {
+        if(!post.getComments().isEmpty()) {
+            comments.addAll(post.getComments());
+            commentAdapter.notifyDataSetChanged();
+
+            noCommentMessage.setVisibility(View.GONE);
+        }
+        else {
+            commentsRecyclerView.setVisibility(View.GONE);
+            noCommentMessage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void handleEvents() {
+        sendCommentBtn.setOnClickListener(v -> {
+            String commentContent = commentInput.getText().toString();
+
+            Call call = postService.addComment(token, postId, commentContent);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if(response.code() == 200) {
+                        Gson gson = new Gson();
+                        Comment newComment = gson.fromJson(response.body().string(), Comment.class);
+
+                        PostDetailActivity.this.runOnUiThread(() -> {
+                            commentInput.setText("");
+
+                            // Hide keyboard after done
+                            InputMethodManager im = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                            View view = getCurrentFocus();
+                            if(view != null) {
+                                im.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
+                            commentInput.clearFocus();
+
+                            comments.add(newComment);
+                            post.setNumberOfComments(post.getNumberOfComments() + 1);
+                            post.getComments().add(newComment);
+                            commentAdapter.notifyItemRangeInserted(comments.size() - 1, comments.size());
+                            renderData();
+                        });
+                    }
+                    else {
+                        PostDetailActivity.this.runOnUiThread(()-> {
+                            Toast.makeText(PostDetailActivity.this, "Đã có lỗi xảy ra", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }
+            });
+        });
+
+        reactionBtn.setOnClickListener(v -> {
+            if(post != null) {
+                System.out.println(post.isLiked());
+                if(post.isLiked()) {
+                    // Unlike
+                    post.setNumberOfReactions(post.getNumberOfReactions() - 1);
+                    unlike();
+                }
+                else {
+                    // Like
+                    post.setNumberOfReactions(post.getNumberOfReactions() + 1);
+                    like();
+                }
+                post.setLiked(!post.isLiked());
+                renderData();
+            }
+        });
+
+    }
+
+    private void like() {
+        Call call = postService.like(token, postId);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.code() == 200) {
+                    System.out.println("Liked");
+                }
+            }
+        });
+    }
+
+    private void unlike() {
+        Call call = postService.unlike(token, postId);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.code() == 200) {
+                    System.out.println("Liked");
+                }
+            }
+        });
     }
 }
