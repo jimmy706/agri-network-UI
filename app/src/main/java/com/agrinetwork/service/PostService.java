@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Call;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class PostService {
     private final Context context;
     private final OkHttpClient client = new OkHttpClient();
@@ -43,6 +43,7 @@ public class PostService {
         return client.newCall(request);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Call getPosts(String token, int page, int limit) {
         Map<String, Integer> params = new HashMap<>();
         params.put("page", page);
@@ -85,9 +86,10 @@ public class PostService {
         return client.newCall(request);
     }
 
-    public Call getPostDetail(String postId) {
+    public Call getPostDetail(String token, String postId) {
         Request request = new Request.Builder()
                 .url(SERVICE_URL + "/" + postId)
+                .header("Authorization", token)
                 .get()
                 .build();
 
@@ -98,6 +100,44 @@ public class PostService {
         Request request = new Request.Builder()
                 .url(SERVICE_URL + "/" + postId)
                 .delete()
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call like(String token, String postId) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .put(body)
+                .header("Authorization", token)
+                .url(SERVICE_URL + "/" + postId + "/like")
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call unlike(String token, String postId) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .put(body)
+                .header("Authorization", token)
+                .url(SERVICE_URL + "/" + postId + "/unlike")
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call addComment(String token, String postId, String content) {
+        RequestBody body = new FormBody.Builder()
+                .add("content", content)
+                .build();
+
+        Request request = new Request.Builder()
+                .header("Authorization", token)
+                .post(body)
+                .url(SERVICE_URL + "/" + postId + "/addComment")
                 .build();
 
         return client.newCall(request);

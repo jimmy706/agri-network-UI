@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment {
     private int page = 1;
     private int limit = Variables.DEFAULT_LIMIT_POST;
     private List<Boolean> loadedPostItems = new ArrayList<>();
+    private LinearLayoutManager linearLayoutManager;
 
     private SwipeRefreshLayout refreshLayout;
 
@@ -72,7 +73,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager = new LinearLayoutManager(getActivity());
 
         RecyclerView recyclerView = binding.feed;
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -82,23 +83,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
-                int firstVisibleIndex = linearLayoutManager.findFirstVisibleItemPosition();
-                int lastVisibleIndex = linearLayoutManager.findLastVisibleItemPosition();
-
-
-                PostItem postItemLast = posts.get(lastVisibleIndex);
-                PostItem postItemFirst = posts.get(firstVisibleIndex);
-
-                boolean shouldLoadedPostItemFirst = !loadedPostItems.get(firstVisibleIndex);
-                if(shouldLoadedPostItemFirst) {
-                    fetchPostCommentCountAndReactionCount(postItemFirst, firstVisibleIndex);
-                }
-
-                boolean shouldLoadPostItemLast = !loadedPostItems.get(lastVisibleIndex);
-                if(shouldLoadPostItemLast) {
-                    fetchPostCommentCountAndReactionCount(postItemLast, lastVisibleIndex);
-                }
+                getPostCommentAndReactionCount();
 
             }
         });
@@ -154,11 +139,40 @@ public class HomeFragment extends Fragment {
 
                             postAdapter.notifyDataSetChanged();
                             refreshLayout.setRefreshing(false);
+                            getPostCommentAndReactionCount();
                         });
                     }
                 }
             });
         }
+    }
+
+    private void getPostCommentAndReactionCount() {
+
+        if(posts.size() > 1) {
+            int firstVisibleIndex = linearLayoutManager.findFirstVisibleItemPosition();
+            int lastVisibleIndex = linearLayoutManager.findLastVisibleItemPosition();
+
+            if(firstVisibleIndex != -1 && lastVisibleIndex != -1) {
+                PostItem postItemLast = posts.get(lastVisibleIndex);
+                PostItem postItemFirst = posts.get(firstVisibleIndex);
+
+                boolean shouldLoadedPostItemFirst = !loadedPostItems.get(firstVisibleIndex);
+                if(shouldLoadedPostItemFirst) {
+                    fetchPostCommentCountAndReactionCount(postItemFirst, firstVisibleIndex);
+                }
+
+                boolean shouldLoadPostItemLast = !loadedPostItems.get(lastVisibleIndex);
+                if(shouldLoadPostItemLast) {
+                    fetchPostCommentCountAndReactionCount(postItemLast, lastVisibleIndex);
+                }
+            }
+            else {
+                fetchPostCommentCountAndReactionCount(posts.get(0), 0);
+            }
+        }
+
+
     }
 
     private void fetchPostCommentCountAndReactionCount(PostItem postItem, int postPosition) {
