@@ -6,7 +6,6 @@ import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.User;
 
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -40,4 +39,5 @@ public class UserService {
 
         return client.newCall(request);
     }
+
 }
