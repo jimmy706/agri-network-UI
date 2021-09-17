@@ -33,6 +33,9 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,7 +81,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private final SliderView postImages;
         private final MaterialCardView cardView;
 
-
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -98,6 +100,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             postImage = itemView.findViewById(R.id.image_view);
             postImages = itemView.findViewById(R.id.image_slider);
             cardView = itemView.findViewById(R.id.card_view);
+
         }
 
         @Override
@@ -173,42 +176,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         if(!images.isEmpty()) {
             holder.imageWrapper.setVisibility(View.VISIBLE);
             Picasso picasso = Picasso.get();
-            if(images.size() == 1) {
                 String postImageUrl = images.get(0);
 
                 holder.postImages.setVisibility(View.GONE);
                 picasso.load(postImageUrl).into(holder.postImage);
-            }
-            else {
-                List<Bitmap> imageBitmaps = new ArrayList<>();
-                holder.postImage.setVisibility(View.GONE);
-                SliderAdapter<Bitmap> sliderAdapter = new SliderAdapter<>(imageBitmaps);
-                holder.postImages.setSliderAdapter(sliderAdapter);
-
-                images.forEach(img -> {
-                    System.out.println("Loading image from: " + img);
-                    picasso.load(img).into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            System.out.println("Image added");
-                            imageBitmaps.add(bitmap);
-                            sliderAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                            e.printStackTrace();
-                            System.out.println("Failed to load image: " + e.getMessage());
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
-
-                });
-            }
+                holder.postImages.setVisibility(View.GONE);
         }
         else {
             holder.imageWrapper.setVisibility(View.GONE);
@@ -224,6 +196,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         else {
             holder.reactionBtn.setImageResource(R.drawable.ic_fav_border);
         }
+
+        // TODO: This code will be removed in future
+        holder.commentCount.setVisibility(View.INVISIBLE);
+        holder.reactionCount.setVisibility(View.INVISIBLE);
+        holder.reactionBtn.setVisibility(View.GONE);
+        holder.commentBtn.setVisibility(View.GONE);
     }
 
     @Override

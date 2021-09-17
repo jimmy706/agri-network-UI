@@ -167,6 +167,7 @@ public class PostDetailActivity extends AppCompatActivity {
             Picasso picasso = Picasso.get();
             if(postImages.size() == 1) {
                 picasso.load(postImages.get(0)).into(imageView);
+                imageSlider.setVisibility(View.GONE);
             }
             else {
                 List<Bitmap> imageBitmaps = new ArrayList<>();
@@ -263,6 +264,9 @@ public class PostDetailActivity extends AppCompatActivity {
                             post.getComments().add(newComment);
                             commentAdapter.notifyItemRangeInserted(comments.size() - 1, comments.size());
                             renderData();
+
+                            noCommentMessage.setVisibility(View.GONE);
+                            commentsRecyclerView.setVisibility(View.VISIBLE);
                         });
                     }
                     else {
