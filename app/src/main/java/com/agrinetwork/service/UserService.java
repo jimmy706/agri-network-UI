@@ -65,5 +65,21 @@ public class UserService {
     }
 
 
+    public Call update(User user, String token)  {
+        RequestBody body = new FormBody.Builder()
+                .add("firstName", user.getFirstName())
+                .add("lastName", user.getLastName())
+                .add("phoneNumber", user.getPhoneNumber())
+                .add("avatar",user.getAvatar())
+                .add("province", user.getProvince())
+                .build();
 
+        Request request = new Request.Builder()
+                .url(Variables.SERVICE_DOMAIN + "/users")
+                .header("Authorization", token)
+                .patch(body)
+                .build();
+
+        return client.newCall(request);
+    }
 }

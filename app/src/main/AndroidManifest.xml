@@ -42,6 +42,9 @@
         <activity
             android:name=".ProfileMangerActivity"
             android:exported="true" />
+        <activity
+            android:name=".UpdateUserActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

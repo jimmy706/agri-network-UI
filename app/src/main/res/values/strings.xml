@@ -14,6 +14,7 @@
     <string name="province_label">Bạn thuộc tỉnh/thành phố</string>
     <string name="phone_label">Số điện thoại</string>
     <string name="password_label">Mật khẩu</string>
+    <string name="link_avatar">Link ảnh đại diện</string>
     <string name="no_network">Không có mạng</string>
     <string name="check_network">Kiểm tra kết nối mạng của bạn</string>
     <string name="title_activity_user_feed">UserFeed</string>
@@ -27,6 +28,8 @@
     <string name="pick_image_action">Chọn hình ảnh</string>
     <string name="picked_image_title">Hình ảnh đã chọn</string>
     <string name="profile_user">Trang cá nhân</string>
+    <string name="update_user"> Cập nhật thông tin</string>
+    <string name="title_update"> Cập nhật</string>
     <string name="hint_search">Tìm kiếm</string>
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>

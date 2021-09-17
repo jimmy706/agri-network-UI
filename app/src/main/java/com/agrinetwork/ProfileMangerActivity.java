@@ -1,5 +1,6 @@
 package com.agrinetwork;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.UserService;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -35,13 +37,25 @@ public class ProfileMangerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String id =  intent.getExtras().getString("userId");
-        fetchUserDetail(id);
+
 
 
         MaterialToolbar iconBack = findViewById(R.id.back);
         iconBack.setNavigationOnClickListener(view -> {
+
             startActivity(new Intent(this, UserFeedActivity.class));
         });
+
+         btnEdit = findViewById(R.id.btn_edit);
+         btnEdit.setOnClickListener(v ->{
+
+             Intent intentNew = new Intent(this,UpdateUserActivity.class);
+             intentNew.putExtra("id",id);
+             startActivity(intentNew);
+
+
+         });
+
 
         avatarProfile = findViewById(R.id.avatar_profile);
         userName = findViewById(R.id.user_name);

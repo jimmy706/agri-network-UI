@@ -69,13 +69,7 @@
             android:translationX="300dp"
             android:translationY="200dp" />
 
-        <Button
-            android:id="@+id/btn_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="xóa tài khoản"
-            android:translationX="285dp"
-            android:translationY="140dp" />
+
 
 
     </RelativeLayout>
