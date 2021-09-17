@@ -29,7 +29,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue_500"
+            android:background="@color/gray_400"
             android:hint="@string/email_label" >
             <com.google.android.material.textfield.TextInputEditText
 
@@ -80,17 +80,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="phone" />
         </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/link_avatar" >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/update_avatar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-        </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

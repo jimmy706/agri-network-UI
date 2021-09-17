@@ -3,16 +3,20 @@ package com.agrinetwork;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.Province;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.ProvinceService;
 import com.agrinetwork.service.UserService;
@@ -25,6 +29,8 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,7 +40,7 @@ public class UpdateUserActivity extends AppCompatActivity {
 
     private UserService userService;
     private ProvinceService provinceService;
-    private TextInputEditText emailText,  firstNameInput, lastNameInput,phoneNumberInput, avatarInput;
+    private TextInputEditText emailText,  firstNameInput, lastNameInput,phoneNumberInput;
     private MaterialAutoCompleteTextView provinceInput;
 
     @Override
@@ -60,7 +66,7 @@ public class UpdateUserActivity extends AppCompatActivity {
         lastNameInput = findViewById(R.id.update_last_name);
         phoneNumberInput = findViewById(R.id.update_phone);
         provinceInput = findViewById(R.id.update_province);
-        avatarInput = findViewById(R.id.update_avatar);
+        getAllProvinces(provinceInput);
 
 
         fetchUserBeforeUpdate(id);
@@ -74,7 +80,7 @@ public class UpdateUserActivity extends AppCompatActivity {
             String firstName = firstNameInput.getText().toString();
             String lastName = lastNameInput.getText().toString();
             String phoneNumber = phoneNumberInput.getText().toString();
-            String avatar = avatarInput.getText().toString();
+
             String province = provinceInput.getText().toString();
 
 
@@ -82,7 +88,7 @@ public class UpdateUserActivity extends AppCompatActivity {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setPhoneNumber(phoneNumber);
-            user.setAvatar(avatar);
+
             user.setProvince(province);
             requestUpdateUser(user,token);
 
@@ -150,11 +156,34 @@ public class UpdateUserActivity extends AppCompatActivity {
             String phoneNumber = user.getPhoneNumber();
             phoneNumberInput.setText(phoneNumber);
 
-            String linkAvatar = user.getAvatar();
-            avatarInput.setText(linkAvatar);
 
             String province = user.getProvince();
             provinceInput.setText(province);
     }
+    private void getAllProvinces(MaterialAutoCompleteTextView provinceInput) {
+        provinceService.getAll().enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Gson gson = new Gson();
+                Province[] provinces = gson.fromJson(response.body().string(), Province[].class);
+                List<String> provinceNames = new ArrayList<>();
+                for(Province p : provinces) {
+                    provinceNames.add(p.getName());
+                }
+
+                UpdateUserActivity.this.runOnUiThread(()-> {
+                    ArrayAdapter<String> provincesAdapter = new ArrayAdapter<>(UpdateUserActivity.this, android.R.layout.simple_list_item_1, provinceNames);
+                    provinceInput.setAdapter(provincesAdapter);
+                });
+            }
+        });
+    }
+
 
 }

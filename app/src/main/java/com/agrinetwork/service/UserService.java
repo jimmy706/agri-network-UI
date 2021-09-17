@@ -70,7 +70,6 @@ public class UserService {
                 .add("firstName", user.getFirstName())
                 .add("lastName", user.getLastName())
                 .add("phoneNumber", user.getPhoneNumber())
-                .add("avatar",user.getAvatar())
                 .add("province", user.getProvince())
                 .build();
 
