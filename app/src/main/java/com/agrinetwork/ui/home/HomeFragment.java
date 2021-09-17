@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -52,14 +52,16 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private String token;
-    private final List<PostItem> posts = new ArrayList<>();
-    private PostAdapter postAdapter;
+    private boolean hasNext = false;
     private int page = 1;
     private int limit = Variables.DEFAULT_LIMIT_POST;
-    private List<Boolean> loadedPostItems = new ArrayList<>();
-    private LinearLayoutManager linearLayoutManager;
+    private final List<PostItem> posts = new ArrayList<>();
+    private final List<Boolean> loadedPostItems = new ArrayList<>();
 
+    private PostAdapter postAdapter;
+    private LinearLayoutManager linearLayoutManager;
     private SwipeRefreshLayout refreshLayout;
+    private TextView emptyPostMessage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +75,8 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        emptyPostMessage = binding.emptyPostMessage;
+
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
         RecyclerView recyclerView = binding.feed;
@@ -84,7 +88,11 @@ public class HomeFragment extends Fragment {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 getPostCommentAndReactionCount();
+                int lastVisibleIndex = linearLayoutManager.findLastVisibleItemPosition();
 
+                if(hasNext && lastVisibleIndex >= posts.size() - 3) {
+                    loadMorePosts();
+                }
             }
         });
 
@@ -132,14 +140,61 @@ public class HomeFragment extends Fragment {
                         PaginationResponse<PostItem> responseData = gson.fromJson(responseBody,paginationType);
 
                         getActivity().runOnUiThread(()-> {
-                            posts.addAll(responseData.getDocs());
+                            if(responseData.getDocs().isEmpty()) {
+                                refreshLayout.setVisibility(View.GONE);
+                                emptyPostMessage.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                refreshLayout.setVisibility(View.VISIBLE);
+                                emptyPostMessage.setVisibility(View.GONE);
 
+                                posts.addAll(responseData.getDocs());
+                                for(int i = 0; i < posts.size(); i++)
+                                    loadedPostItems.add(false);
+
+                                postAdapter.notifyDataSetChanged();
+                                refreshLayout.setRefreshing(false);
+
+                                hasNext = responseData.isHasNextPage();
+
+                                getPostCommentAndReactionCount();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    private void loadMorePosts() {
+        page += 1;
+        if(token != null && !token.isEmpty()) {
+            Call call = postService.getPosts(token, page, limit);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    refreshLayout.setRefreshing(false);
+                }
+
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if(response.code() == 200) {
+                        Gson gson = new Gson();
+                        String responseBody = response.body().string();
+
+                        Type paginationType = new TypeToken<PaginationResponse<PostItem>>(){}.getType();
+                        PaginationResponse<PostItem> responseData = gson.fromJson(responseBody,paginationType);
+
+                        getActivity().runOnUiThread(()-> {
+                            posts.addAll(responseData.getDocs());
                             for(int i = 0; i < posts.size(); i++)
                                 loadedPostItems.add(false);
 
                             postAdapter.notifyDataSetChanged();
                             refreshLayout.setRefreshing(false);
-                            getPostCommentAndReactionCount();
+
+                            hasNext = responseData.isHasNextPage();
                         });
                     }
                 }
