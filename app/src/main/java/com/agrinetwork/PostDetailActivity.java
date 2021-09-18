@@ -152,7 +152,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         User postedByUser = post.getPostedBy();
         String avatarUrl = postedByUser.getAvatar();
-        if(avatarUrl != null) {
+        if(avatarUrl != null && !avatarUrl.isEmpty()) {
             Picasso.get().load(avatarUrl).into(userAvatar);
         }
 

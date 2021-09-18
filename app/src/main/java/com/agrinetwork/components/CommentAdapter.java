@@ -41,7 +41,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         User owner = comment.getOwner();
 
         String avatarUrl = owner.getAvatar();
-        if(avatarUrl != null) {
+        if(avatarUrl != null && !avatarUrl.isEmpty()) {
             Picasso.get().load(avatarUrl).into(holder.avatar);
         }
 

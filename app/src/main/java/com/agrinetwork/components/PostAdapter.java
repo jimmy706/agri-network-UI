@@ -159,7 +159,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         });
 
         String avatarUrl = postItem.getPostedBy().getAvatar();
-        if(avatarUrl != null) {
+        if(avatarUrl != null && !avatarUrl.isEmpty()) {
             Picasso.get().load(avatarUrl).centerCrop().resize(40, 40).into(holder.avatar);
         }
 
@@ -196,12 +196,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         else {
             holder.reactionBtn.setImageResource(R.drawable.ic_fav_border);
         }
-
-        // TODO: This code will be removed in future
-        holder.commentCount.setVisibility(View.INVISIBLE);
-        holder.reactionCount.setVisibility(View.INVISIBLE);
-        holder.reactionBtn.setVisibility(View.GONE);
-        holder.commentBtn.setVisibility(View.GONE);
+        
     }
 
     @Override
