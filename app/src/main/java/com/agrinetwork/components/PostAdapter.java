@@ -21,7 +21,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.PostDetailActivity;
-import com.agrinetwork.ProfileMangerActivity;
+import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.R;
 
 import com.agrinetwork.config.Variables;
@@ -167,7 +167,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
         holder.avatar.setOnClickListener(v -> {
             String userId = postItem.getPostedBy().get_id();
-            Intent intent = new Intent(context, ProfileMangerActivity.class);
+            Intent intent = new Intent(context, UserWallActivity.class);
             intent.putExtra("userId", userId);
             context.startActivity(intent);
         });

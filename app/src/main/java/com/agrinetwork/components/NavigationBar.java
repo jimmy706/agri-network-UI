@@ -15,7 +15,7 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import com.agrinetwork.MainActivity;
-import com.agrinetwork.ProfileMangerActivity;
+import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.R;
 
 import com.agrinetwork.config.Variables;
@@ -53,7 +53,7 @@ public class NavigationBar extends RelativeLayout {
             int itemId = menuItem.getItemId();
             if(itemId == R.id.view_profile){
                 String userId =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
-                Intent intent = new Intent(context,ProfileMangerActivity.class);
+                Intent intent = new Intent(context, UserWallActivity.class);
                 intent.putExtra("userId",userId);
                 context.startActivity(intent);
             }

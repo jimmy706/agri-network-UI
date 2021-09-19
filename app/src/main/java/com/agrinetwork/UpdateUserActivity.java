@@ -6,9 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,9 +21,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +55,7 @@ public class UpdateUserActivity extends AppCompatActivity {
         MaterialToolbar iconBack = findViewById(R.id.backToWall);
         iconBack.setNavigationOnClickListener(view -> {
 
-            Intent intentNew = new Intent(this,ProfileMangerActivity.class);
+            Intent intentNew = new Intent(this, UserWallActivity.class);
             intentNew.putExtra("userId",id);
             startActivity(intentNew);
 
@@ -101,7 +96,7 @@ public class UpdateUserActivity extends AppCompatActivity {
 
 
             Toast.makeText(UpdateUserActivity.this, "Cập nhật tài khoản thành công", Toast.LENGTH_SHORT).show();
-            Intent intentNew = new Intent(this,ProfileMangerActivity.class);
+            Intent intentNew = new Intent(this, UserWallActivity.class);
             intentNew.putExtra("userId",id);
             startActivity(intentNew);
         }

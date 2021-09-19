@@ -12,7 +12,6 @@
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_register.xml" value="0.28940217391304346" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_update_user.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_user_feed.xml" value="0.26268115942028986" />
-        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/add_post_bottom_sheet_popup.xml" value="0.358695652173913" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_add_post.xml" value="0.3109375" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_home.xml" value="0.25" />
@@ -21,7 +20,6 @@
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_products.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/loading_dialog.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/navigation_bar.xml" value="0.25" />
-        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/post_action_bottom_sheet_popup.xml" value="0.358695652173913" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/post_comment_adapter.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/post_item_adapter.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/profile_user.xml" value="0.35104166666666664" />
@@ -45,7 +43,7 @@
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/fragment_products.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/navigation_bar.xml" value="0.264" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/post_item_adapter.xml" value="0.2246376811594203" />
-        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/profile_user.xml" value="0.176" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/profile_user.xml" value="0.1" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/slider_image_item.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/menu/add_post_menu.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/menu/bottom_nav_menu.xml" value="0.12708333333333333" />
