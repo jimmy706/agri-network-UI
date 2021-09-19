@@ -1,22 +1,22 @@
 package com.agrinetwork;
 
 
-import android.content.Context;
+
 import android.content.Intent;
 
-import android.content.SharedPreferences;
+
 import android.os.Build;
 import android.os.Bundle;
 
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
-import com.agrinetwork.config.Variables;
-import com.agrinetwork.entities.User;
 import com.agrinetwork.service.UserService;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -25,14 +25,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.agrinetwork.databinding.ActivityUserFeedBinding;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class UserFeedActivity extends AppCompatActivity {
@@ -68,11 +62,30 @@ public class UserFeedActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         btnAddPost.setOnClickListener(v -> {
-            startActivity(new Intent(this, CreatePostActivity.class));
+            showBottomSheetAddNewPost();
         });
 
 
     }
 
+    private void showBottomSheetAddNewPost() {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.add_post_bottom_sheet_popup);
 
+        LinearLayout addRegularPost = bottomSheetDialog.findViewById(R.id.add_regular_post);
+        addRegularPost.setOnClickListener(v -> {
+            startActivity(new Intent(this, CreatePostActivity.class));
+        });
+
+        LinearLayout addSellPost = bottomSheetDialog.findViewById(R.id.add_sell_post);
+        addSellPost.setOnClickListener(v -> {
+            Toast.makeText(this, "Thêm sản phẩm", Toast.LENGTH_SHORT).show();
+        });
+
+        LinearLayout addPlanningPost = bottomSheetDialog.findViewById(R.id.add_planning_post);
+        addPlanningPost.setOnClickListener(v -> {
+            Toast.makeText(this, "Thêm kế hoạch sản xuất", Toast.LENGTH_SHORT).show();
+        });
+        bottomSheetDialog.show();
+    }
 }

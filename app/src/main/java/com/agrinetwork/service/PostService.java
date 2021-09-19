@@ -96,9 +96,10 @@ public class PostService {
         return client.newCall(request);
     }
 
-    public Call deletePost(String postId) {
+    public Call deletePost(String token, String postId) {
         Request request = new Request.Builder()
                 .url(SERVICE_URL + "/" + postId)
+                .header("Authorization", token)
                 .delete()
                 .build();
 

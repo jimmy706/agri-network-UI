@@ -4,8 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,24 +21,23 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.PostDetailActivity;
+import com.agrinetwork.ProfileMangerActivity;
 import com.agrinetwork.R;
 
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PostItem;
+import com.agrinetwork.interfaces.DeletePostListener;
 import com.agrinetwork.interfaces.ListItemClickListener;
 import com.agrinetwork.service.PostService;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 
 import java.util.Date;
 import java.util.List;
@@ -56,13 +55,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private final Context context;
     private final String token;
     private final PostService postService;
+    private final SharedPreferences sharedPreferences;
+    private final String currentLoginUserId;
+    @Setter
+    private DeletePostListener deletePostListener;
 
     public PostAdapter(List<PostItem> posts, Context context) {
         this.posts = posts;
         this.context = context;
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
-
+        currentLoginUserId = sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID, "");
         this.postService = new PostService(context);
     }
 
@@ -162,6 +165,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         if(avatarUrl != null && !avatarUrl.isEmpty()) {
             Picasso.get().load(avatarUrl).centerCrop().resize(40, 40).into(holder.avatar);
         }
+        holder.avatar.setOnClickListener(v -> {
+            String userId = postItem.getPostedBy().get_id();
+            Intent intent = new Intent(context, ProfileMangerActivity.class);
+            intent.putExtra("userId", userId);
+            context.startActivity(intent);
+        });
 
         String name = postItem.getPostedBy().getFirstName() + " " + postItem.getPostedBy().getLastName();
         holder.displayName.setText(name);
@@ -197,6 +206,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.reactionBtn.setImageResource(R.drawable.ic_fav_border);
         }
 
+        if(!currentLoginUserId.equals(postItem.getPostedBy().get_id())) {
+            holder.moreActionBtn.setVisibility(View.GONE);
+        }
+        else {
+            holder.moreActionBtn.setOnClickListener(v -> {
+                showPostActions(postItem);
+            });
+        }
     }
 
     @Override
@@ -245,4 +262,24 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         });
     }
 
+    private void showPostActions(PostItem postItem) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog.setContentView(R.layout.post_action_bottom_sheet_popup);
+
+        RelativeLayout editPost = bottomSheetDialog.findViewById(R.id.edit_post);
+        editPost.setOnClickListener(v -> {
+            Toast.makeText(context, "Mở edit post", Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
+        });
+
+        RelativeLayout deletePost = bottomSheetDialog.findViewById(R.id.delete_post);
+        deletePost.setOnClickListener(v -> {
+            if(deletePostListener != null) {
+                deletePostListener.onDelete(postItem.get_id());
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.show();
+    }
 }

@@ -35,6 +35,11 @@
     <string name="empty_comment">Chưa có bình luận nào tại đây</string>
     <string name="empty_post">Chưa có bài đăng nào</string>
     <string name="view_profile">Trang cá nhân</string>
+    <string name="add_new_regular_post">Thêm bài đăng mới</string>
+    <string name="add_new_product">Thêm sản phẩm mới</string>
+    <string name="add_new_planning">Thêm kế hoạch sản xuất</string>
+    <string name="delete_post">Xóa bài đăng</string>
+    <string name="edit_post">Chỉnh sửa bài đăng</string>
 
     <string name="email_required">Địa chỉ email không thể để trống</string>
     <string name="phone_required">Sđt không thể để trống</string>
@@ -43,8 +48,6 @@
     <string name="password_required">Mật khẩu không thể để trống</string>
     <string name="usertype_require">Chọn loại thành viên</string>
     <string name="province_required">Chọn tỉnh/thành phố</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
