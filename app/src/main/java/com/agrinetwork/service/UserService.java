@@ -44,7 +44,6 @@ public class UserService {
         return client.newCall(request);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public  Call getUserLogin(String token){
         Request request = new Request.Builder()
                 .url(SERVICE_URL  )

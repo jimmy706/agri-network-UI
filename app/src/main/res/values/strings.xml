@@ -34,6 +34,7 @@
     <string name="write_comment_acction_hint">Nhập bình luận</string>
     <string name="empty_comment">Chưa có bình luận nào tại đây</string>
     <string name="empty_post">Chưa có bài đăng nào</string>
+    <string name="view_profile">Trang cá nhân</string>
 
     <string name="email_required">Địa chỉ email không thể để trống</string>
     <string name="phone_required">Sđt không thể để trống</string>

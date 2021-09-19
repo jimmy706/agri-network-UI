@@ -72,32 +72,7 @@ public class UserFeedActivity extends AppCompatActivity {
         });
 
 
-        fetchLoginUser();
     }
-    private void fetchLoginUser() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
-        String token =  sharedPreferences.getString(Variables.ID_TOKEN_LABEL,"");
 
-        Call getUserLogin = userService.getUserLogin(token);
-        getUserLogin.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call getUserLogin, @NonNull IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(@NonNull Call getUserLogin, @NonNull Response response) throws IOException {
-                Gson gson = new Gson();
-                String jsonData = response.body().string();
-                User user = gson.fromJson(jsonData, User.class);
-                String currentLoginUserId = user.get_id();
-                String avatarLink = user.getAvatar();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("currentLoginUserId", currentLoginUserId);
-                editor.putString("currentLoginUserAvatar",avatarLink);
-                editor.apply();
-            }
-        });
-    }
 
 }

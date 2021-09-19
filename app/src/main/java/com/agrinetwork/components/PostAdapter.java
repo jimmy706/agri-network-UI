@@ -196,7 +196,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         else {
             holder.reactionBtn.setImageResource(R.drawable.ic_fav_border);
         }
-        
+
     }
 
     @Override
