@@ -71,6 +71,7 @@ public class UserService {
                 .add("lastName", user.getLastName())
                 .add("phoneNumber", user.getPhoneNumber())
                 .add("province", user.getProvince())
+                .add("avatar", user.getAvatar())
                 .build();
 
         Request request = new Request.Builder()

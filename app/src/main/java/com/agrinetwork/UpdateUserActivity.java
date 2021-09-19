@@ -42,6 +42,7 @@ public class UpdateUserActivity extends AppCompatActivity {
     private ProvinceService provinceService;
     private TextInputEditText emailText,  firstNameInput, lastNameInput,phoneNumberInput;
     private MaterialAutoCompleteTextView provinceInput;
+    private  User userResponse;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -58,8 +59,13 @@ public class UpdateUserActivity extends AppCompatActivity {
 
         MaterialToolbar iconBack = findViewById(R.id.backToWall);
         iconBack.setNavigationOnClickListener(view -> {
-            startActivity(new Intent(this, UserFeedActivity.class));
+
+            Intent intentNew = new Intent(this,ProfileMangerActivity.class);
+            intentNew.putExtra("userId",id);
+            startActivity(intentNew);
+
         });
+
 
         emailText = findViewById(R.id.display_email);
         firstNameInput = findViewById(R.id.update_first_name);
@@ -77,25 +83,27 @@ public class UpdateUserActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
             String token =  sharedPreferences.getString(Variables.ID_TOKEN_LABEL,"");
 
+
             String firstName = firstNameInput.getText().toString();
             String lastName = lastNameInput.getText().toString();
             String phoneNumber = phoneNumberInput.getText().toString();
-
             String province = provinceInput.getText().toString();
 
 
-            User user = new User();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setPhoneNumber(phoneNumber);
-
-            user.setProvince(province);
-            requestUpdateUser(user,token);
-
-            Toast  successful= Toast.makeText(this, "Cập nhật tài khoản thành công", Toast.LENGTH_LONG);
-            successful.show();
+            User updatingUser = new User();
+                    updatingUser.setFirstName(firstName);
+                    updatingUser.setLastName(lastName);
+                    updatingUser.setPhoneNumber(phoneNumber);
+                    updatingUser.setProvince(province);
+                    String avatar = userResponse.getAvatar();
+                    updatingUser.setAvatar(avatar);
+            requestUpdateUser(updatingUser,token);
 
 
+            Toast.makeText(UpdateUserActivity.this, "Cập nhật tài khoản thành công", Toast.LENGTH_SHORT).show();
+            Intent intentNew = new Intent(this,ProfileMangerActivity.class);
+            intentNew.putExtra("userId",id);
+            startActivity(intentNew);
         }
 
         );
@@ -130,9 +138,10 @@ public class UpdateUserActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call getbyId, @NonNull Response response) throws IOException {
                 Gson gson = new Gson();
                 String jsonData = response.body().string();
-                User user = gson.fromJson(jsonData, User.class);
+                userResponse = gson.fromJson(jsonData, User.class);
+
                 UpdateUserActivity.this.runOnUiThread(()-> {
-                    renderBeforeUpdate(user);
+                    renderBeforeUpdate(userResponse);
                 });
 
             }
@@ -141,23 +150,22 @@ public class UpdateUserActivity extends AppCompatActivity {
 
     }
 
-    private void  renderBeforeUpdate(User user){
+    private void  renderBeforeUpdate(User userResponse){
 
-            String emailAddress = user.getEmail();
+            String emailAddress = userResponse.getEmail();
             emailText.setText(emailAddress);
             emailText.setFocusable(false);
 
-            String firstName = user.getFirstName();
+            String firstName = userResponse.getFirstName();
             firstNameInput.setText(firstName);
 
-            String lastName = user.getLastName();
+            String lastName = userResponse.getLastName();
             lastNameInput.setText(lastName);
 
-            String phoneNumber = user.getPhoneNumber();
+            String phoneNumber = userResponse.getPhoneNumber();
             phoneNumberInput.setText(phoneNumber);
 
-
-            String province = user.getProvince();
+            String province = userResponse.getProvince();
             provinceInput.setText(province);
     }
     private void getAllProvinces(MaterialAutoCompleteTextView provinceInput) {

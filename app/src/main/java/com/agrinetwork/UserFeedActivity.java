@@ -91,8 +91,10 @@ public class UserFeedActivity extends AppCompatActivity {
                 String jsonData = response.body().string();
                 User user = gson.fromJson(jsonData, User.class);
                 String currentLoginUserId = user.get_id();
+                String avatarLink = user.getAvatar();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("currentLoginUserId", currentLoginUserId);
+                editor.putString("currentLoginUserAvatar",avatarLink);
                 editor.apply();
             }
         });
