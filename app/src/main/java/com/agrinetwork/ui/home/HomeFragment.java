@@ -86,8 +86,6 @@ public class HomeFragment extends Fragment {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                getPostCommentAndReactionCount();
                 int lastVisibleIndex = linearLayoutManager.findLastVisibleItemPosition();
 
                 if(hasNext && lastVisibleIndex >= posts.size() - 3) {
@@ -149,15 +147,13 @@ public class HomeFragment extends Fragment {
                                 emptyPostMessage.setVisibility(View.GONE);
 
                                 posts.addAll(responseData.getDocs());
-                                for(int i = 0; i < posts.size(); i++)
-                                    loadedPostItems.add(false);
 
                                 postAdapter.notifyDataSetChanged();
                                 refreshLayout.setRefreshing(false);
 
                                 hasNext = responseData.isHasNextPage();
 
-                                getPostCommentAndReactionCount();
+
                             }
                         });
                     }
@@ -188,9 +184,6 @@ public class HomeFragment extends Fragment {
 
                         getActivity().runOnUiThread(()-> {
                             posts.addAll(responseData.getDocs());
-                            for(int i = 0; i < posts.size(); i++)
-                                loadedPostItems.add(false);
-
                             postAdapter.notifyDataSetChanged();
                             refreshLayout.setRefreshing(false);
 
@@ -202,68 +195,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void getPostCommentAndReactionCount() {
-
-        if(posts.size() > 1) {
-            int firstVisibleIndex = linearLayoutManager.findFirstVisibleItemPosition();
-            int lastVisibleIndex = linearLayoutManager.findLastVisibleItemPosition();
-
-            if(firstVisibleIndex != -1 && lastVisibleIndex != -1) {
-                PostItem postItemLast = posts.get(lastVisibleIndex);
-                PostItem postItemFirst = posts.get(firstVisibleIndex);
-
-                boolean shouldLoadedPostItemFirst = !loadedPostItems.get(firstVisibleIndex);
-                if(shouldLoadedPostItemFirst) {
-                    fetchPostCommentCountAndReactionCount(postItemFirst, firstVisibleIndex);
-                }
-
-                boolean shouldLoadPostItemLast = !loadedPostItems.get(lastVisibleIndex);
-                if(shouldLoadPostItemLast) {
-                    fetchPostCommentCountAndReactionCount(postItemLast, lastVisibleIndex);
-                }
-            }
-            else {
-                fetchPostCommentCountAndReactionCount(posts.get(0), 0);
-            }
-        }
 
 
-    }
-
-    private void fetchPostCommentCountAndReactionCount(PostItem postItem, int postPosition) {
-        Call call = postService.getCommentsAndReactionsCountFromPost(token, postItem.get_id());
-        loadedPostItems.set(postPosition, true);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
-                String body = response.body().string();
-                try {
-                    JSONObject jsonObject = new JSONObject(body);
-                    int countComments = jsonObject.getInt("countComments");
-                    int countReactions = jsonObject.getInt("countReactions");
-                    boolean isLiked = jsonObject.getBoolean("isLiked");
-
-                   getActivity().runOnUiThread(() -> {
-
-                       postItem.setNumberOfComments(countComments);
-                       postItem.setNumberOfReactions(countReactions);
-                       postItem.setLiked(isLiked);
-
-                       postAdapter.notifyItemChanged(postPosition);
-                   });
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-    }
 
 }
