@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import com.agrinetwork.MainActivity;
@@ -37,29 +38,37 @@ public class NavigationBar extends RelativeLayout {
         EditText search = this.findViewById(R.id.search_text);
         Button logOutBtn = this.findViewById(R.id.btn_logout);
 
-        SharedPreferences sharedPreferencesAvatar = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
-        String avatarUrl =  sharedPreferencesAvatar.getString(Variables.CURRENT_LOGIN_USER_AVATAR,"");
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        String avatarUrl =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_AVATAR,"");
         if(avatarUrl != null && !avatarUrl.isEmpty()) {
             Picasso.get().load(avatarUrl).into(avatar);
         }
 
+        PopupMenu popupMenu = new PopupMenu(context, avatar);
+        popupMenu.getMenuInflater().inflate(R.menu.user_profile_menu, popupMenu.getMenu());
 
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            int itemId = menuItem.getItemId();
+            if(itemId == R.id.view_profile){
+                String userId =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
+                Intent intent = new Intent(context,ProfileMangerActivity.class);
+                intent.putExtra("userId",userId);
+                context.startActivity(intent);
+            }
+            else if(itemId == R.id.logout) {
+                firebaseAuth.signOut();
+                context.startActivity(new Intent(context,MainActivity.class));
+            }
+            return true;
+        });
 
         avatar.setOnClickListener(v ->{
-             SharedPreferences sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
-             String userId =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
-
-            Intent intent = new Intent(context,ProfileMangerActivity.class);
-            intent.putExtra("userId",userId);
-             context.startActivity(intent);
+            popupMenu.show();
          });
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        logOutBtn.setOnClickListener(v ->{
-                firebaseAuth.signOut();
-                context.startActivity(new Intent(context,MainActivity.class));
-        });
 
     }
 

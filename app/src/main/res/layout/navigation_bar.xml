@@ -6,7 +6,7 @@
   >
 
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar_user"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -23,6 +23,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="100dp"
         android:layout_toRightOf="@id/avatar_user"
+        app:hintEnabled="false"
         app:startIconDrawable="@drawable/ic_search">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -41,6 +42,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="270dp"
         android:layout_toRightOf="@id/avatar_user"
+        android:visibility="gone"
         android:text="Đăng xuất" />
 
 
