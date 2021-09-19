@@ -120,14 +120,15 @@
                         android:layout_height="30dp"
                         android:layout_marginRight="5dp"
                         android:src="@drawable/ic_fav" />
+
                     <TextView
+                        android:id="@+id/reaction_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/reaction_button"
                         android:layout_centerVertical="true"
-                        android:id="@+id/reaction_count"
-                        android:textSize="12sp"
-                        android:text="145"/>
+                        android:layout_toRightOf="@id/reaction_button"
+                        android:text="145"
+                        android:textSize="12sp" />
                 </RelativeLayout>
 
                 <RelativeLayout

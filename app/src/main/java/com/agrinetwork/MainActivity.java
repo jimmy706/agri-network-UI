@@ -1,6 +1,7 @@
 package com.agrinetwork;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
@@ -19,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.User;
 import com.agrinetwork.helpers.TextValidator;
+import com.agrinetwork.service.UserService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -31,12 +34,19 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.gson.Gson;
 
 
+import java.io.IOException;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 public class MainActivity extends Activity {
+    private UserService userService;
 
     private static final int RC_SIGN_IN = 1;
 
@@ -48,12 +58,11 @@ public class MainActivity extends Activity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Remove title bar
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userService = new UserService(this);
 
         MaterialButton loginButton = findViewById(R.id.login_btn);
         inputEmail = findViewById(R.id.edit_text_email);
@@ -90,6 +99,7 @@ public class MainActivity extends Activity {
                             MainActivity.this.runOnUiThread(()-> {
                                 Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                                 setSharedToken(idToken);
+                                fetchCurrentLoginUser(idToken);
                                 startActivity(new Intent(MainActivity.this, UserFeedActivity.class));
                             });
                         }
@@ -128,6 +138,7 @@ public class MainActivity extends Activity {
 
                             MainActivity.this.runOnUiThread(()-> {
                                 setSharedToken(idToken);
+                                fetchCurrentLoginUser(idToken);
                                 startActivity(new Intent(MainActivity.this, UserFeedActivity.class));
                             });
                         }
@@ -191,5 +202,31 @@ public class MainActivity extends Activity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(Variables.ID_TOKEN_LABEL, idToken);
         editor.apply();
+    }
+
+    private void fetchCurrentLoginUser(String token) {
+
+        Call getUserLogin = userService.getUserLogin(token);
+        getUserLogin.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call getUserLogin, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call getUserLogin, @NonNull Response response) throws IOException {
+                SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+
+                Gson gson = new Gson();
+                String jsonData = response.body().string();
+                User user = gson.fromJson(jsonData, User.class);
+                String currentLoginUserId = user.get_id();
+                String avatarLink = user.getAvatar();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(Variables.CURRENT_LOGIN_USER_ID, currentLoginUserId);
+                editor.putString(Variables.CURRENT_LOGIN_USER_AVATAR,avatarLink);
+                editor.apply();
+            }
+        });
     }
 }

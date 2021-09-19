@@ -102,7 +102,9 @@ public class ProfileMangerActivity extends AppCompatActivity {
       email.setText(emailAddress);
 
       String urlImg = user.getAvatar();
-        Picasso.get().load(urlImg).into(avatarProfile);
+      if(urlImg != null && !urlImg.isEmpty()) {
+          Picasso.get().load(urlImg).into(avatarProfile);
+      }
 
     }
 
