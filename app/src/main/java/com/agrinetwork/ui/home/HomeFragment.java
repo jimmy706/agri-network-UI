@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -68,7 +69,10 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         postService = new PostService(getContext());
 
-        postAdapter = new PostAdapter(posts,getActivity());
+        postAdapter = new PostAdapter(posts, getActivity());
+        postAdapter.setDeletePostListener(postId -> {
+            deletePost(postId);
+        });
 
         getTokenFromSharedPreference();
 
@@ -105,6 +109,40 @@ public class HomeFragment extends Fragment {
         fetchPosts();
 
         return root;
+    }
+
+    private void deletePost(String postId) {
+
+
+
+        Call call = postService.deletePost(token, postId);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.code() == 200) {
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getActivity(), "Bài đăng đã xóa", Toast.LENGTH_SHORT).show();
+                        int deletePosition = -1;
+                        for(int i = 0; i < posts.size(); i++) {
+                            if(posts.get(i).get_id().equals(postId)){
+                                deletePosition = i;
+                                break;
+                            }
+                        }
+
+                        if(deletePosition != -1){
+                            posts.remove(deletePosition);
+                            postAdapter.notifyItemRemoved(deletePosition);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
