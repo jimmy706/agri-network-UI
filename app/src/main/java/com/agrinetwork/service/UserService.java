@@ -81,4 +81,48 @@ public class UserService {
 
         return client.newCall(request);
     }
+
+    public Call follow(String token, String followTargetUser) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .post(body)
+                .header("Authorization", token)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + followTargetUser + "/follow")
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call unfollow(String token, String unfollowTargetUser) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .post(body)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + unfollowTargetUser + "/unfollow")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call getFollowings(String token, String userId) {
+        Request request = new Request.Builder()
+                .get()
+                .header("Authorization", token)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + userId + "/followings")
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call getFollowers(String token, String userId) {
+        Request request = new Request.Builder()
+                .get()
+                .header("Authorization", token)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + userId + "/followers")
+                .build();
+
+        return client.newCall(request);
+    }
 }

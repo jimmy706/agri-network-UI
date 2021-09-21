@@ -43,6 +43,11 @@
     <string name="full_name">Họ và tên</string>
     <string name="province_name">Tỉnh</string>
     <string name="edit_btn">Chỉnh Sửa</string>
+    <string name="recommend_users_tab_title">Gợi ý</string>
+    <string name="following_users_tab_title">Đang theo dõi</string>
+    <string name="follower_tab_title">Người theo dõi</string>
+    <string name="following">Đang theo dõi</string>
+    <string name="follow">Theo dõi</string>
 
     <string name="email_required">Địa chỉ email không thể để trống</string>
     <string name="phone_required">Sđt không thể để trống</string>
@@ -51,6 +56,8 @@
     <string name="password_required">Mật khẩu không thể để trống</string>
     <string name="usertype_require">Chọn loại thành viên</string>
     <string name="province_required">Chọn tỉnh/thành phố</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
