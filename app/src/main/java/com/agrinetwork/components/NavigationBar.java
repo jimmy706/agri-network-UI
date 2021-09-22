@@ -1,7 +1,5 @@
 package com.agrinetwork.components;
 
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +13,7 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
 import com.agrinetwork.MainActivity;
+import com.agrinetwork.SearchUserActivity;
 import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.R;
 
@@ -36,7 +35,7 @@ public class NavigationBar extends RelativeLayout {
         layoutInflater.inflate(R.layout.navigation_bar, this);
         ImageView avatar = this.findViewById(R.id.avatar_user);
         EditText search = this.findViewById(R.id.search_text);
-        Button logOutBtn = this.findViewById(R.id.btn_logout);
+        Button btnSearch = this.findViewById(R.id.btn_search);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -68,7 +67,9 @@ public class NavigationBar extends RelativeLayout {
             popupMenu.show();
          });
 
-
+        btnSearch.setOnClickListener(v ->{
+            context.startActivity(new Intent(context, SearchUserActivity.class));
+        });
 
     }
 

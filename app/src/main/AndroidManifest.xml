@@ -45,6 +45,9 @@
         <activity
             android:name=".UpdateUserActivity"
             android:exported="true" />
+        <activity
+            android:name=".SearchUserActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

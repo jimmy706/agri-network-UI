@@ -37,13 +37,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_logout"
+        android:id="@+id/btn_search"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="270dp"
         android:layout_toRightOf="@id/avatar_user"
-        android:visibility="gone"
-        android:text="Đăng xuất" />
-
+        android:text="Tìm kiếm"
+        android:visibility="visible"></Button>
 
 </RelativeLayout>

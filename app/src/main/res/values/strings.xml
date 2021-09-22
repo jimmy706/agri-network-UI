@@ -30,6 +30,8 @@
     <string name="update_user"> Cập nhật thông tin</string>
     <string name="title_update"> Cập nhật</string>
     <string name="hint_search">Tìm kiếm</string>
+    <string name="hint_results">Kết quả tìm kiếm</string>
+
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>
     <string name="empty_comment">Chưa có bình luận nào tại đây</string>
