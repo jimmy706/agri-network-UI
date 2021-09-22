@@ -34,9 +34,6 @@ import com.agrinetwork.service.PostService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -70,9 +67,7 @@ public class HomeFragment extends Fragment {
         postService = new PostService(getContext());
 
         postAdapter = new PostAdapter(posts, getActivity());
-        postAdapter.setDeletePostListener(postId -> {
-            deletePost(postId);
-        });
+        postAdapter.setDeletePostListener(this::deletePost);
 
         getTokenFromSharedPreference();
 
@@ -112,9 +107,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void deletePost(String postId) {
-
-
-
         Call call = postService.deletePost(token, postId);
         call.enqueue(new Callback() {
             @Override

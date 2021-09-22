@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class User {
     private String firstName;
@@ -16,5 +15,5 @@ public class User {
     private String type;
     private String province;
     private String _id;
-
+    private boolean isFollowed;
 }

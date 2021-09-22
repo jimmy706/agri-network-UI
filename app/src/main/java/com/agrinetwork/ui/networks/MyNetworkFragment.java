@@ -2,65 +2,68 @@ package com.agrinetwork.ui.networks;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.agrinetwork.R;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyNetworkFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MyNetworkFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MyNetworkFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyNetworkFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyNetworkFragment newInstance(String param1, String param2) {
-        MyNetworkFragment fragment = new MyNetworkFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private static final int NUM_PAGES = 3;
+    private static final int[] TAB_TITLES = {R.string.recommend_users_tab_title, R.string.following_users_tab_title, R.string.follower_tab_title};
+    private ViewPager2 viewPager;
+    private FragmentStateAdapter pagerAdapter;
+    private TabLayout tabLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_network, container, false);
+        final View root = inflater.inflate(R.layout.fragment_my_network, container, false);
+
+        viewPager = root.findViewById(R.id.pager);
+        pagerAdapter = new MyNetworkSliderPagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
+
+        tabLayout = root.findViewById(R.id.tab_layout);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            tab.setText(getString(TAB_TITLES[position]));
+        }).attach();
+
+        return root;
+    }
+
+    private class MyNetworkSliderPagerAdapter extends FragmentStateAdapter {
+
+
+        public MyNetworkSliderPagerAdapter(@NonNull Fragment fragment) {
+            super(fragment);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            String title = getString(TAB_TITLES[position]);
+            switch (position) {
+                case 1:
+                    return MyFollowFragment.newInstance(title, FollowTabFragmentType.FOLLOWINGS);
+                case 2:
+                    return MyFollowFragment.newInstance(title, FollowTabFragmentType.FOLLOWERS);
+                default:
+                    return RecommendUsersFragment.newInstance(title);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return NUM_PAGES;
+        }
     }
 }

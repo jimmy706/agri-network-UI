@@ -57,6 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private final PostService postService;
     private final SharedPreferences sharedPreferences;
     private final String currentLoginUserId;
+
     @Setter
     private DeletePostListener deletePostListener;
 
