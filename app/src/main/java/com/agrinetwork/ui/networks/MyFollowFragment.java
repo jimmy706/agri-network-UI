@@ -39,12 +39,13 @@ import okhttp3.Response;
 public class MyFollowFragment extends Fragment {
 
     private static final String ARG_TITLE = "title";
-    private static final String ART_TYPE = "type";
+    private static final String ARG_TYPE = "type";
 
     private final List<User> users = new ArrayList<>();
     private UserAdapter userAdapter;
     private UserService userService;
     private String token;
+
     private String currentLoginUserId;
     private SwipeRefreshLayout refreshLayout;
 
@@ -53,6 +54,8 @@ public class MyFollowFragment extends Fragment {
     private String title;
     private String type;
 
+    private TextView noResultFoundMessage;
+
     public MyFollowFragment() {
     }
 
@@ -60,7 +63,7 @@ public class MyFollowFragment extends Fragment {
         MyFollowFragment fragment = new MyFollowFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
-        args.putString(ART_TYPE, tabType.getType());
+        args.putString(ARG_TYPE, tabType.getType());
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +73,7 @@ public class MyFollowFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             title = getArguments().getString(ARG_TITLE);
-            type = getArguments().getString(ART_TYPE);
+            type = getArguments().getString(ARG_TYPE);
         }
     }
 
@@ -92,12 +95,14 @@ public class MyFollowFragment extends Fragment {
         refreshLayout = root.findViewById(R.id.refresh_layout);
         refreshLayout.setOnRefreshListener(()-> {
             users.clear();
-            fetchFollowers();
+            fetchData();
         });
 
         RecyclerView recyclerView = root.findViewById(R.id.follow_list);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(userAdapter);
+
+        noResultFoundMessage = root.findViewById(R.id.no_result_found);
 
         fetchData();
 
@@ -130,9 +135,17 @@ public class MyFollowFragment extends Fragment {
                     List<User> followers = gson.fromJson(responseData, userListType);
 
                     getActivity().runOnUiThread(()-> {
-                        users.addAll(followers);
-                        userAdapter.notifyDataSetChanged();
-                        refreshLayout.setRefreshing(false);
+                        if(!followers.isEmpty()) {
+                            users.addAll(followers);
+                            userAdapter.notifyDataSetChanged();
+                            refreshLayout.setRefreshing(false);
+
+                            noResultFoundMessage.setVisibility(View.GONE);
+                        }
+                        else {
+                            noResultFoundMessage.setVisibility(View.VISIBLE);
+                        }
+
                     });
                 }
             }
@@ -140,7 +153,7 @@ public class MyFollowFragment extends Fragment {
     }
 
     private void fetchFollowings() {
-        Call call = userService.getFollowers(token, currentLoginUserId);
+        Call call = userService.getFollowings(token, currentLoginUserId);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -157,9 +170,16 @@ public class MyFollowFragment extends Fragment {
                     List<User> followingUsers = gson.fromJson(responseData, userListType);
 
                     getActivity().runOnUiThread(()-> {
-                        users.addAll(followingUsers.stream().peek(user -> user.setFollowed(true)).collect(Collectors.toList()));
-                        userAdapter.notifyDataSetChanged();
-                        refreshLayout.setRefreshing(false);
+                       if(!followingUsers.isEmpty()) {
+                           users.addAll(followingUsers.stream().peek(user -> user.setFollowed(true)).collect(Collectors.toList()));
+                           userAdapter.notifyDataSetChanged();
+                           refreshLayout.setRefreshing(false);
+
+                           noResultFoundMessage.setVisibility(View.GONE);
+                       }
+                       else{
+                           noResultFoundMessage.setVisibility(View.VISIBLE);
+                       }
                     });
                 }
             }

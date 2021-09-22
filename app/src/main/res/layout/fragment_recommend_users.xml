@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.networks.RecommendUsersFragment"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/no_recommended_user"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_recommended_user"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_centerInParent="true"/>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_alignParentTop="true"
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,4 +28,4 @@
             />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+</RelativeLayout>

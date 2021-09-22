@@ -48,6 +48,8 @@
     <string name="follower_tab_title">Người theo dõi</string>
     <string name="following">Đang theo dõi</string>
     <string name="follow">Theo dõi</string>
+    <string name="no_recommended_user">Không tìm thấy kết quả nào, quay lại sau nhé :3</string>
+    <string name="no_users_found">Không tìm thấy kết quả nào</string>
 
     <string name="email_required">Địa chỉ email không thể để trống</string>
     <string name="phone_required">Sđt không thể để trống</string>
@@ -56,8 +58,7 @@
     <string name="password_required">Mật khẩu không thể để trống</string>
     <string name="usertype_require">Chọn loại thành viên</string>
     <string name="province_required">Chọn tỉnh/thành phố</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 </resources>
