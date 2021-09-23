@@ -125,4 +125,14 @@ public class UserService {
 
         return client.newCall(request);
     }
+
+    public Call searchByUser ( String searchText){
+        Request request = new Request.Builder()
+                .get()
+                .url(SERVICE_URL +"/search"+"/userName?search="+searchText)
+                .build();
+        return client.newCall(request);
+
+    }
+
 }

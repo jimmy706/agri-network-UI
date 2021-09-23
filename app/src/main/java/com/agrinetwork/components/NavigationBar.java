@@ -3,6 +3,7 @@ package com.agrinetwork.components;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
@@ -37,6 +38,8 @@ public class NavigationBar extends RelativeLayout {
         EditText search = this.findViewById(R.id.search_text);
         Button btnSearch = this.findViewById(R.id.btn_search);
 
+
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
@@ -68,7 +71,11 @@ public class NavigationBar extends RelativeLayout {
          });
 
         btnSearch.setOnClickListener(v ->{
-            context.startActivity(new Intent(context, SearchUserActivity.class));
+            String searchText = search.getText().toString();
+            Intent intentSearch = new Intent(context,SearchUserActivity.class);
+            intentSearch.putExtra("search",searchText);
+            context.startActivity(intentSearch);
+
         });
 
     }
