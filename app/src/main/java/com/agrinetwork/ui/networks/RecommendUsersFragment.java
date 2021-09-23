@@ -114,12 +114,12 @@ public class RecommendUsersFragment extends Fragment {
                     List<User> userList = gson.fromJson(responseData, userListType);
 
                    getActivity().runOnUiThread(()-> {
+                       refreshLayout.setRefreshing(false);
                       if(!userList.isEmpty()) {
                           noRecommendedUserMessage.setVisibility(View.GONE);
 
                           users.addAll(userList);
                           userAdapter.notifyDataSetChanged();
-                          refreshLayout.setRefreshing(false);
                       }
                       else {
                           noRecommendedUserMessage.setVisibility(View.VISIBLE);
