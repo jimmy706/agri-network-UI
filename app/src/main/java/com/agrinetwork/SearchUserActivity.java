@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.agrinetwork.components.SearchAdapter;
 import com.agrinetwork.entities.User;
@@ -19,12 +18,9 @@ import com.agrinetwork.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import okhttp3.Call;
@@ -44,7 +40,7 @@ public class SearchUserActivity extends AppCompatActivity {
     protected void onCreate( Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_results);
+        setContentView(R.layout.activity_search_user);
         userService = new UserService(this);
         recyclerView = findViewById(R.id.result_list);
 
@@ -67,8 +63,7 @@ public class SearchUserActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(searchAdapter);
-
-         showTextNoResult = findViewById(R.id.no_result);
+        showTextNoResult = findViewById(R.id.no_result);
 
 
         fetchResultUser(searchUser);

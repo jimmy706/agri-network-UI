@@ -2,6 +2,7 @@ package com.agrinetwork.components;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.agrinetwork.R;
+import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.UserService;
 import com.squareup.picasso.Picasso;
@@ -31,21 +33,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private final UserService userService;
 
 
-
     public SearchAdapter (List<User> users, Context context){
         this.users = users;
         this.context = context;
         this.userService = new UserService(context);
 
-
-        }
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View resultView = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_result_item, parent, false);
-      return new SearchAdapter.ViewHolder(resultView);
-       // return  new ViewHolder(resultView);
+        return new SearchAdapter.ViewHolder(resultView);
+
     }
 
     @Override
@@ -70,16 +70,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         String userType = user.getType();
         holder.displayType.setText(userType);
 
-
+        holder.buttonDetail.setOnClickListener(v -> {
+            String userId =user.get_id();
+            Intent intent = new Intent(context, UserWallActivity.class);
+            intent.putExtra("userId", userId);
+            context.startActivity(intent);
+        });
     }
-
 
 
     @Override
     public int getItemCount() {
         return users.size();
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -95,14 +98,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             displayType = itemView.findViewById(R.id.user_type);
             buttonDetail = itemView.findViewById(R.id.btn_detail);
 
-
-
-//           buttonDetail.setOnClickListener(new View.OnClickListener() {
-//               @Override
-//               public void onClick(View view) {
-//
-//               }
-//           });
         }
     }
+
 }
