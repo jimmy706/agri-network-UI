@@ -30,10 +30,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private final Context context;
     private final UserService userService;
 
+
+
     public SearchAdapter (List<User> users, Context context){
         this.users = users;
         this.context = context;
-        userService = new UserService(context);
+        this.userService = new UserService(context);
+
 
         }
 
@@ -41,7 +44,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View resultView = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_result_item, parent, false);
-        return new SearchAdapter.ViewHolder(resultView);
+      return new SearchAdapter.ViewHolder(resultView);
+       // return  new ViewHolder(resultView);
     }
 
     @Override
@@ -66,6 +70,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         String userType = user.getType();
         holder.displayType.setText(userType);
 
+
     }
 
 
@@ -74,6 +79,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public int getItemCount() {
         return users.size();
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -89,12 +95,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             displayType = itemView.findViewById(R.id.user_type);
             buttonDetail = itemView.findViewById(R.id.btn_detail);
 
-           buttonDetail.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
 
-               }
-           });
+
+//           buttonDetail.setOnClickListener(new View.OnClickListener() {
+//               @Override
+//               public void onClick(View view) {
+//
+//               }
+//           });
         }
     }
 }
