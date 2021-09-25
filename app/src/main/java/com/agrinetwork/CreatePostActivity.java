@@ -58,10 +58,12 @@ public class CreatePostActivity extends AppCompatActivity {
 
 
     // Register for pick image intent
-    ActivityResultLauncher<Intent> pickImageResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
+    ActivityResultLauncher<Intent> pickImageResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
        if(result.getResultCode() == Activity.RESULT_OK) {
            Intent data = result.getData();
            if(data.getClipData() != null) {
+               // Choice multiple images
+
                ClipData clipData = data.getClipData();
                pickedImageUris.clear();
                for(int i = 0; i < clipData.getItemCount(); i++) {
@@ -71,6 +73,8 @@ public class CreatePostActivity extends AppCompatActivity {
                sliderAdapter.notifyDataSetChanged();
            }
            else if(data.getData() != null) {
+               // Choice one
+
                Uri image = data.getData();
                pickedImageUris.clear();
                pickedImageUris.add(image);

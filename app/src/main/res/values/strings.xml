@@ -52,6 +52,7 @@
     <string name="following_users_tab_title">Đang theo dõi</string>
     <string name="follower_tab_title">Người theo dõi</string>
     <string name="following">Đang theo dõi</string>
+    <string name="follower">Người theo dõi</string>
     <string name="follow">Theo dõi</string>
     <string name="no_recommended_user">Không tìm thấy kết quả nào, quay lại sau nhé :3</string>
     <string name="no_users_found">Không tìm thấy kết quả nào</string>

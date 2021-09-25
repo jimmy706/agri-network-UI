@@ -37,12 +37,16 @@ public class UpdateUserActivity extends AppCompatActivity {
     private ProvinceService provinceService;
     private TextInputEditText emailText,  firstNameInput, lastNameInput,phoneNumberInput;
     private MaterialAutoCompleteTextView provinceInput;
-    private  User userResponse;
+    private User userResponse;
+    private String token;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_user);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        token =  sharedPreferences.getString(Variables.ID_TOKEN_LABEL,"");
 
         userService = new UserService(this);
         provinceService = new ProvinceService(this);
@@ -74,11 +78,6 @@ public class UpdateUserActivity extends AppCompatActivity {
 
         MaterialButton updateButton = findViewById(R.id.update_btn);
         updateButton.setOnClickListener(v -> {
-
-            SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
-            String token =  sharedPreferences.getString(Variables.ID_TOKEN_LABEL,"");
-
-
             String firstName = firstNameInput.getText().toString();
             String lastName = lastNameInput.getText().toString();
             String phoneNumber = phoneNumberInput.getText().toString();
@@ -122,7 +121,7 @@ public class UpdateUserActivity extends AppCompatActivity {
 
     private  void fetchUserBeforeUpdate(String id){
 
-        Call getbyId = userService.getbyId(id);
+        Call getbyId = userService.getById(token, id);
         getbyId.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call getUserLogin, @NonNull IOException e) {

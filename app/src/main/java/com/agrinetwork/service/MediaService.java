@@ -35,7 +35,6 @@ public class MediaService {
     }
 
     public Call uploadImage(Uri uri, String token) throws Exception {
-        String fileType = context.getContentResolver().getType(uri);
         InputStream ips = context.getContentResolver().openInputStream(uri);
         String fileId = DocumentsContract.getDocumentId(uri);
         File file = new File(context.getCacheDir().getAbsolutePath() + "/" + fileId);

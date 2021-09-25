@@ -50,14 +50,14 @@
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="2dp"
                 android:background="@drawable/follow_toggle_selector"
+                android:checked="true"
                 android:letterSpacing="0.17"
                 android:textAllCaps="false"
                 android:textOff="@string/follow"
                 android:textOn="@string/following"
-                android:checked="true"
                 android:textSize="12sp"
-                android:layout_marginEnd="2dp"
                 android:textStyle="bold" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
