@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.helpers.TextValidator;
+import com.agrinetwork.service.MessagingService;
 import com.agrinetwork.service.UserService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -61,6 +62,10 @@ public class MainActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent backgroundMessageService = new Intent(this, MessagingService.class);
+        startService(backgroundMessageService);
+
 
         userService = new UserService(this);
 

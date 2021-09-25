@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/follow_toggle_selector.xml" value="0.3828125" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/image_placeholder.xml" value="0.2759259259259259" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/layout_border.xml" value="0.3828125" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/outline_btn.xml" value="0.3828125" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/toggle_following.xml" value="0.3828125" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_create_post.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_feed.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_main.xml" value="0.25" />
@@ -25,6 +28,7 @@
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/profile_user.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/sample_app_navigation.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/slider_image_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/user_item_adapter.xml" value="0.5" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/menu/add_post_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/menu/user_profile_menu.xml" value="0.36666666666666664" />

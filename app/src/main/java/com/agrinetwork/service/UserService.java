@@ -54,8 +54,9 @@ public class UserService {
     }
 
 
-    public Call getbyId ( String userId) {
+    public Call getById(String token, String userId) {
         Request request = new Request.Builder()
+                .header("Authorization", token)
                 .url(SERVICE_URL + "/" + userId)
                 .get()
                 .build();
