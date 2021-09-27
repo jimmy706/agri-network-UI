@@ -31,6 +31,11 @@
     <string name="title_update"> Cập nhật</string>
     <string name="hint_search">Tìm kiếm</string>
     <string name="hint_results">Kết quả tìm kiếm</string>
+    <string name="add_friend">Thêm bạn</string>
+    <string name="friended">Bạn bè</string>
+    <string name="contact_action">Liên hệ</string>
+    <string name="friend_rq_approve">Chấp nhận</string>
+    <string name="friend_rq_reject">Từ chối</string>
 
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>
