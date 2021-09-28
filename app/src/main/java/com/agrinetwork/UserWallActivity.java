@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -85,11 +86,14 @@ public class UserWallActivity extends AppCompatActivity {
         });
 
         btnEdit = findViewById(R.id.btn_edit);
+
+        LinearLayout interactBtnWrapper = findViewById(R.id.interact_buttons_wrapper);
         if (isOwner) {
             btnEdit.setVisibility(View.VISIBLE);
-            followBtn.setVisibility(View.GONE);
+            interactBtnWrapper.setVisibility(View.GONE);
         } else {
             btnEdit.setVisibility(View.GONE);
+            interactBtnWrapper.setVisibility(View.VISIBLE);
         }
 
         MaterialToolbar iconBack = findViewById(R.id.back);

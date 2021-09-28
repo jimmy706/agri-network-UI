@@ -2,9 +2,11 @@ package com.agrinetwork;
 
 
 
+import android.content.Context;
 import android.content.Intent;
 
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -13,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-import com.agrinetwork.service.MessagingService;
+import com.agrinetwork.config.Variables;
 import com.agrinetwork.service.UserService;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,19 +30,26 @@ import androidx.navigation.ui.NavigationUI;
 import com.agrinetwork.databinding.ActivityUserFeedBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class UserFeedActivity extends AppCompatActivity {
 
     private ActivityUserFeedBinding binding;
     private UserService userService;
-
+    private FirebaseMessaging firebaseMessaging;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userService = new UserService(this);
         binding = ActivityUserFeedBinding.inflate(getLayoutInflater());
+
+        sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        firebaseMessaging = FirebaseMessaging.getInstance();
+        subscribeCurrentUserToMessagingTopics();
+
         setContentView(binding.getRoot());
         View viewFragment = findViewById(R.id.nav_host_fragment_activity_user_feed);
         BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
@@ -88,5 +97,10 @@ public class UserFeedActivity extends AppCompatActivity {
             Toast.makeText(this, "Thêm kế hoạch sản xuất", Toast.LENGTH_SHORT).show();
         });
         bottomSheetDialog.show();
+    }
+
+    private void subscribeCurrentUserToMessagingTopics() {
+        String currentUserId =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
+        firebaseMessaging.subscribeToTopic("add_friend_to_" + currentUserId);
     }
 }

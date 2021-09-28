@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
@@ -13,9 +15,12 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.agrinetwork.R;
+import com.agrinetwork.UserWallActivity;
+import com.agrinetwork.entities.FirebaseMessageTypes;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
 import java.util.Random;
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
@@ -38,13 +43,25 @@ public class MessagingService extends FirebaseMessagingService {
             createNotificationChannel(notificationManager);
         }
 
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody())
-                .setSmallIcon(R.drawable.ic_bell)
-                .setAutoCancel(true)
-                .build();
+        Map<String, String> payload = remoteMessage.getData();
 
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(payload.get("title"))
+                .setContentText(payload.get("message"))
+                .setSmallIcon(R.drawable.ic_bell)
+                .setAutoCancel(true);
+
+        String notificationType = payload.get("type");
+        if(notificationType.equals(FirebaseMessageTypes.FRIEND_REQUEST.getLabel())){
+            Intent intent = new Intent(this, UserWallActivity.class);
+            intent.putExtra("userId", payload.get("fromUser"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            notificationBuilder.setContentIntent(pendingIntent);
+        }
+
+        Notification notification = notificationBuilder.build();
         notificationManager.notify(notificationId, notification);
     }
 

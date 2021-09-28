@@ -20,14 +20,19 @@ import com.agrinetwork.R;
 
 import com.agrinetwork.config.Variables;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 public class NavigationBar extends RelativeLayout {
-    FirebaseAuth firebaseAuth;
-
+    private FirebaseAuth firebaseAuth;
+    private FirebaseMessaging firebaseMessaging;
+    private final Context context;
+    private final SharedPreferences sharedPreferences;
 
     public NavigationBar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
+        this.sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         init(context);
     }
 
@@ -38,11 +43,9 @@ public class NavigationBar extends RelativeLayout {
         EditText search = this.findViewById(R.id.search_text);
         Button btnSearch = this.findViewById(R.id.btn_search);
 
-
-
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseMessaging = FirebaseMessaging.getInstance();
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         String avatarUrl =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_AVATAR,"");
         if(avatarUrl != null && !avatarUrl.isEmpty()) {
             Picasso.get().load(avatarUrl).into(avatar);
@@ -60,8 +63,7 @@ public class NavigationBar extends RelativeLayout {
                 context.startActivity(intent);
             }
             else if(itemId == R.id.logout) {
-                firebaseAuth.signOut();
-                context.startActivity(new Intent(context,MainActivity.class));
+                logout();
             }
             return true;
         });
@@ -78,6 +80,13 @@ public class NavigationBar extends RelativeLayout {
 
         });
 
+    }
+
+    private void logout() {
+        String currentUserId =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
+        firebaseMessaging.unsubscribeFromTopic("add_friend_to_" + currentUserId);
+        firebaseAuth.signOut();
+        context.startActivity(new Intent(context,MainActivity.class));
     }
 
 }
