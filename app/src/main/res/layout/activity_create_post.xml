@@ -107,13 +107,23 @@
         android:background="@drawable/layout_border"
         android:layout_gravity="bottom"
         >
+
         <ImageButton
+            android:id="@+id/pick_media_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_media"
-            android:id="@+id/pick_media_btn"
             android:layout_alignParentEnd="true"
             android:backgroundTint="@color/fui_transparent"
-            android:contentDescription="media" />
+            android:contentDescription="media"
+            android:src="@drawable/ic_media" />
+        <Button
+            android:id="@+id/btn_addTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thêm Tag"
+            />
+
+
+
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
