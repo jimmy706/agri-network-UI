@@ -17,6 +17,8 @@ import androidx.core.app.NotificationCompat;
 import com.agrinetwork.R;
 import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.entities.FirebaseMessageTypes;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -27,6 +29,11 @@ import java.util.Random;
 public class MessagingService extends FirebaseMessagingService {
     private final static String CHANNEL_ID = "firebase_notification";
     private final static String CHANNEL_NAME = "firebase_channel";
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+    }
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
