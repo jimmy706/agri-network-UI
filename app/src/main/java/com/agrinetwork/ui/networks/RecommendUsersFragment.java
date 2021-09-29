@@ -44,7 +44,6 @@ public class RecommendUsersFragment extends Fragment {
     private String token;
     private String title;
 
-    private SwipeRefreshLayout refreshLayout;
     private TextView noRecommendedUserMessage;
 
     public RecommendUsersFragment() {
@@ -78,12 +77,6 @@ public class RecommendUsersFragment extends Fragment {
 
         userAdapter = new RecommendUserAdapter(users, getActivity());
 
-        refreshLayout = root.findViewById(R.id.refresh_layout);
-        refreshLayout.setOnRefreshListener(()-> {
-            users.clear();
-            fetchRecommendedUsers();
-        });
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 
         RecyclerView recyclerView = root.findViewById(R.id.recommended_list);
@@ -116,7 +109,6 @@ public class RecommendUsersFragment extends Fragment {
                     List<RecommendUser> userList = gson.fromJson(responseData, userListType);
 
                    getActivity().runOnUiThread(()-> {
-                       refreshLayout.setRefreshing(false);
                       if(!userList.isEmpty()) {
                           noRecommendedUserMessage.setVisibility(View.GONE);
 

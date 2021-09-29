@@ -1,31 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.networks.RecommendUsersFragment"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/no_recommended_user"
-        android:visibility="gone"
+    tools:context=".ui.networks.RecommendUsersFragment">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_recommended_user"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_centerInParent="true"/>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_alignParentTop="true"
-        android:id="@+id/refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/no_recommended_user"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recommended_list"
-            />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:text="@string/no_recommended_user"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/pending_friend_request"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/friend_request"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/friend_request_list"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:id="@+id/recommended_wrapper"
+            android:layout_below="@id/pending_friend_request">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/people_may_know"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recommended_list"
+                android:nestedScrollingEnabled="false"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

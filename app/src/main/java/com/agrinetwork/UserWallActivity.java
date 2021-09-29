@@ -2,6 +2,8 @@ package com.agrinetwork;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -140,7 +142,17 @@ public class UserWallActivity extends AppCompatActivity {
 
         btnAddFriend.setOnClickListener(v -> {
             if(user.isFriend()) {
-                unfriend();
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                dialogBuilder.setMessage(getText(R.string.unfriend_asking));
+                dialogBuilder.setPositiveButton(getText(R.string.accept), (dialogInterface, i) -> {
+                    unfriend();
+                });
+                dialogBuilder.setNegativeButton(getText(R.string.cancel), (dialogInterface, i) -> {
+                    dialogInterface.cancel();
+                });
+
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.show();
             }
             else {
                 if(user.isPendingFriendRequest()) {
@@ -174,6 +186,7 @@ public class UserWallActivity extends AppCompatActivity {
                     if(response.code() == 200) {
                         user.setFriend(false);
                         renderData();
+                        Toast.makeText(UserWallActivity.this, "Đã hủy kết bạn", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -274,7 +287,9 @@ public class UserWallActivity extends AppCompatActivity {
       }
       else {
           friendRequestWrapper.setVisibility(View.GONE);
-          interactBtnWrapper.setVisibility(View.VISIBLE);
+          if(!isOwner) {
+              interactBtnWrapper.setVisibility(View.VISIBLE);
+          }
       }
 
       boolean isPendingFriendRequest = user.isPendingFriendRequest();
