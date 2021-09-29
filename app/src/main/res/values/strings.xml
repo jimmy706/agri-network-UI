@@ -32,10 +32,12 @@
     <string name="hint_search">Tìm kiếm</string>
     <string name="hint_results">Kết quả tìm kiếm</string>
     <string name="add_friend">Thêm bạn</string>
+    <string name="remove_friend_rq">Hủy lời mời</string>
     <string name="friended">Bạn bè</string>
     <string name="contact_action">Liên hệ</string>
     <string name="friend_rq_approve">Chấp nhận</string>
     <string name="friend_rq_reject">Từ chối</string>
+    <string name="friend_request_question">Chấp nhận lời mời kết bạn?</string>
 
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>

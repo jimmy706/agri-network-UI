@@ -1,20 +1,16 @@
 package com.agrinetwork.service;
 
 import android.content.Context;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.User;
 
-import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class UserService {
     private final Context context;
@@ -136,4 +132,61 @@ public class UserService {
 
     }
 
+    public Call sendFriendRequest(String token, String targetUserId) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .post(body)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + targetUserId + "/friend-request")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call approveFriendRequest(String token, String userWithFriendRequest) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .post(body)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + userWithFriendRequest + "/friend-request/approve")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call rejectFriendRequest(String token, String userWithFriendRequest) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .post(body)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + userWithFriendRequest + "/friend-request/reject")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call cancelFriendRequest(String token, String targetUserId) {
+        Request request = new Request.Builder()
+                .delete()
+                .url(Variables.SERVICE_DOMAIN + "/users/" + targetUserId + "/friend-request")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call unfriend(String token, String targetUserId) {
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = new Request.Builder()
+                .put(body)
+                .url(Variables.SERVICE_DOMAIN + "/users/" + targetUserId + "/unfriend")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
 }

@@ -84,22 +84,44 @@
                 android:id="@+id/following_wrapper"
                 android:layout_toStartOf="@id/follower_wrapper"
                 android:layout_marginEnd="20dp">
-
                 <TextView
+                    android:id="@+id/count_following"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="155"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/count_following"/>
+                    android:text="155"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/count_following"
                     android:layout_centerHorizontal="true"
                     android:text="@string/following"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/friend_wrapper"
+                android:layout_toStartOf="@id/following_wrapper"
+                android:layout_marginEnd="20dp">
+                <TextView
+                    android:id="@+id/count_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="155"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/count_friend"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/friended"/>
             </RelativeLayout>
 
             <TextView
@@ -148,32 +170,45 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:id="@+id/friend_request_wrapper"
                     android:weightSum="2"
                     android:visibility="gone">
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/friend_rq_reject"
-                        android:textSize="12sp"
-                        android:textAllCaps="false"
-                        android:layout_weight="1"
-                        android:textColor="@color/gray_600"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_marginEnd="16dp"
-                        android:id="@+id/reject_friend_rq"
+                        android:text="@string/friend_request_question"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
                         />
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/light_blue_600"
-                        android:text="@string/friend_rq_approve"
-                        android:textSize="12sp"
-                        android:textAllCaps="false"
-                        android:layout_weight="1"
-                        android:id="@+id/approve_friend_rq"
-                        />
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/friend_rq_reject"
+                            android:textSize="12sp"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:textColor="@color/gray_600"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_marginEnd="16dp"
+                            android:id="@+id/reject_friend_rq"
+                            />
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/light_blue_600"
+                            android:text="@string/friend_rq_approve"
+                            android:textSize="12sp"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:id="@+id/approve_friend_rq"
+                            />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout

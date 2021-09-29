@@ -16,4 +16,5 @@ public class User {
     private String province;
     private String _id;
     private boolean isFollowed;
+    private boolean isFriend;
 }

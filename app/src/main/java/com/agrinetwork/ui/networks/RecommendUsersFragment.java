@@ -17,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.agrinetwork.R;
+import com.agrinetwork.components.RecommendUserAdapter;
 import com.agrinetwork.components.UserAdapter;
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.RecommendUser;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.RecommendService;
 import com.google.gson.Gson;
@@ -36,8 +38,8 @@ import okhttp3.Response;
 public class RecommendUsersFragment extends Fragment {
 
     private static final String ARG_TITLE = "title";
-    private final List<User> users = new ArrayList<>();
-    private UserAdapter userAdapter;
+    private final List<RecommendUser> users = new ArrayList<>();
+    private RecommendUserAdapter userAdapter;
     private RecommendService recommendService;
     private String token;
     private String title;
@@ -74,7 +76,7 @@ public class RecommendUsersFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
 
-        userAdapter = new UserAdapter(users, getActivity());
+        userAdapter = new RecommendUserAdapter(users, getActivity());
 
         refreshLayout = root.findViewById(R.id.refresh_layout);
         refreshLayout.setOnRefreshListener(()-> {
@@ -110,8 +112,8 @@ public class RecommendUsersFragment extends Fragment {
                     Gson gson = new Gson();
                     String responseData = response.body().string();
 
-                    Type userListType = new TypeToken<List<User>>(){}.getType();
-                    List<User> userList = gson.fromJson(responseData, userListType);
+                    Type userListType = new TypeToken<List<RecommendUser>>(){}.getType();
+                    List<RecommendUser> userList = gson.fromJson(responseData, userListType);
 
                    getActivity().runOnUiThread(()-> {
                        refreshLayout.setRefreshing(false);
