@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agrinetwork.components.PostTagAdapter;
@@ -50,6 +51,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -69,6 +72,8 @@ public class CreatePostActivity extends AppCompatActivity {
     private final SliderAdapter<Uri> sliderAdapter = new SliderAdapter<>(pickedImageUris);
     private RelativeLayout pickedImageWrapper;
     private ProgressBar progressBar;
+    private SharedPreferences sharedPreferences;
+//    private List<String> postTags = new ArrayList<>();
 
 
 
@@ -105,6 +110,11 @@ public class CreatePostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
+
+//        sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+//        postTags = Collections.singletonList(sharedPreferences.getString("userChoice", ""));
+
+
 
         mediaService = new MediaService(this);
         postService = new PostService(this);
@@ -183,9 +193,14 @@ public class CreatePostActivity extends AppCompatActivity {
 
             DialogTagActivity dialogTagActivity = new DialogTagActivity(this);
             dialogTagActivity.show();
-
+            dialogTagActivity.setSubmitListener(tags -> {
+                Toast.makeText(CreatePostActivity.this, Arrays.toString(tags.toArray()), Toast.LENGTH_SHORT).show();
+            });
 
         });
+
+       TextView textView = findViewById(R.id.tag_selected);
+
 
 
     }

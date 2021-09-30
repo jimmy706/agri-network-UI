@@ -1,25 +1,41 @@
 package com.agrinetwork.components;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.TextView;
+import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.agrinetwork.DialogTagActivity;
 import com.agrinetwork.R;
+import com.agrinetwork.UserWallActivity;
+import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PostTagItem;
+import com.agrinetwork.interfaces.CheckboxChangedListener;
 import com.agrinetwork.service.TagService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import lombok.Setter;
 
 public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHolder>{
     private final List<PostTagItem> postTagItemsList;
     private final Context context;
     private final TagService tagService;
+    @Setter
+    private CheckboxChangedListener checkboxChangedListener;
+
 
     public PostTagAdapter(List<PostTagItem> postTagItemList, Context context){
         this.postTagItemsList = postTagItemList;
@@ -39,10 +55,18 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
         final PostTagItem postTagItem = postTagItemsList.get(position);
 
         String tagName = postTagItem.getName();
-        holder.tag.setText(tagName);
+        holder.checkBox.setText(tagName);
 
+
+
+        holder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
+            if(checkboxChangedListener != null) {
+                checkboxChangedListener.onChange(checked, position);
+            }
+        });
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -50,13 +74,14 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private final TextView tag;
         private  final CheckBox checkBox;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            tag = itemView.findViewById(R.id.tag_item);
+//            tag = itemView.findViewById(R.id.tag_item);
             checkBox = itemView.findViewById(R.id.checkbox_id);
+
+
         }
     }
 }

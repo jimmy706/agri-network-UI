@@ -75,11 +75,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/picked_image_title"
                 android:id="@+id/picked_image_title"/>
+
             <com.smarteist.autoimageslider.SliderView
-                android:layout_width="wrap_content"
-                android:layout_below="@id/picked_image_title"
-                android:layout_height="200dp"
                 android:id="@+id/image_slider"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_below="@id/picked_image_title"
                 app:sliderAnimationDuration="600"
                 app:sliderAutoCycleDirection="right"
                 app:sliderAutoCycleEnabled="true"
@@ -91,10 +92,22 @@
                 app:sliderIndicatorRadius="2dp"
                 app:sliderIndicatorSelectedColor="#ddd"
                 app:sliderIndicatorUnselectedColor="#4A000000"
-                app:sliderScrollTimeInSec="1"
-                />
+                app:sliderScrollTimeInSec="1" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/picked_image_wrapper">
+            <TextView
+                android:id="@+id/tag_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tag đã chọn:"
+                android:textSize="17sp"
+
+                />
+        </RelativeLayout>
     </RelativeLayout>
 
 
@@ -126,4 +139,5 @@
 
 
     </RelativeLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

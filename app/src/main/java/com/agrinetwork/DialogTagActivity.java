@@ -2,11 +2,14 @@ package com.agrinetwork;
 
 import android.app.Activity;
 import android.app.Dialog;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
+
 import android.widget.Button;
+import android.widget.CheckBox;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.components.PostTagAdapter;
 import com.agrinetwork.entities.PostTagItem;
+import com.agrinetwork.interfaces.PostTagDialogSubmitListener;
 import com.agrinetwork.service.TagService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Setter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -35,7 +40,12 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
     private TagService tagService;
     private RecyclerView recyclerView;
     private PostTagAdapter postTagAdapter;
-    private List<PostTagItem> postTagItemList = new ArrayList<>();
+    private final List<PostTagItem> postTagItemList = new ArrayList<>();
+    private final List<PostTagItem> pickedPostTags = new ArrayList<>();
+    private CheckBox checkBox;
+
+    @Setter
+    private PostTagDialogSubmitListener submitListener;
 
 
     public DialogTagActivity(Activity activity){
@@ -55,28 +65,38 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
         add.setOnClickListener(this);
 
         tagService = new TagService(activity);
-            recyclerView = findViewById(R.id.post_tag_list);
-            postTagAdapter = new PostTagAdapter(postTagItemList,activity);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
-            recyclerView.setAdapter(postTagAdapter);
-            recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView = findViewById(R.id.post_tag_list);
+        postTagAdapter = new PostTagAdapter(postTagItemList,activity);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
+        recyclerView.setAdapter(postTagAdapter);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        checkBox = findViewById(R.id.checkbox_id);
+        fetchPostTag();
 
-            fetchPostTag();
+        postTagAdapter.setCheckboxChangedListener((checked, position) -> {
+            if(checked) {
+                pickedPostTags.add(postTagItemList.get(position));
+            }
+            else {
+                pickedPostTags.remove(postTagItemList.get(position));
+            }
+        });
+
 
     }
+
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                activity.finish();
-                break;
-            case R.id.btn_cancel:
-                dismiss();
+                handleSubmit();
                 break;
             default:
+                dismiss();
                 break;
         }
-        dismiss();
     }
 
     private void fetchPostTag(){
@@ -104,5 +124,13 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
             }
         });
     }
+
+    private void handleSubmit() {
+        if(submitListener != null) {
+            submitListener.onSubmit(pickedPostTags);
+        }
+        dismiss();
+    }
+
 }
 

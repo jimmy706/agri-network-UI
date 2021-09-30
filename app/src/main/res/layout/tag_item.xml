@@ -8,27 +8,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
 
         >
 
-        <TextView
-            android:id="@+id/tag_item"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:text="test check box"
+<!--        <TextView-->
+<!--            android:id="@+id/tag_item"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:textSize="16sp"-->
+<!--            android:text="test check box"-->
 
-            />
+<!--            />-->
 
         <CheckBox
             android:id="@+id/checkbox_id"
-            android:layout_width="0dp"
+            android:text="Day la mot check box"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="16sp"
-
             android:checked="false" />
 
     </LinearLayout>
