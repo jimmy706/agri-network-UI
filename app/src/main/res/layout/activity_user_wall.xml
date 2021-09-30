@@ -107,6 +107,7 @@
                 android:id="@+id/friend_wrapper"
                 android:layout_toStartOf="@id/following_wrapper"
                 android:layout_marginEnd="20dp">
+
                 <TextView
                     android:id="@+id/count_friend"
                     android:layout_width="wrap_content"

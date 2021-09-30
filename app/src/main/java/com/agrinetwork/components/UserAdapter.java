@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -34,11 +35,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private final UserService userService;
     private final String token;
     private final SharedPreferences sharedPreferences;
+    private boolean moreActionMode = false;
 
 
     public UserAdapter (List<User> users, Context context) {
         this.users = users;
         this.context = context;
+        this.userService = new UserService(context);
+
+        this.sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        this.token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
+    }
+
+    public UserAdapter (List<User> users, Context context, boolean moreActionMode) {
+        this.users = users;
+        this.context = context;
+        this.moreActionMode = moreActionMode;
         this.userService = new UserService(context);
 
         this.sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
@@ -74,19 +86,28 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         String userType = user.getType();
         holder.tag.setText(userType);
 
-        boolean isFollowed = user.isFollowed();
-        holder.followBtn.setChecked(isFollowed);
-        changeTextColorBaseOnCheckedState(holder.followBtn, isFollowed);
+        if(moreActionMode) {
+               holder.followBtn.setVisibility(View.GONE);
+               holder.moreActionBtn.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.followBtn.setVisibility(View.VISIBLE);
+            holder.moreActionBtn.setVisibility(View.GONE);
 
-        holder.followBtn.setOnClickListener(v -> {
-            user.setFollowed(!user.isFollowed());
-            if(isFollowed) {
-                unfollow(user.get_id());
-            }
-            else {
-                follow(user.get_id());
-            }
-        });
+            boolean isFollowed = user.isFollowed();
+            holder.followBtn.setChecked(isFollowed);
+            changeTextColorBaseOnCheckedState(holder.followBtn, isFollowed);
+
+            holder.followBtn.setOnClickListener(v -> {
+                user.setFollowed(!user.isFollowed());
+                if(isFollowed) {
+                    unfollow(user.get_id());
+                }
+                else {
+                    follow(user.get_id());
+                }
+            });
+        }
     }
 
     @Override
@@ -99,6 +120,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         private final ImageView avatar;
         private final TextView displayName, tag;
         private final ToggleButton followBtn;
+        private final ImageButton moreActionBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -106,6 +128,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             displayName = itemView.findViewById(R.id.display_name);
             tag = itemView.findViewById(R.id.user_tag);
             followBtn = itemView.findViewById(R.id.follow_btn);
+            moreActionBtn = itemView.findViewById(R.id.more_action_btn);
         }
     }
 

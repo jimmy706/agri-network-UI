@@ -59,6 +59,15 @@
                 android:textOn="@string/following"
                 android:textSize="12sp"
                 android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/more_action_btn"
+                style="@style/Widget.AppCompat.Light.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_dots_hor" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

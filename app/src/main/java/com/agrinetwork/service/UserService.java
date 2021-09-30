@@ -199,4 +199,14 @@ public class UserService {
 
         return client.newCall(request);
     }
+
+    public Call getFriends(String token, String userId) {
+        Request request = new Request.Builder()
+                .get()
+                .url(Variables.SERVICE_DOMAIN + "/users/" + userId + "/friends")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
 }

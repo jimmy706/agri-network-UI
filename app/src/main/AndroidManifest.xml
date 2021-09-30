@@ -17,8 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AgriNetwork"
         android:usesCleartextTraffic="true">
-
-
+        <activity
+            android:name=".FriendsActivity"
+            android:exported="true" />
         <activity
             android:name=".PostDetailActivity"
             android:exported="true" />
@@ -50,7 +51,6 @@
         <activity
             android:name=".SearchUserActivity"
             android:exported="true" />
-
 
         <service
             android:name=".service.MessagingService"
