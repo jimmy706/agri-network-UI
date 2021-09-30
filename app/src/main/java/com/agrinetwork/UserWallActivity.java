@@ -2,6 +2,8 @@ package com.agrinetwork;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +39,8 @@ import okhttp3.Response;
 
 public class UserWallActivity extends AppCompatActivity {
     private UserService userService;
+    private SharedPreferences sharedPreferences;
+
     private ImageView avatarProfile;
     private TextView userName, province, contact, email, countFollower, countFollowing, countFriend;
     private MaterialButton btnEdit, btnApproveFriendRq, btnRejectFriendRq, btnAddFriend, btnContact;
@@ -70,7 +74,7 @@ public class UserWallActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userId =  intent.getExtras().getString("userId");
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         String userIdLogin =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
 
@@ -140,7 +144,17 @@ public class UserWallActivity extends AppCompatActivity {
 
         btnAddFriend.setOnClickListener(v -> {
             if(user.isFriend()) {
-                unfriend();
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                dialogBuilder.setMessage(getText(R.string.unfriend_asking));
+                dialogBuilder.setPositiveButton(getText(R.string.accept), (dialogInterface, i) -> {
+                    unfriend();
+                });
+                dialogBuilder.setNegativeButton(getText(R.string.cancel), (dialogInterface, i) -> {
+                    dialogInterface.cancel();
+                });
+
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.show();
             }
             else {
                 if(user.isPendingFriendRequest()) {
@@ -174,6 +188,7 @@ public class UserWallActivity extends AppCompatActivity {
                     if(response.code() == 200) {
                         user.setFriend(false);
                         renderData();
+                        Toast.makeText(UserWallActivity.this, "Đã hủy kết bạn", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -274,7 +289,9 @@ public class UserWallActivity extends AppCompatActivity {
       }
       else {
           friendRequestWrapper.setVisibility(View.GONE);
-          interactBtnWrapper.setVisibility(View.VISIBLE);
+          if(!isOwner) {
+              interactBtnWrapper.setVisibility(View.VISIBLE);
+          }
       }
 
       boolean isPendingFriendRequest = user.isPendingFriendRequest();
@@ -329,6 +346,9 @@ public class UserWallActivity extends AppCompatActivity {
                 UserWallActivity.this.runOnUiThread(()-> {
                     if(response.code() == 200) {
                         Toast.makeText(UserWallActivity.this, "Cập nhật avatar thành công", Toast.LENGTH_SHORT).show();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(Variables.CURRENT_LOGIN_USER_AVATAR, user.getAvatar());
+                        editor.apply();
                     }
                     else {
                         Toast.makeText(UserWallActivity.this, "Đã gặp lỗi xảy ra", Toast.LENGTH_SHORT).show();

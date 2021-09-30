@@ -38,6 +38,11 @@
     <string name="friend_rq_approve">Chấp nhận</string>
     <string name="friend_rq_reject">Từ chối</string>
     <string name="friend_request_question">Chấp nhận lời mời kết bạn?</string>
+    <string name="people_may_know">Người có thể bạn quen</string>
+    <string name="friend_request">Lời mời kết bạn</string>
+    <string name="unfriend_asking">Bạn có chắc muốn hủy kết bạn?</string>
+    <string name="accept">Chấp nhận</string>
+    <string name="cancel">Từ chối</string>
 
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>

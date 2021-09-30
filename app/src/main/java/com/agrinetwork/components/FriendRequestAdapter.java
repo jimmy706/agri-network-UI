@@ -15,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.agrinetwork.R;
 import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.config.Variables;
-import com.agrinetwork.entities.RecommendUser;
+import com.agrinetwork.entities.FriendRequest;
+import com.agrinetwork.entities.User;
+import com.agrinetwork.enumeration.FriendRequestResponseStatus;
+import com.agrinetwork.interfaces.HandleFriendRequestListener;
 import com.agrinetwork.service.UserService;
 import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
@@ -23,37 +26,42 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.List;
 
+import lombok.Setter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdapter.ViewHolder>{
+public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.ViewHolder> {
+    private final List<FriendRequest> friendRequests;
     private final Context context;
-    private final List<RecommendUser> users;
     private final UserService userService;
     private final String token;
     private final SharedPreferences sharedPreferences;
+    @Setter
+    private HandleFriendRequestListener handleFriendRequestListener;
 
-    public RecommendUserAdapter(List<RecommendUser> users, Context context) {
-        this.users = users;
+    public FriendRequestAdapter(List<FriendRequest> friendRequests, Context context){
+        this.friendRequests = friendRequests;
         this.context = context;
         this.userService = new UserService(context);
         this.sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         this.token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_recommend_user, parent, false);
-        return new RecommendUserAdapter.ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_friend_request, parent, false);
+        return new FriendRequestAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RecommendUser user = users.get(position);
+        FriendRequest friendRequest = this.friendRequests.get(position);
+        User requestUser = friendRequest.getFrom();
 
-        String userAvatar = user.getAvatar();
+        String userAvatar = requestUser.getAvatar();
         if(userAvatar != null && !userAvatar.isEmpty()) {
             Picasso.get().load(userAvatar)
                     .placeholder(R.drawable.avatar_placeholder)
@@ -61,60 +69,18 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
                     .into(holder.avatar);
         }
         holder.avatar.setOnClickListener(v -> {
-            moveToUserWall(user.get_id());
+            moveToUserWall(requestUser.get_id());
         });
 
-        String fullName = user.getFirstName() + " " + user.getLastName();
+        String fullName = requestUser.getFirstName() + " " + requestUser.getLastName();
         holder.displayName.setText(fullName);
 
-        String userType = user.getType();
+        String userType = requestUser.getType();
         holder.tag.setText(userType);
 
-        boolean isPendingFriendRq = user.isPendingFriendRequest();
-        if(isPendingFriendRq) {
-            holder.addFriendBtn.setVisibility(View.GONE);
-            holder.deleteFriendRqBtn.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.addFriendBtn.setVisibility(View.VISIBLE);
-            holder.deleteFriendRqBtn.setVisibility(View.GONE);
-        }
+        holder.rejectFriendRqBtn.setOnClickListener(v -> rejectFriendRequest(position));
 
-        holder.addFriendBtn.setOnClickListener(v -> {
-            sendFriendRequest(user.get_id());
-            user.setPendingFriendRequest(true);
-
-            holder.addFriendBtn.setVisibility(View.GONE);
-            holder.deleteFriendRqBtn.setVisibility(View.VISIBLE);
-        });
-        holder.deleteFriendRqBtn.setOnClickListener(v -> {
-            cancelFriendRequest(user.get_id());
-            user.setPendingFriendRequest(false);
-
-            holder.addFriendBtn.setVisibility(View.VISIBLE);
-            holder.deleteFriendRqBtn.setVisibility(View.GONE);
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return users.size();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView avatar;
-        private final TextView displayName, tag;
-        private final MaterialButton addFriendBtn, deleteFriendRqBtn;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            avatar = itemView.findViewById(R.id.avatar);
-            displayName = itemView.findViewById(R.id.display_name);
-            tag = itemView.findViewById(R.id.user_tag);
-            addFriendBtn = itemView.findViewById(R.id.add_friend_btn);
-            deleteFriendRqBtn = itemView.findViewById(R.id.delete_friend_rq_btn);
-        }
+        holder.acceptFriendRqBtn.setOnClickListener(v -> approveFriendRequest(position));
     }
 
     private void moveToUserWall(String userId) {
@@ -124,8 +90,28 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
         context.startActivity(intent);
     }
 
-    private void sendFriendRequest(String targetUser) {
-        Call call = userService.sendFriendRequest(token, targetUser);
+    @Override
+    public int getItemCount() {
+        return friendRequests.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView avatar;
+        private final TextView displayName, tag;
+        private final MaterialButton acceptFriendRqBtn, rejectFriendRqBtn;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            avatar = itemView.findViewById(R.id.avatar);
+            displayName = itemView.findViewById(R.id.display_name);
+            tag = itemView.findViewById(R.id.user_tag);
+            acceptFriendRqBtn = itemView.findViewById(R.id.accept_friend_rq_btn);
+            rejectFriendRqBtn = itemView.findViewById(R.id.reject_friend_rq_btn);
+        }
+    }
+
+    private void approveFriendRequest(int position) {
+        Call call = userService.approveFriendRequest(token, friendRequests.get(position).getFrom().get_id());
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -134,13 +120,17 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
+                if(response.code() == 200) {
+                    if(handleFriendRequestListener != null) {
+                        handleFriendRequestListener.onFriendRequestResponse(position, FriendRequestResponseStatus.ACCEPT);
+                    }
+                }
             }
         });
     }
 
-    private void cancelFriendRequest(String targetUser) {
-        Call call = userService.cancelFriendRequest(token, targetUser);
+    private void rejectFriendRequest(int position) {
+        Call call = userService.rejectFriendRequest(token, friendRequests.get(position).getFrom().get_id());
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -149,7 +139,11 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                
+                if(response.code() == 200) {
+                    if(handleFriendRequestListener != null) {
+                        handleFriendRequestListener.onFriendRequestResponse(position, FriendRequestResponseStatus.REJECT);
+                    }
+                }
             }
         });
     }

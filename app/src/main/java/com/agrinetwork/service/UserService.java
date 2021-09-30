@@ -168,6 +168,16 @@ public class UserService {
         return client.newCall(request);
     }
 
+    public Call getFriendRequests(String token) {
+        Request request = new Request.Builder()
+                .get()
+                .url(Variables.SERVICE_DOMAIN + "/users/friend-request")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
     public Call cancelFriendRequest(String token, String targetUserId) {
         Request request = new Request.Builder()
                 .delete()
