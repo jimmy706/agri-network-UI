@@ -1,7 +1,7 @@
 package com.agrinetwork.ui.networks;
 
 import android.content.Context;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -9,20 +9,23 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.agrinetwork.R;
+import com.agrinetwork.components.FriendRequestAdapter;
 import com.agrinetwork.components.RecommendUserAdapter;
-import com.agrinetwork.components.UserAdapter;
+
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.FriendRequest;
 import com.agrinetwork.entities.RecommendUser;
-import com.agrinetwork.entities.User;
 import com.agrinetwork.service.RecommendService;
+import com.agrinetwork.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,11 +41,18 @@ import okhttp3.Response;
 public class RecommendUsersFragment extends Fragment {
 
     private static final String ARG_TITLE = "title";
+
+    private final Gson gson = new Gson();
     private final List<RecommendUser> users = new ArrayList<>();
+    private final List<FriendRequest> friendRequests = new ArrayList<>();
     private RecommendUserAdapter userAdapter;
+    private FriendRequestAdapter friendRequestAdapter;
     private RecommendService recommendService;
+    private UserService userService;
     private String token;
     private String title;
+
+    private LinearLayout recommendUsersWrapper, pendingFriendRequestsWrapper;
 
     private TextView noRecommendedUserMessage;
 
@@ -71,20 +81,36 @@ public class RecommendUsersFragment extends Fragment {
         View root= inflater.inflate(R.layout.fragment_recommend_users, container, false);
 
         recommendService = new RecommendService(getActivity());
+        userService = new UserService(getActivity());
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
 
         userAdapter = new RecommendUserAdapter(users, getActivity());
+        friendRequestAdapter = new FriendRequestAdapter(friendRequests, getActivity());
+        friendRequestAdapter.setHandleFriendRequestListener((position, status) -> {
+            getActivity().runOnUiThread(()-> {
+                friendRequests.remove(position);
+                renderPendingFriendRequests();
+            });
+        });
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recommendUsersWrapper = root.findViewById(R.id.recommended_wrapper);
+        pendingFriendRequestsWrapper = root.findViewById(R.id.pending_friend_request);
 
-        RecyclerView recyclerView = root.findViewById(R.id.recommended_list);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(userAdapter);
+        LinearLayoutManager recommendUserLayoutMng = new LinearLayoutManager(getActivity());
+        RecyclerView recommendedUserRecyclerView = root.findViewById(R.id.recommended_list);
+        recommendedUserRecyclerView.setLayoutManager(recommendUserLayoutMng);
+        recommendedUserRecyclerView.setAdapter(userAdapter);
+
+        LinearLayoutManager pendingFriendRqLayoutMng = new LinearLayoutManager(getActivity());
+        RecyclerView pendingFriendRqRecyclerView = root.findViewById(R.id.friend_request_list);
+        pendingFriendRqRecyclerView.setLayoutManager(pendingFriendRqLayoutMng);
+        pendingFriendRqRecyclerView.setAdapter(friendRequestAdapter);
 
         noRecommendedUserMessage = root.findViewById(R.id.no_recommended_user);
 
+        fetchPendingFriendRequest();
         fetchRecommendedUsers();
 
         return root;
@@ -102,26 +128,75 @@ public class RecommendUsersFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.code() == 200){
-                    Gson gson = new Gson();
                     String responseData = response.body().string();
 
                     Type userListType = new TypeToken<List<RecommendUser>>(){}.getType();
                     List<RecommendUser> userList = gson.fromJson(responseData, userListType);
 
                    getActivity().runOnUiThread(()-> {
-                      if(!userList.isEmpty()) {
-                          noRecommendedUserMessage.setVisibility(View.GONE);
-
-                          users.addAll(userList);
-                          userAdapter.notifyDataSetChanged();
-                      }
-                      else {
-                          noRecommendedUserMessage.setVisibility(View.VISIBLE);
-                      }
+                       if(!userList.isEmpty()) {
+                           users.addAll(userList);
+                       }
+                       renderRecommendedUsers();
                    });
                 }
             }
         });
+    }
+
+    private void fetchPendingFriendRequest() {
+        Call call = userService.getFriendRequests(token);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String responseData = response.body().string();
+                Type friendRequestListType = new TypeToken<List<FriendRequest>>(){}.getType();
+
+                List<FriendRequest> friendRequestsResponse = gson.fromJson(responseData, friendRequestListType);
+                getActivity().runOnUiThread(() -> {
+                    if(!friendRequestsResponse.isEmpty()) {
+                        friendRequests.addAll(friendRequestsResponse);
+                    }
+                    renderPendingFriendRequests();
+                });
+            }
+        });
+    }
+
+    private void renderRecommendedUsers() {
+        userAdapter.notifyDataSetChanged();
+        if(!users.isEmpty()) {
+            recommendUsersWrapper.setVisibility(View.VISIBLE);
+        }
+        else {
+            recommendUsersWrapper.setVisibility(View.GONE);
+        }
+        renderEmptyMessage();
+    }
+
+    private void renderPendingFriendRequests() {
+        friendRequestAdapter.notifyDataSetChanged();
+        if(!friendRequests.isEmpty()) {
+            pendingFriendRequestsWrapper.setVisibility(View.VISIBLE);
+        }
+        else {
+            pendingFriendRequestsWrapper.setVisibility(View.GONE);
+        }
+        renderEmptyMessage();
+    }
+
+    private void renderEmptyMessage() {
+        if(pendingFriendRequestsWrapper.getVisibility() == View.GONE && recommendUsersWrapper.getVisibility() == View.GONE) {
+            noRecommendedUserMessage.setVisibility(View.VISIBLE);
+        }
+        else {
+            noRecommendedUserMessage.setVisibility(View.GONE);
+        }
     }
 
 }

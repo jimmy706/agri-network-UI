@@ -26,17 +26,18 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.List;
 
+import lombok.Setter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.ViewHolder> {
-
     private final List<FriendRequest> friendRequests;
     private final Context context;
     private final UserService userService;
     private final String token;
     private final SharedPreferences sharedPreferences;
+    @Setter
     private HandleFriendRequestListener handleFriendRequestListener;
 
     public FriendRequestAdapter(List<FriendRequest> friendRequests, Context context){
