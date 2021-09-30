@@ -48,7 +48,11 @@ public class NavigationBar extends RelativeLayout {
 
         String avatarUrl =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_AVATAR,"");
         if(avatarUrl != null && !avatarUrl.isEmpty()) {
-            Picasso.get().load(avatarUrl).into(avatar);
+            Picasso.get()
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.avatar_placeholder)
+                    .error(R.drawable.avatar_placeholder)
+                    .into(avatar);
         }
 
         PopupMenu popupMenu = new PopupMenu(context, avatar);

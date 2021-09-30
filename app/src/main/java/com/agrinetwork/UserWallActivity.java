@@ -39,6 +39,8 @@ import okhttp3.Response;
 
 public class UserWallActivity extends AppCompatActivity {
     private UserService userService;
+    private SharedPreferences sharedPreferences;
+
     private ImageView avatarProfile;
     private TextView userName, province, contact, email, countFollower, countFollowing, countFriend;
     private MaterialButton btnEdit, btnApproveFriendRq, btnRejectFriendRq, btnAddFriend, btnContact;
@@ -72,7 +74,7 @@ public class UserWallActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String userId =  intent.getExtras().getString("userId");
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         String userIdLogin =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
 
@@ -344,6 +346,9 @@ public class UserWallActivity extends AppCompatActivity {
                 UserWallActivity.this.runOnUiThread(()-> {
                     if(response.code() == 200) {
                         Toast.makeText(UserWallActivity.this, "Cập nhật avatar thành công", Toast.LENGTH_SHORT).show();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(Variables.CURRENT_LOGIN_USER_AVATAR, user.getAvatar());
+                        editor.apply();
                     }
                     else {
                         Toast.makeText(UserWallActivity.this, "Đã gặp lỗi xảy ra", Toast.LENGTH_SHORT).show();
