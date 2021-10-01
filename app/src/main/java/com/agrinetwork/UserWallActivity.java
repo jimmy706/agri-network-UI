@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -46,6 +47,7 @@ public class UserWallActivity extends AppCompatActivity {
     private MaterialButton btnEdit, btnApproveFriendRq, btnRejectFriendRq, btnAddFriend, btnContact;
     private ToggleButton followBtn;
     private LinearLayout friendRequestWrapper, interactBtnWrapper;
+    private RelativeLayout friendCounterWrapper;
 
     private boolean isOwner;
     private UserDetail user;
@@ -77,7 +79,6 @@ public class UserWallActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         String userIdLogin =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
-
         isOwner = userId.equals(userIdLogin);
 
         followBtn = findViewById(R.id.follow_btn);
@@ -101,8 +102,8 @@ public class UserWallActivity extends AppCompatActivity {
             interactBtnWrapper.setVisibility(View.VISIBLE);
         }
 
-        MaterialToolbar iconBack = findViewById(R.id.back);
-        iconBack.setNavigationOnClickListener(view -> {
+        MaterialToolbar toolbar = findViewById(R.id.back);
+        toolbar.setNavigationOnClickListener(view -> {
 
             startActivity(new Intent(this, UserFeedActivity.class));
         });
@@ -124,6 +125,7 @@ public class UserWallActivity extends AppCompatActivity {
         countFollowing = findViewById(R.id.count_following);
         countFriend = findViewById(R.id.count_friend);
         friendRequestWrapper = findViewById(R.id.friend_request_wrapper);
+        friendCounterWrapper = findViewById(R.id.friend_wrapper);
         btnApproveFriendRq = findViewById(R.id.approve_friend_rq);
         btnRejectFriendRq = findViewById(R.id.reject_friend_rq);
         btnAddFriend = findViewById(R.id.add_friend_btn);
@@ -169,6 +171,12 @@ public class UserWallActivity extends AppCompatActivity {
         btnContact.setOnClickListener(v -> {
             Intent phoneCallIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + user.getPhoneNumber()));
             startActivity(phoneCallIntent);
+        });
+
+        friendCounterWrapper.setOnClickListener(v -> {
+            Intent intentFriends = new Intent(this, FriendsActivity.class);
+            intentFriends.putExtra("userId", userId);
+            startActivity(intentFriends);
         });
 
         fetchUserDetail(userId);
