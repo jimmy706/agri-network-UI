@@ -43,7 +43,7 @@
         <entry key="..\:/source/agri-network-UI/app/src/main/res/drawable-anydpi/ic_search.xml" value="0.159375" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/drawable/dialog_tag.xml" value="0.26614583333333336" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.26614583333333336" />
-        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_create_post.xml" value="0.12708333333333333" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_create_post.xml" value="0.152" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_dialog_tag.xml" value="0.14130434782608695" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_main.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_post_detail.xml" value="0.25" />
@@ -70,6 +70,7 @@
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/search_results.xml" value="0.264" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/slider_image_item.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/tag_item.xml" value="0.22644927536231885" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/tag_picked.xml" value="0.16041666666666668" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/user_item_adapter.xml" value="0.264" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/menu/add_post_menu.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/menu/bottom_nav_menu.xml" value="0.12708333333333333" />

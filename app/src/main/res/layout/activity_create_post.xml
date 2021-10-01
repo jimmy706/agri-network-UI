@@ -98,16 +98,39 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/picked_image_wrapper">
+            android:layout_below="@+id/picked_image_wrapper"
+            >
             <TextView
-                android:id="@+id/tag_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tag đã chọn:"
-                android:textSize="17sp"
-
+                android:text="@string/picked_tag"
                 />
         </RelativeLayout>
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/picked_image_wrapper"
+            android:orientation="horizontal">
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:singleLine="true">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_tagPicked"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:scrollbars="horizontal" />
+            </com.google.android.material.chip.ChipGroup>
+
+
+        </LinearLayout>
+
     </RelativeLayout>
 
 
@@ -129,13 +152,12 @@
             android:backgroundTint="@color/fui_transparent"
             android:contentDescription="media"
             android:src="@drawable/ic_media" />
+
         <Button
             android:id="@+id/btn_addTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thêm Tag"
-            />
-
+            android:text="@string/btn_add_tag" />
 
 
     </RelativeLayout>

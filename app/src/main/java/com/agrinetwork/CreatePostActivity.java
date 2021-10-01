@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
@@ -31,10 +32,12 @@ import android.widget.Toast;
 
 import com.agrinetwork.components.PostTagAdapter;
 import com.agrinetwork.components.SliderAdapter;
+import com.agrinetwork.components.TagPickedAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PostFormat;
 import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.entities.PostTagItem;
+import com.agrinetwork.entities.User;
 import com.agrinetwork.service.MediaService;
 import com.agrinetwork.service.PostService;
 import com.agrinetwork.service.TagService;
@@ -72,9 +75,10 @@ public class CreatePostActivity extends AppCompatActivity {
     private final SliderAdapter<Uri> sliderAdapter = new SliderAdapter<>(pickedImageUris);
     private RelativeLayout pickedImageWrapper;
     private ProgressBar progressBar;
-    private SharedPreferences sharedPreferences;
-//    private List<String> postTags = new ArrayList<>();
+    private List<PostTagItem> pickedPostTags = new ArrayList<>();
 
+    private TagPickedAdapter tagPickedAdapter;
+    private RecyclerView recyclerViewTag;
 
 
     // Register for pick image intent
@@ -110,11 +114,6 @@ public class CreatePostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
-
-//        sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
-//        postTags = Collections.singletonList(sharedPreferences.getString("userChoice", ""));
-
-
 
         mediaService = new MediaService(this);
         postService = new PostService(this);
@@ -190,16 +189,23 @@ public class CreatePostActivity extends AppCompatActivity {
 
         Button buttonAddTag = findViewById(R.id.btn_addTag);
         buttonAddTag.setOnClickListener(v->{
-
             DialogTagActivity dialogTagActivity = new DialogTagActivity(this);
             dialogTagActivity.show();
             dialogTagActivity.setSubmitListener(tags -> {
-                Toast.makeText(CreatePostActivity.this, Arrays.toString(tags.toArray()), Toast.LENGTH_SHORT).show();
+
+               pickedPostTags.addAll(tags);
+                tagPickedAdapter.notifyDataSetChanged();
+                System.out.println(pickedPostTags);
+
             });
 
         });
 
-       TextView textView = findViewById(R.id.tag_selected);
+        recyclerViewTag = findViewById(R.id.list_tagPicked);
+        tagPickedAdapter = new TagPickedAdapter(pickedPostTags,this);
+        LinearLayoutManager linearLayoutManagerTag = new LinearLayoutManager(this);
+        recyclerViewTag.setAdapter(tagPickedAdapter);
+        recyclerViewTag.setLayoutManager(linearLayoutManagerTag);
 
 
 

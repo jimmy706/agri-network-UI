@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:chipIcon="@drawable/ic_delete"
+        android:text="@string/tag_item"/>
+
+</LinearLayout>

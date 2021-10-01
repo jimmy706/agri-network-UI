@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="16dp"
@@ -14,7 +14,7 @@
         android:textSize="17sp"
         android:gravity="center"
         android:background="@color/green_700"
-        android:text="Chọn thẻ cho bài đăng"
+        android:text="@string/choice_tag"
         />
     <com.google.android.material.textfield.TextInputLayout
         android:background="@color/white"
@@ -38,7 +38,7 @@
         android:id="@+id/post_tag_list"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="150dp"/>
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +53,7 @@
             android:layout_weight="1"
             android:textSize="17sp"
             android:background="@color/gray_400"
-            android:text="Hủy"/>
+            android:text="@string/cancel_dialog"/>
         <Button
             android:id="@+id/btn_add"
             android:layout_width="0dp"
@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:textSize="17sp"
             android:background="@color/green_700"
-            android:text="Thêm"/>
+            android:text="@string/btn_add"/>
 
 
     </LinearLayout>

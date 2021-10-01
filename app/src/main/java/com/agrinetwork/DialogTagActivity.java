@@ -128,6 +128,7 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
     private void handleSubmit() {
         if(submitListener != null) {
             submitListener.onSubmit(pickedPostTags);
+
         }
         dismiss();
     }

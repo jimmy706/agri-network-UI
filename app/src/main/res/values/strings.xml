@@ -58,6 +58,14 @@
     <string name="province_name">Tỉnh</string>
     <string name="user_type">Loại người dùng</string>
 
+    <string name="choice_tag">Chọn thẻ cho bài đăng</string>
+    <string name="cancel_dialog">Hủy</string>
+    <string name="btn_add">Thêm</string>
+    <string name="tag_item">Đây là một thẻ trong bài đăng</string>
+    <string name="picked_tag">Thẻ đã chọn cho bài đăng</string>
+    <string name="btn_add_tag">Thêm thẻ</string>
+
+
     <string name="detail_btn">Chi tiết</string>
     <string name="edit_btn">Chỉnh Sửa</string>
     <string name="recommend_users_tab_title">Gợi ý</string>
