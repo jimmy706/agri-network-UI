@@ -78,7 +78,6 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-//            tag = itemView.findViewById(R.id.tag_item);
             checkBox = itemView.findViewById(R.id.checkbox_id);
 
 

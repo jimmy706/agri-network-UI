@@ -100,11 +100,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/picked_image_wrapper"
             >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/picked_tag"
-                />
+                android:text="@string/picked_tag" />
         </RelativeLayout>
         <LinearLayout
             android:layout_marginTop="20dp"
@@ -112,23 +112,21 @@
             android:layout_height="150dp"
             android:layout_below="@+id/picked_image_wrapper"
             android:orientation="horizontal">
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                android:scrollbars="none">
 
-            <com.google.android.material.chip.ChipGroup
+                <com.google.android.material.chip.ChipGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:singleLine="true">
+                app:singleLine="true"
+                android:id="@+id/chip_group"
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/list_tagPicked"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:scrollbars="horizontal" />
-            </com.google.android.material.chip.ChipGroup>
+                >
+                </com.google.android.material.chip.ChipGroup>
 
-
+            </HorizontalScrollView>
         </LinearLayout>
 
     </RelativeLayout>

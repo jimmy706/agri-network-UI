@@ -5,57 +5,42 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.agrinetwork.components.PostTagAdapter;
 import com.agrinetwork.components.SliderAdapter;
-import com.agrinetwork.components.TagPickedAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PostFormat;
 import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.entities.PostTagItem;
-import com.agrinetwork.entities.User;
 import com.agrinetwork.service.MediaService;
 import com.agrinetwork.service.PostService;
-import com.agrinetwork.service.TagService;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.smarteist.autoimageslider.IndicatorView.animation.data.Value;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.io.IOException;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -77,8 +62,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private List<PostTagItem> pickedPostTags = new ArrayList<>();
 
-    private TagPickedAdapter tagPickedAdapter;
-    private RecyclerView recyclerViewTag;
+
 
 
     // Register for pick image intent
@@ -193,21 +177,11 @@ public class CreatePostActivity extends AppCompatActivity {
             dialogTagActivity.show();
             dialogTagActivity.setSubmitListener(tags -> {
 
-               pickedPostTags.addAll(tags);
-                tagPickedAdapter.notifyDataSetChanged();
-                System.out.println(pickedPostTags);
-
+                pickedPostTags.addAll(tags);
+                setTag(pickedPostTags);
             });
 
         });
-
-        recyclerViewTag = findViewById(R.id.list_tagPicked);
-        tagPickedAdapter = new TagPickedAdapter(pickedPostTags,this);
-        LinearLayoutManager linearLayoutManagerTag = new LinearLayoutManager(this);
-        recyclerViewTag.setAdapter(tagPickedAdapter);
-        recyclerViewTag.setLayoutManager(linearLayoutManagerTag);
-
-
 
     }
 
@@ -282,4 +256,30 @@ public class CreatePostActivity extends AppCompatActivity {
     }
 
 
+    private void setTag(final List<PostTagItem> tagList) {
+        final ChipGroup chipGroup = findViewById(R.id.chip_group);
+
+
+        for (int index = 0; index < tagList.size(); index++) {
+
+            final  PostTagItem chipTag = pickedPostTags.get(index);
+            String chipName = chipTag.getName();
+
+            final Chip chip = new Chip(this);
+            chip.setText(chipName);
+            chip.setCloseIconResource(R.drawable.ic_delete);
+            chip.setCloseIconEnabled(true);
+
+            chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tagList.remove(chipName);
+                    chipGroup.removeView(chip);
+                    tagList.clear();
+                }
+            });
+
+            chipGroup.addView(chip);
+        }
+    }
 }

@@ -50,6 +50,7 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
 
     public DialogTagActivity(Activity activity){
         super(activity);
+        pickedPostTags.clear();
         this.activity = activity;
     }
 
@@ -74,6 +75,7 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
         fetchPostTag();
 
         postTagAdapter.setCheckboxChangedListener((checked, position) -> {
+
             if(checked) {
                 pickedPostTags.add(postTagItemList.get(position));
             }
