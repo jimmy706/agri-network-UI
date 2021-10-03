@@ -57,7 +57,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private final PostService postService;
     private final SharedPreferences sharedPreferences;
     private final String currentLoginUserId;
-
     @Setter
     private DeletePostListener deletePostListener;
 
@@ -104,7 +103,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             postImage = itemView.findViewById(R.id.image_view);
             postImages = itemView.findViewById(R.id.image_slider);
             cardView = itemView.findViewById(R.id.card_view);
-
         }
 
         @Override

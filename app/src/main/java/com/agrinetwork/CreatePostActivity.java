@@ -62,7 +62,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private List<PostTagItem> pickedPostTags = new ArrayList<>();
 
-
+    private ChipGroup chipGroup;
 
 
     // Register for pick image intent
@@ -177,12 +177,16 @@ public class CreatePostActivity extends AppCompatActivity {
             dialogTagActivity.show();
             dialogTagActivity.setSubmitListener(tags -> {
 
+                chipGroup.removeAllViews();
+                pickedPostTags.clear();
+
                 pickedPostTags.addAll(tags);
                 setTag(pickedPostTags);
             });
 
         });
 
+        chipGroup = findViewById(R.id.chip_group);
     }
 
     // Only display image slider when there is/are image(s) picked
@@ -257,7 +261,6 @@ public class CreatePostActivity extends AppCompatActivity {
 
 
     private void setTag(final List<PostTagItem> tagList) {
-        final ChipGroup chipGroup = findViewById(R.id.chip_group);
 
 
         for (int index = 0; index < tagList.size(); index++) {
