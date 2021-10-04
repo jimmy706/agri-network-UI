@@ -26,4 +26,6 @@ public class PostItem {
     private int numberOfComments;
 
     private boolean isLiked;
+
+    private List<String> tags;
 }

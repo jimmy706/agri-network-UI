@@ -66,10 +66,35 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/avatar_wrapper"
+                android:id="@+id/tag_contain"
+                >
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    android:scrollbars="none">
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:singleLine="true"
+                        android:id="@+id/chip_group_feed"
+                        >
+
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:orientation="horizontal"
                 android:id="@+id/images_wrapper"
-                android:layout_below="@id/avatar_wrapper">
+                android:layout_below="@+id/tag_contain">
                 <com.smarteist.autoimageslider.SliderView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

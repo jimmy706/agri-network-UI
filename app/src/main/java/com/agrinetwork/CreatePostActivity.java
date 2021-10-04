@@ -34,6 +34,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
 
@@ -41,6 +42,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -62,6 +64,7 @@ public class CreatePostActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private List<PostTagItem> pickedPostTags = new ArrayList<>();
 
+    private List<String> requestTags = new ArrayList<>();
     private ChipGroup chipGroup;
 
 
@@ -130,15 +133,17 @@ public class CreatePostActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if(id == R.id.add_post_action) {
+
                 showLoading();
                 TextInputEditText contentInput = findViewById(R.id.input_content);
                 String content = contentInput.getText().toString();
-
                 String format = PostFormat.REGULAR.getLabel();
 
                 PostItem postItem = new PostItem();
                 postItem.setContent(content);
                 postItem.setImages(pickedImageUrls);
+                postItem.setTags(requestTags);
+
                 postItem.setFormat(format);
 
                 Call call = postService.addPost(token, postItem);
@@ -179,9 +184,10 @@ public class CreatePostActivity extends AppCompatActivity {
 
                 chipGroup.removeAllViews();
                 pickedPostTags.clear();
-
                 pickedPostTags.addAll(tags);
                 setTag(pickedPostTags);
+
+
             });
 
         });
@@ -266,7 +272,10 @@ public class CreatePostActivity extends AppCompatActivity {
         for (int index = 0; index < tagList.size(); index++) {
 
             final  PostTagItem chipTag = pickedPostTags.get(index);
+
             String chipName = chipTag.getName();
+            requestTags.add(chipName);
+
 
             final Chip chip = new Chip(this);
             chip.setText(chipName);
@@ -279,6 +288,7 @@ public class CreatePostActivity extends AppCompatActivity {
                     tagList.remove(chipName);
                     chipGroup.removeView(chip);
                     tagList.clear();
+                    requestTags.remove(chipName);
                 }
             });
 

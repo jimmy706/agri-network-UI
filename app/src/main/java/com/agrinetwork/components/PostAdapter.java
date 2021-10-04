@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.PostDetailActivity;
@@ -31,6 +32,8 @@ import com.agrinetwork.interfaces.ListItemClickListener;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
@@ -57,6 +60,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private final PostService postService;
     private final SharedPreferences sharedPreferences;
     private final String currentLoginUserId;
+    private   List<String> tags;
+   
+    
     @Setter
     private DeletePostListener deletePostListener;
 
@@ -73,6 +79,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Getter
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+        
         @Setter
         private ListItemClickListener itemClickListener;
 
@@ -83,6 +90,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private final ImageView commentBtn, reactionBtn, postImage;
         private final SliderView postImages;
         private final MaterialCardView cardView;
+        private final ChipGroup chipGroup;
+        
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -103,6 +113,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             postImage = itemView.findViewById(R.id.image_view);
             postImages = itemView.findViewById(R.id.image_slider);
             cardView = itemView.findViewById(R.id.card_view);
+            chipGroup = itemView.findViewById(R.id.chip_group_feed);
         }
 
         @Override
@@ -185,7 +196,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.imageWrapper.setVisibility(View.VISIBLE);
             Picasso picasso = Picasso.get();
                 String postImageUrl = images.get(0);
-
                 holder.postImages.setVisibility(View.GONE);
                 picasso.load(postImageUrl).into(holder.postImage);
                 holder.postImages.setVisibility(View.GONE);
@@ -213,6 +223,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 showPostActions(postItem);
             });
         }
+
+
+
+        if(!postItem.getTags().isEmpty()) {
+            holder.chipGroup.removeAllViews();
+            for(int i = 0; i < postItem.getTags().size(); i++){
+                String chipName = postItem.getTags().get(i);
+                final Chip chip = new Chip(context);
+                chip.setText(chipName);
+                holder.chipGroup.addView(chip);
+            }
+        }
+
     }
 
     @Override
@@ -281,4 +304,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         bottomSheetDialog.show();
     }
+
+
 }

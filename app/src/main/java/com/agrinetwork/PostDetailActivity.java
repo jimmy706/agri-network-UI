@@ -33,6 +33,8 @@ import com.agrinetwork.entities.Post;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.smarteist.autoimageslider.SliderView;
@@ -70,7 +72,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageButton sendCommentBtn;
     private TextInputEditText commentInput;
     private RecyclerView commentsRecyclerView;
-
+    private ChipGroup chipGroup;
+    private List<String> tags = new ArrayList<>();
 
 
     @Override
@@ -111,9 +114,11 @@ public class PostDetailActivity extends AppCompatActivity {
         commentsRecyclerView.setLayoutManager(linearLayoutManager);
         commentsRecyclerView.setNestedScrollingEnabled(false);
         commentsRecyclerView.setAdapter(commentAdapter);
+        chipGroup = findViewById(R.id.tag_group);
 
         fetchPost();
         handleEvents();
+
 
     }
 
@@ -136,6 +141,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 PostDetailActivity.this.runOnUiThread(()-> {
                     renderData();
                     renderComments();
+                    renderTags();
                 });
             }
         });
@@ -330,5 +336,21 @@ public class PostDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void renderTags() {
+        if(!post.getTags().isEmpty()) {
+            tags.addAll(post.getTags());
+
+            for(int i = 0; i <tags.size(); i++){
+                String tagName = tags.get(i);
+
+                final Chip chip = new Chip(this);
+                chip.setText(tagName);
+                chipGroup.addView(chip);
+            }
+
+        }
+
     }
 }

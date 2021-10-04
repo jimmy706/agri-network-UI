@@ -62,6 +62,8 @@ public class UserFeedActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
         View viewFragment = findViewById(R.id.nav_host_fragment_activity_user_feed);
+
+
         BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
         viewFragment.setPadding(0,0,0,bottomAppBar.getHeight());
 
