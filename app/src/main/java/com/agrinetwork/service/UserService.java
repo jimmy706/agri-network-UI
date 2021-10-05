@@ -30,6 +30,8 @@ public class UserService {
                 .add("avatar", "")
                 .add("phoneNumber", user.getPhoneNumber())
                 .add("province", user.getProvince())
+                .add("district", user.getDistrict())
+                .add("ward", user.getWard())
                 .build();
 
         Request request = new Request.Builder()
@@ -68,6 +70,8 @@ public class UserService {
                 .add("phoneNumber", user.getPhoneNumber())
                 .add("province", user.getProvince())
                 .add("avatar", user.getAvatar())
+                .add("district", user.getDistrict())
+                .add("ward", user.getWard())
                 .build();
 
         Request request = new Request.Builder()
