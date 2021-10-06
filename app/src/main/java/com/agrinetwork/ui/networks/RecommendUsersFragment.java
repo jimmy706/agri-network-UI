@@ -1,5 +1,6 @@
 package com.agrinetwork.ui.networks;
 
+import android.app.Activity;
 import android.content.Context;
 
 import android.content.SharedPreferences;
@@ -133,12 +134,15 @@ public class RecommendUsersFragment extends Fragment {
                     Type userListType = new TypeToken<List<RecommendUser>>(){}.getType();
                     List<RecommendUser> userList = gson.fromJson(responseData, userListType);
 
-                   getActivity().runOnUiThread(()-> {
-                       if(!userList.isEmpty()) {
-                           users.addAll(userList);
-                       }
-                       renderRecommendedUsers();
-                   });
+                    Activity currentActivity = getActivity();
+                    if(currentActivity != null) {
+                        currentActivity.runOnUiThread(()-> {
+                            if(!userList.isEmpty()) {
+                                users.addAll(userList);
+                            }
+                            renderRecommendedUsers();
+                        });
+                    }
                 }
             }
         });

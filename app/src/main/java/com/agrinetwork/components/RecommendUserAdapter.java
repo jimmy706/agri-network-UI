@@ -1,5 +1,6 @@
 package com.agrinetwork.components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,8 @@ import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import okhttp3.Call;
@@ -49,6 +53,7 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
         return new RecommendUserAdapter.ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecommendUser user = users.get(position);
@@ -94,6 +99,18 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
             holder.addFriendBtn.setVisibility(View.VISIBLE);
             holder.deleteFriendRqBtn.setVisibility(View.GONE);
         });
+
+        double userDistance = user.getDistance();
+        if(userDistance >= 0) {
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            decimalFormat.setRoundingMode(RoundingMode.CEILING);
+
+            String distanceText = decimalFormat.format(user.getDistance());
+            holder.distance.setText(distanceText + "km");
+        }
+        else {
+            holder.distanceWrapper.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -103,8 +120,9 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView avatar;
-        private final TextView displayName, tag;
+        private final TextView displayName, tag, distance;
         private final MaterialButton addFriendBtn, deleteFriendRqBtn;
+        private final LinearLayout distanceWrapper;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -114,6 +132,8 @@ public class RecommendUserAdapter extends RecyclerView.Adapter<RecommendUserAdap
             tag = itemView.findViewById(R.id.user_tag);
             addFriendBtn = itemView.findViewById(R.id.add_friend_btn);
             deleteFriendRqBtn = itemView.findViewById(R.id.delete_friend_rq_btn);
+            distance = itemView.findViewById(R.id.distance);
+            distanceWrapper = itemView.findViewById(R.id.distance_wrapper);
         }
     }
 

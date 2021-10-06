@@ -43,7 +43,7 @@ public class UserWallActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
 
     private ImageView avatarProfile;
-    private TextView userName, province, contact, email, countFollower, countFollowing, countFriend;
+    private TextView userName, userLocation, contact, email, countFollower, countFollowing, countFriend;
     private MaterialButton btnEdit, btnApproveFriendRq, btnRejectFriendRq, btnAddFriend, btnContact;
     private ToggleButton followBtn;
     private LinearLayout friendRequestWrapper, interactBtnWrapper;
@@ -118,7 +118,7 @@ public class UserWallActivity extends AppCompatActivity {
 
         avatarProfile = findViewById(R.id.avatar_profile);
         userName = findViewById(R.id.user_name);
-        province = findViewById(R.id.province);
+        userLocation = findViewById(R.id.location);
         contact = findViewById(R.id.contact);
         email = findViewById(R.id.email);
         countFollower = findViewById(R.id.count_follower);
@@ -271,7 +271,9 @@ public class UserWallActivity extends AppCompatActivity {
       userName.setText(fullName);
 
       String textProvince = user.getProvince();
-      province.setText(textProvince);
+      String textDistrict = user.getDistrict();
+      String textWard = user.getWard();
+      userLocation.setText(textWard +", " + textDistrict + ", " + textProvince);
 
       String textContact = user.getPhoneNumber();
       contact.setText(textContact);
