@@ -11,9 +11,11 @@
     <string name="first_name_label">Họ</string>
     <string name="last_name_label">Tên</string>
     <string name="user_type_label">Bạn là thành viên</string>
-    <string name="province_label">Bạn thuộc tỉnh/thành phố</string>
+    <string name="province_label">Tỉnh/thành phố</string>
     <string name="phone_label">Số điện thoại</string>
     <string name="password_label">Mật khẩu</string>
+    <string name="district_label">Quận/huyện</string>
+    <string name="ward_label">Phường/xã</string>
     <string name="no_network">Không có mạng</string>
     <string name="check_network">Kiểm tra kết nối mạng của bạn</string>
     <string name="title_activity_user_feed">UserFeed</string>

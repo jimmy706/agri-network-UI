@@ -14,6 +14,8 @@ public class User {
     private String phoneNumber;
     private String type;
     private String province;
+    private String district;
+    private String ward;
     private String _id;
     private boolean isFollowed;
     private boolean isFriend;
