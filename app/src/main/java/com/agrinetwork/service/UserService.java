@@ -4,6 +4,7 @@ import android.content.Context;
 
 
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.Location;
 import com.agrinetwork.entities.User;
 
 import okhttp3.Call;
@@ -208,6 +209,21 @@ public class UserService {
         Request request = new Request.Builder()
                 .get()
                 .url(Variables.SERVICE_DOMAIN + "/users/" + userId + "/friends")
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call updateLocation(String token, Location location) {
+        RequestBody body = new FormBody.Builder()
+                .add("lat", Double.toString(location.getLat()))
+                .add("lng", Double.toString(location.getLng()))
+                .build();
+
+        Request request = new Request.Builder()
+                .put(body)
+                .url(Variables.SERVICE_DOMAIN + "/users/update-location")
                 .header("Authorization", token)
                 .build();
 

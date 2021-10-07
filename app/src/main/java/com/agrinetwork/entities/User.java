@@ -1,6 +1,5 @@
 package com.agrinetwork.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,4 +18,5 @@ public class User {
     private String _id;
     private boolean isFollowed;
     private boolean isFriend;
+    private Location location;
 }
