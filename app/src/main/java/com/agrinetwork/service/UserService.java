@@ -1,11 +1,18 @@
 package com.agrinetwork.service;
 
 import android.content.Context;
+import android.os.Build;
 
+
+import androidx.annotation.RequiresApi;
 
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.Location;
 import com.agrinetwork.entities.User;
+import com.agrinetwork.helpers.UrlHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -205,10 +212,16 @@ public class UserService {
         return client.newCall(request);
     }
 
-    public Call getFriends(String token, String userId) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Call getFriends(String token, String userId, int page, int limit) {
+        UrlHelper<Integer> urlHelper = new UrlHelper<>();
+        Map<String, Integer> params = new HashMap<>();
+        params.put("page", page);
+        params.put("limit", limit);
+
         Request request = new Request.Builder()
                 .get()
-                .url(Variables.SERVICE_DOMAIN + "/users/" + userId + "/friends")
+                .url(Variables.SERVICE_DOMAIN + "/users/" + userId + "/friends?" + urlHelper.convertFromMapToQueryString(params))
                 .header("Authorization", token)
                 .build();
 

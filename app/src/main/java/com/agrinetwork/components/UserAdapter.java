@@ -61,7 +61,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_user_item, parent, false);
         return new UserAdapter.ViewHolder(view);
     }
 
@@ -71,7 +71,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         String userAvatar = user.getAvatar();
         if(userAvatar != null && !userAvatar.isEmpty()) {
-            Picasso.get().load(userAvatar)
+            Picasso.get()
+                    .load(userAvatar)
                     .placeholder(R.drawable.avatar_placeholder)
                     .error(R.drawable.avatar_placeholder)
                     .into(holder.avatar);
@@ -109,6 +110,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             });
         }
     }
+
+
 
     @Override
     public int getItemCount() {
