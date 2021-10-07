@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,20 +27,27 @@ import com.agrinetwork.service.TagService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import lombok.Setter;
 
-public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHolder>{
-    private final List<PostTagItem> postTagItemsList;
+public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHolder> implements Filterable {
+    private List<PostTagItem> postTagItemsList;
+    private final List<PostTagItem> postTagItemsListOld;
     private final Context context;
     private final TagService tagService;
+
+
+
     @Setter
     private CheckboxChangedListener checkboxChangedListener;
 
 
     public PostTagAdapter(List<PostTagItem> postTagItemList, Context context){
         this.postTagItemsList = postTagItemList;
+        this.postTagItemsListOld = postTagItemList;
         this.context = context;
         this.tagService = new TagService(context);
     }
@@ -57,11 +66,19 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
         String tagName = postTagItem.getName();
         holder.checkBox.setText(tagName);
 
-
-
         holder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if(checkboxChangedListener != null) {
-                checkboxChangedListener.onChange(checked, position);
+              Toast.makeText(context,compoundButton.getText(),Toast.LENGTH_SHORT).show();
+
+//                for(int index = 0; index < postTagItemsList.size(); index++){
+//                    if(compoundButton.getText() == postTagItemsList.get(index).getName()){
+//                        Toast.makeText(context,"vi tri thu"+ index ,Toast.LENGTH_SHORT).show();
+//                        checkboxChangedListener.onChange(checked, index);
+//
+//                    }
+//                }
+
+              checkboxChangedListener.onChange(checked, position);
             }
         });
 
@@ -73,6 +90,8 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
         return postTagItemsList.size();
     }
 
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private  final CheckBox checkBox;
 
@@ -83,4 +102,42 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
 
         }
     }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String strSearch = charSequence.toString();
+                if(strSearch.isEmpty()){
+                    postTagItemsList = postTagItemsListOld;
+                }
+                else {
+                    List<PostTagItem> list = new ArrayList<>();
+
+                    for(PostTagItem tagItem : postTagItemsListOld){
+
+                        if (tagItem.getName().toLowerCase().contains(strSearch.toLowerCase())){
+
+                            list.add(tagItem);
+                        }
+                    }
+                    postTagItemsList = list;
+
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = postTagItemsList;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                postTagItemsList = (List<PostTagItem>) filterResults.values;
+                notifyDataSetChanged();
+
+            }
+        };
+    }
+
 }

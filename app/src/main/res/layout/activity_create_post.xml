@@ -106,25 +106,26 @@
                 android:layout_height="wrap_content"
                 android:text="@string/picked_tag" />
         </RelativeLayout>
+
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_below="@+id/picked_image_wrapper"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
+
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 android:scrollbars="none">
 
                 <com.google.android.material.chip.ChipGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                android:id="@+id/chip_group"
+                    android:id="@+id/chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleLine="true"
 
-                >
-                </com.google.android.material.chip.ChipGroup>
+                    ></com.google.android.material.chip.ChipGroup>
 
             </HorizontalScrollView>
         </LinearLayout>
