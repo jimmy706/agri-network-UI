@@ -2,7 +2,7 @@ package com.agrinetwork.config;
 
 public class Variables {
 
-    public static final String SERVICE_DOMAIN = "http://192.168.1.8:3000/api";
+    public static final String SERVICE_DOMAIN = "http://192.168.3.101:3000/api";
     public static final String COUNTRY_SERVICE_DOMAIN = "https://provinces.open-api.vn/api";
 
     public static final String ID_TOKEN_LABEL = "idToken";

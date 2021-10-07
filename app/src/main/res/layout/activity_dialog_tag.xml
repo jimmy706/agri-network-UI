@@ -16,29 +16,22 @@
         android:background="@color/green_700"
         android:text="@string/choice_tag"
         />
-    <com.google.android.material.textfield.TextInputLayout
-        android:background="@color/white"
-        android:id="@+id/text_search"
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:hintEnabled="false"
-        app:startIconDrawable="@drawable/ic_search">
+        app:iconifiedByDefault="false"
+        app:queryBackground="@null"
+        app:startIconDrawable="@drawable/ic_search"
+        app:defaultQueryHint="@string/hint_search"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@id/text_search"
-            android:hint="@string/hint_search"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/post_tag_list"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="450dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
