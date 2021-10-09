@@ -133,8 +133,10 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
                 postTagItemsList = (List<PostTagItem>) filterResults.values;
                 notifyDataSetChanged();
+
 
             }
         };

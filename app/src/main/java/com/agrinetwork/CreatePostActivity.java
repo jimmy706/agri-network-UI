@@ -268,12 +268,13 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void setTag(final List<PostTagItem> tagList) {
 
-
+        requestTags.clear();
         for (int index = 0; index < tagList.size(); index++) {
 
             final  PostTagItem chipTag = tagList.get(index);
 
             String chipName = chipTag.getName();
+
             requestTags.add(chipName);
 
 

@@ -78,6 +78,7 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
 
 
         fetchPostTag();
+
         postTagAdapter.setCheckboxChangedListener((checked, position) -> {
             if(checked) {
 
