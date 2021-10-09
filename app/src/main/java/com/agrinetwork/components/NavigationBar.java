@@ -7,8 +7,10 @@ import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -41,7 +43,7 @@ public class NavigationBar extends RelativeLayout {
         layoutInflater.inflate(R.layout.navigation_bar, this);
         ImageView avatar = this.findViewById(R.id.avatar_user);
         EditText search = this.findViewById(R.id.search_text);
-        Button btnSearch = this.findViewById(R.id.btn_search);
+        ImageButton btnSearch = this.findViewById(R.id.btn_search);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseMessaging = FirebaseMessaging.getInstance();
@@ -78,19 +80,36 @@ public class NavigationBar extends RelativeLayout {
 
         btnSearch.setOnClickListener(v ->{
             String searchText = search.getText().toString();
-            Intent intentSearch = new Intent(context,SearchUserActivity.class);
-            intentSearch.putExtra("search",searchText);
-            context.startActivity(intentSearch);
-
+            handleSearch(searchText);
         });
+
+        search.setOnEditorActionListener((textView, id, keyEvent) -> {
+            String searchText= textView.getText().toString();
+            if(id == EditorInfo.IME_ACTION_SEARCH) {
+                handleSearch(searchText);
+                return true;
+            }
+            return false;
+        });
+
 
     }
 
     private void logout() {
         String currentUserId =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
         firebaseMessaging.unsubscribeFromTopic("add_friend_to_" + currentUserId);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(Variables.CURRENT_LNG_LOCATION);
+        editor.remove(Variables.CURRENT_LAT_LOCATION);
+        editor.apply();
         firebaseAuth.signOut();
         context.startActivity(new Intent(context,MainActivity.class));
+    }
+
+    private void handleSearch(String searchText) {
+        Intent intentSearch = new Intent(context,SearchUserActivity.class);
+        intentSearch.putExtra("search",searchText);
+        context.startActivity(intentSearch);
     }
 
 }

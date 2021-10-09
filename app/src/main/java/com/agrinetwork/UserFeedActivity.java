@@ -67,6 +67,12 @@ public class UserFeedActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         firebaseMessaging = FirebaseMessaging.getInstance();
 
+        Intent activityIntent = getIntent();
+        int tab = -1;
+        if(activityIntent.getExtras() != null) {
+            tab = activityIntent.getExtras().getInt("tab", -1);
+        }
+
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
 
         subscribeCurrentUserToMessagingTopics();
@@ -94,6 +100,9 @@ public class UserFeedActivity extends AppCompatActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_user_feed);
         NavigationUI.setupWithNavController(navView, navController);
+        if(tab != -1) {
+            navController.navigate(tab);
+        }
 
         btnAddPost.setOnClickListener(v -> {
             showBottomSheetAddNewPost();
@@ -118,7 +127,6 @@ public class UserFeedActivity extends AppCompatActivity {
             if(location != null) {
                 double lng = location.getLongitude();
                 double lat = location.getLatitude();
-
                 com.agrinetwork.entities.Location newLocation = new com.agrinetwork.entities.Location(lat, lng);
                 updateLocation(newLocation);
             }
@@ -171,6 +179,7 @@ public class UserFeedActivity extends AppCompatActivity {
                 permissionDialog.show();
             }
             else {
+
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -185,7 +194,6 @@ public class UserFeedActivity extends AppCompatActivity {
     private void updateLocation(com.agrinetwork.entities.Location newLocation) {
         double lat = Double.parseDouble(sharedPreferences.getString(Variables.CURRENT_LAT_LOCATION, "-360"));
         double lng = Double.parseDouble(sharedPreferences.getString(Variables.CURRENT_LNG_LOCATION, "-360"));
-
         com.agrinetwork.entities.Location currentLocation = new com.agrinetwork.entities.Location(lat, lng);
         if(!currentLocation.isValid() || !currentLocation.equals(newLocation)) {
             ExecutorService executorService = Executors.newSingleThreadExecutor();
