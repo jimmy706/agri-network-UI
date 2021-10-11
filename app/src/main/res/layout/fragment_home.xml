@@ -17,13 +17,31 @@
             />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/no_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/empty_post"
-        android:gravity="center"
+        android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:id="@+id/empty_post_message"
-        android:visibility="gone"
-        />
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_post"
+            android:gravity="center"
+            android:id="@+id/empty_post_message"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/light_blue_600"
+            android:layout_marginTop="5dp"
+            android:text="@string/explore_more"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_friended"
+            android:id="@+id/explore_friend_button"
+            />
+    </LinearLayout>
+
 </RelativeLayout>

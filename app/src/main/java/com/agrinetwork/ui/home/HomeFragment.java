@@ -3,12 +3,14 @@ package com.agrinetwork.ui.home;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.agrinetwork.R;
+import com.agrinetwork.UserFeedActivity;
 import com.agrinetwork.components.PostAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.databinding.FragmentHomeBinding;
@@ -31,6 +35,7 @@ import com.agrinetwork.entities.PaginationResponse;
 
 import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.service.PostService;
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -59,7 +64,7 @@ public class HomeFragment extends Fragment {
     private PostAdapter postAdapter;
     private LinearLayoutManager linearLayoutManager;
     private SwipeRefreshLayout refreshLayout;
-    private TextView emptyPostMessage;
+    private LinearLayout noPostWrapper;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +79,13 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        emptyPostMessage = binding.emptyPostMessage;
+        noPostWrapper = binding.noPost;
+        MaterialButton exploreFriendBtn = binding.exploreFriendButton;
+        exploreFriendBtn.setOnClickListener((v) -> {
+            Intent intent = new Intent(getActivity(), UserFeedActivity.class);
+            intent.putExtra("tab", R.id.navigation_networks);
+            startActivity(intent);
+        });
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
@@ -170,11 +181,11 @@ public class HomeFragment extends Fragment {
                         getActivity().runOnUiThread(()-> {
                             if(responseData.getDocs().isEmpty()) {
                                 refreshLayout.setVisibility(View.GONE);
-                                emptyPostMessage.setVisibility(View.VISIBLE);
+                                noPostWrapper.setVisibility(View.VISIBLE);
                             }
                             else {
                                 refreshLayout.setVisibility(View.VISIBLE);
-                                emptyPostMessage.setVisibility(View.GONE);
+                                noPostWrapper.setVisibility(View.GONE);
 
                                 posts.addAll(responseData.getDocs());
 
