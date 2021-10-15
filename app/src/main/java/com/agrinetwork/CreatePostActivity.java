@@ -102,8 +102,9 @@ public class CreatePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
-        mediaService = new MediaService(this);
+
         postService = new PostService(this);
+        mediaService = new MediaService(this);
 
         token = getToken();
 

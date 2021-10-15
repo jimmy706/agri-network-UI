@@ -90,5 +90,19 @@
     <string name="usertype_require">Chọn loại thành viên</string>
     <string name="province_required">Chọn tỉnh/thành phố</string>
 
+    <string name="title_add_product">Thêm sản phẩm</string>
+    <string name="hint_product_name">Tên sản phẩm</string>
+    <string name="hint_category">Loại sản phẩm</string>
+    <string name="hint_quantity">Số lượng</string>
+    <string name="hint_price">Đơn giá| VND</string>
+    <string name="hint_unit">Đơn vị</string>
+    <string name="text_add_img">Thêm hình ảnh</string>
+    <string name="checkbox_add_story">Bạn có muốn thêm vào bản tin của mọi người</string>
+    <string name="btn_add_product">Thêm sản phẩm</string>
+    <string name="product_name_required">Vui lòng nhập tên sản phẩm</string>
+    <string name="category_required">Chọn loại sản phẩm</string>
+    <string name="quantity_required">Vui lòng nhập số lượng</string>
+    <string name="price_required">Vui lòng nhập đơn giá</string>
+    <string name="unit_required">Chọn đơn vị</string>
 
 </resources>

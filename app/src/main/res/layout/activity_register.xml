@@ -92,13 +92,13 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/last_name_label"
                     android:layout_weight="1">
+
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_last_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/edit_text_last_name"
                         android:inputType="textCapSentences"
-                        android:maxLength="32"
-                        />
+                        android:maxLength="32" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
