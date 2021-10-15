@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_width="160dp"
+    android:layout_height="250dp"
     android:clickable="true"
     android:focusable="true"
-    android:paddingVertical="5dp"
     android:id="@+id/card_view">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingVertical="5dp"
         android:id="@+id/wrapper">
         <ImageView
             android:layout_width="match_parent"

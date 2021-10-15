@@ -1,4 +1,4 @@
-package com.agrinetwork.components;
+package com.agrinetwork.decorator;
 
 import android.graphics.Rect;
 import android.view.View;

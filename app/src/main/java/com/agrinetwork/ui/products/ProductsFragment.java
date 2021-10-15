@@ -3,6 +3,7 @@ package com.agrinetwork.ui.products;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -10,15 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.agrinetwork.R;
-import com.agrinetwork.components.GridProductSpacingItemDecorator;
+import com.agrinetwork.decorator.GridProductSpacingItemDecorator;
 import com.agrinetwork.components.ProductAdapter;
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.decorator.HorizontalProductSpacingItemDecorator;
 import com.agrinetwork.entities.PaginationResponse;
 import com.agrinetwork.entities.Product;
 import com.agrinetwork.entities.ProductCategory;
@@ -73,11 +76,9 @@ public class ProductsFragment extends Fragment {
         productAdapter = new ProductAdapter(products, getContext());
         forYouProductList = view.findViewById(R.id.recommended_products_for_you);
 
-        int numberOfCols = 2;
-        GridLayoutManager forYouGridLayoutMng = new GridLayoutManager(getContext(), 2);
         forYouProductList.setAdapter(productAdapter);
-        forYouProductList.setLayoutManager(forYouGridLayoutMng);
-        forYouProductList.addItemDecoration(new GridProductSpacingItemDecorator(2, 20, false));
+        forYouProductList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        forYouProductList.addItemDecoration(new HorizontalProductSpacingItemDecorator(20));
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
@@ -140,9 +141,11 @@ public class ProductsFragment extends Fragment {
                             String categoryName = category.getName();
                             final Chip chip = new Chip(getContext());
                             chip.setText(categoryName);
-                            chip.setChipBackgroundColorResource(R.color.blue_500);
+                            chip.setChipBackgroundColorResource(R.color.white);
                             chip.setTextSize(14);
-                            chip.setTextColor(R.color.white);
+                            chip.setTextColor(R.color.black);
+                            chip.setChipStrokeColor(ColorStateList.valueOf(R.color.black));
+                            chip.setChipStrokeWidth(2);
 
                             chipGroup.addView(chip);
                         }
