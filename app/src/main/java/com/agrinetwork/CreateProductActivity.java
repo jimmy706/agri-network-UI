@@ -189,6 +189,7 @@ public class CreateProductActivity extends AppCompatActivity {
                 requestPostProduct(product);
             }else{
                 Toast.makeText(this,"Không được để trống các trường",Toast.LENGTH_SHORT).show();
+
             }
 
         });
