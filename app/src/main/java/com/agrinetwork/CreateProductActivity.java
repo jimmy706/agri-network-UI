@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.agrinetwork.components.SliderAdapter;
@@ -102,6 +104,7 @@ public class CreateProductActivity extends AppCompatActivity {
     });
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,7 +184,7 @@ public class CreateProductActivity extends AppCompatActivity {
             product.setName(name);
             product.setCategories(idCategory);
             product.setQuantity(quantity);
-            product.setPrice(price);
+            product.setPrice(Double.parseDouble((price)));
             product.setQuantityType(unit);
             product.setThumbnails(imageUrls);
 
