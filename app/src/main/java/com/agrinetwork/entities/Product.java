@@ -17,7 +17,6 @@ public class Product {
     private List<String> categories;
     private String quantity;
     private String quantityType;
-    private User owner;
     private Date createdDate;
     private double price;
     private int numberOfViews;

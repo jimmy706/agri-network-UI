@@ -5,10 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum PostFormat {
-    REGULAR("REGULAR"),
-    SELL("SELL"),
-    PLAN("PLAN");
-
+public enum Topic {
+    PRODUCT_REQUEST("Nhu cầu mua hàng");
     private final String label;
+
 }

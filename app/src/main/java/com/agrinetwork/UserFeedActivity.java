@@ -146,13 +146,19 @@ public class UserFeedActivity extends AppCompatActivity {
         LinearLayout addSellPost = bottomSheetDialog.findViewById(R.id.add_sell_post);
         addSellPost.setOnClickListener(v -> {
             startActivity(new Intent(this,CreateProductActivity.class));
+        });
 
+        LinearLayout addProductRequestPost = bottomSheetDialog.findViewById(R.id.add_request_product);
+        addProductRequestPost.setOnClickListener(v -> {
+            startActivity(new Intent(this, RequestProductActivity.class));
         });
 
         LinearLayout addPlanningPost = bottomSheetDialog.findViewById(R.id.add_planning_post);
         addPlanningPost.setOnClickListener(v -> {
             Toast.makeText(this, "Thêm kế hoạch sản xuất", Toast.LENGTH_SHORT).show();
         });
+
+
         bottomSheetDialog.show();
     }
 
