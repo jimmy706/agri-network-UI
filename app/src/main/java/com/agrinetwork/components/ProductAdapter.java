@@ -19,7 +19,6 @@ import com.squareup.picasso.Picasso;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private final Context context;
@@ -63,7 +62,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         double productPrice = product.getPrice();
         holder.price.setText(numberFormat.format(productPrice));
 
-        int productViews = product.getViews();
+        int productViews = product.getNumberOfViews();
         holder.views.setText(Integer.toString(productViews));
     }
 

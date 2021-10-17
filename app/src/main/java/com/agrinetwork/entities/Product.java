@@ -20,6 +20,6 @@ public class Product {
     private User owner;
     private Date createdDate;
     private double price;
-    private int views;
+    private int numberOfViews;
     private List<String> thumbnails;
 }
