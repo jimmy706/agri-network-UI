@@ -2,6 +2,7 @@ package com.agrinetwork.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.agrinetwork.PostDetailActivity;
+import com.agrinetwork.ProductDetailActivity;
 import com.agrinetwork.R;
+import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.entities.Product;
+import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
@@ -64,6 +71,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         int productViews = product.getNumberOfViews();
         holder.views.setText(Integer.toString(productViews));
+
+        holder.cardView.setOnClickListener(view -> {
+            startProductDetail(product);
+        });
     }
 
     @Override
@@ -75,6 +86,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView thumbnail;
         private final TextView name, price, views;
+        private final CardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -82,6 +94,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             this.name = itemView.findViewById(R.id.product_name);
             this.price = itemView.findViewById(R.id.product_price);
             this.views = itemView.findViewById(R.id.product_views);
+            this.cardView = itemView.findViewById(R.id.card_view);
         }
+    }
+
+    private void startProductDetail(Product product) {
+        Intent intent = new Intent(context, ProductDetailActivity.class);
+        intent.putExtra("productId",product.get_id());
+        context.startActivity(intent);
     }
 }

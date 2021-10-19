@@ -94,5 +94,14 @@ public class ProductService {
         }
     }
 
+    public Call getProductById (String token, String productId){
+        Request request = new Request.Builder()
+                .header("Authorization",token)
+                .url(DOMAIN + "/" + productId)
+                .get()
+                .build();
+        return client.newCall(request);
+    }
+
 }
 

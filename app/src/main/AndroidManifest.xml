@@ -60,7 +60,9 @@
         <activity
             android:name=".CreateProductActivity"
             android:exported="true" />
-
+        <activity
+            android:name=".ProductDetailActivity"
+            android:exported="true" />
         <service
             android:name=".service.MessagingService"
             android:exported="false">
