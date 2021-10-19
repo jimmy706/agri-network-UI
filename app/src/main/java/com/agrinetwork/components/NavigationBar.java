@@ -41,7 +41,6 @@ public class NavigationBar extends RelativeLayout {
         layoutInflater.inflate(R.layout.navigation_bar, this);
         ImageView avatar = this.findViewById(R.id.avatar_user);
         EditText search = this.findViewById(R.id.search_text);
-        ImageButton btnSearch = this.findViewById(R.id.btn_search);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseMessaging = FirebaseMessaging.getInstance();
@@ -75,11 +74,6 @@ public class NavigationBar extends RelativeLayout {
         avatar.setOnClickListener(v ->{
             popupMenu.show();
          });
-
-        btnSearch.setOnClickListener(v ->{
-            String searchText = search.getText().toString();
-            handleSearch(searchText);
-        });
 
         search.setOnEditorActionListener((textView, id, keyEvent) -> {
             String searchText= textView.getText().toString();
