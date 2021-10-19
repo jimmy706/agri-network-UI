@@ -61,11 +61,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="3">
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/hint_quantity"
             android:layout_weight="1">
             <com.google.android.material.textfield.TextInputEditText
@@ -91,7 +91,7 @@
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/hint_price"
             android:layout_weight="1">
             <com.google.android.material.textfield.TextInputEditText

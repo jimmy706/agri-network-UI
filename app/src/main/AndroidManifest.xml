@@ -21,6 +21,9 @@
         android:theme="@style/Theme.AgriNetwork"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ProductsActivity"
+            android:exported="true" />
+        <activity
             android:name=".RequestProductActivity"
             android:exported="true" />
         <activity

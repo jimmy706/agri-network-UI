@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="30dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,32 +48,26 @@
             android:orientation="vertical"
             android:padding="10dp"
             android:background="@color/white"
-            android:layout_marginBottom="15dp">
+            android:layout_marginBottom="15dp"
+            android:id="@+id/interest_wrapper">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/for_you"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_alignParentStart="true"/>
 
                 <TextView
-                    android:id="@+id/view_more_for_you"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:text="@string/view_more"
-                    android:textColor="@color/light_blue_600" />
+                    android:layout_alignParentStart="true"
+                    android:text="@string/maybe_interest"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recommended_products_for_you"
+                android:id="@+id/recommended_products_interest"
                 android:nestedScrollingEnabled="false"
                 android:paddingVertical="10dp"/>
         </LinearLayout>
@@ -83,32 +78,26 @@
             android:orientation="vertical"
             android:padding="10dp"
             android:background="@color/white"
-            android:layout_marginBottom="15dp">
+            android:layout_marginBottom="15dp"
+            android:id="@+id/nearby_wrapper">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:text="@string/near_your_location"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_alignParentStart="true"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/view_more_near_you"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:text="@string/view_more"
-                    android:textColor="@color/light_blue_600" />
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recommended_products_near_you"
+                android:id="@+id/recommended_products_nearby"
                 android:nestedScrollingEnabled="false"
                 android:paddingVertical="10dp"/>
         </LinearLayout>
@@ -119,7 +108,8 @@
             android:orientation="vertical"
             android:padding="10dp"
             android:background="@color/white"
-            android:layout_marginBottom="15dp">
+            android:layout_marginBottom="15dp"
+            android:id="@+id/from_friends_wrapper">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -133,20 +123,12 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/view_more_from_friends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:text="@string/view_more"
-                    android:textColor="@color/light_blue_600" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recommended_product_from_friend"
+                android:id="@+id/recommended_products_from_friend"
                 android:paddingVertical="10dp"/>
         </LinearLayout>
 
@@ -155,7 +137,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:id="@+id/popular_wrapper">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -169,22 +152,23 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/view_more_interest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:text="@string/view_more"
-                    android:textColor="@color/light_blue_600" />
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recommended_products"
+                android:id="@+id/recommended_products_popular"
                 android:paddingVertical="10dp"/>
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/view_more"
+            android:textAllCaps="false"
+            android:id="@+id/view_more_btn"
+            />
 
     </LinearLayout>
 
