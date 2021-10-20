@@ -28,6 +28,7 @@ import com.agrinetwork.entities.ProductCategory;
 import com.agrinetwork.entities.ProductDetail;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.ProductService;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
@@ -73,6 +74,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView imageView;
     private RecyclerView fromOwnerProductList;
     private RecyclerView fromRelatedProductList;
+    private MaterialToolbar toolbar;
 
 
 
@@ -89,6 +91,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
 
+        toolbar = findViewById(R.id.toolbar);
         sliderView = findViewById(R.id.image_slider);
         productName = findViewById(R.id.product_name_detail);
         quantity = findViewById(R.id.quantity_num);
@@ -122,7 +125,11 @@ public class ProductDetailActivity extends AppCompatActivity {
             contactOwn(userId);
         });
 
-
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent startActivityIntent = new Intent(this, UserFeedActivity.class);
+            startActivityIntent.putExtra("tab", R.id.navigation_products);
+            startActivity(startActivityIntent);
+        });
     }
 
     private void fetchProductDetail(){
