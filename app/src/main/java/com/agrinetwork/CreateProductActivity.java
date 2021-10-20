@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.ProgressBar;
@@ -55,11 +56,13 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class CreateProductActivity extends AppCompatActivity {
+
     private final Gson gson = new Gson();
     private CategoryService categoryService;
     private final List<ProductCategory> productCategoryList = new ArrayList<>();
     private  String token;
     private SharedPreferences sharedPreferences;
+
     private TextInputEditText nameInput, quantityInput, priceInput;
     private MaterialAutoCompleteTextView  unitInput;
     private MultiAutoCompleteTextView categoryInput;
@@ -70,6 +73,7 @@ public class CreateProductActivity extends AppCompatActivity {
     private MediaService mediaService;
     private MaterialButton submitProduct;
     private ProductService productService;
+    private CheckBox broadcastProdCheckbox;
 
     private final List<Uri> imageUris = new ArrayList<>();
     private final List<String> imageUrls = new ArrayList<>();
@@ -119,7 +123,7 @@ public class CreateProductActivity extends AppCompatActivity {
         categoryInput = findViewById(R.id.edit_text_category);
         quantityInput = findViewById(R.id.edit_text_quantity);
         priceInput = findViewById(R.id.edit_text_price);
-
+        broadcastProdCheckbox = findViewById(R.id.checkbox_broadcast_product);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view -> {
@@ -187,6 +191,7 @@ public class CreateProductActivity extends AppCompatActivity {
             product.setPrice(Double.parseDouble((price)));
             product.setQuantityType(unit);
             product.setThumbnails(imageUrls);
+            product.setBroadCasted(broadcastProdCheckbox.isChecked());
 
             if(!name.isEmpty() && !idCategory.isEmpty() && !quantity.isEmpty() && !price.isEmpty() && !unit.isEmpty()){
                 requestPostProduct(product);

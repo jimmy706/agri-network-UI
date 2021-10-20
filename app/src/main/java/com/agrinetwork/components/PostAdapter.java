@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,14 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.PostDetailActivity;
+import com.agrinetwork.ProductDetailActivity;
 import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.R;
 
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.PostFormat;
 import com.agrinetwork.entities.PostItem;
+import com.agrinetwork.helpers.AttributesConverter;
 import com.agrinetwork.interfaces.DeletePostListener;
 import com.agrinetwork.interfaces.ListItemClickListener;
 import com.agrinetwork.service.PostService;
@@ -39,11 +43,14 @@ import com.squareup.picasso.Picasso;
 
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -60,8 +67,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private final PostService postService;
     private final SharedPreferences sharedPreferences;
     private final String currentLoginUserId;
-    private   List<String> tags;
-   
+    private final Picasso picasso = Picasso.get();
     
     @Setter
     private DeletePostListener deletePostListener;
@@ -75,8 +81,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         this.postService = new PostService(context);
     }
 
-
-
     @Getter
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         
@@ -84,15 +88,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private ListItemClickListener itemClickListener;
 
         private final ImageView avatar;
-        private final TextView displayName, postTag, context, commentCount, reactionCount;
+        private final TextView displayName, postTag, context, commentCount, reactionCount, productName, productPrice;
         private final ImageButton moreActionBtn;
-        private final LinearLayout imageWrapper;
-        private final ImageView commentBtn, reactionBtn, postImage;
+        private final LinearLayout imageWrapper, productRefWrapper;
+        private final ImageView commentBtn, reactionBtn, postImage, productThumbnail;
         private final SliderView postImages;
         private final MaterialCardView cardView;
         private final ChipGroup chipGroup;
-        
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -114,6 +116,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             postImages = itemView.findViewById(R.id.image_slider);
             cardView = itemView.findViewById(R.id.card_view);
             chipGroup = itemView.findViewById(R.id.chip_group_feed);
+            productRefWrapper = itemView.findViewById(R.id.product_ref_wrapper);
+            productThumbnail = itemView.findViewById(R.id.product_thumbnail);
+            productName = itemView.findViewById(R.id.product_name);
+            productPrice = itemView.findViewById(R.id.product_price);
         }
 
         @Override
@@ -173,7 +179,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         String avatarUrl = postItem.getPostedBy().getAvatar();
         if(avatarUrl != null && !avatarUrl.isEmpty()) {
-            Picasso.get().load(avatarUrl).centerCrop().resize(40, 40).into(holder.avatar);
+            picasso.load(avatarUrl).centerCrop().resize(40, 40).into(holder.avatar);
         }
         holder.avatar.setOnClickListener(v -> {
             String userId = postItem.getPostedBy().get_id();
@@ -189,12 +195,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.postTag.setText(dateFormat.format(lastedModify));
 
         String content = postItem.getContent();
-        holder.context.setText(content);
+        holder.context.setText(Html.fromHtml(content));
 
         List<String> images = postItem.getImages();
         if(!images.isEmpty()) {
             holder.imageWrapper.setVisibility(View.VISIBLE);
-            Picasso picasso = Picasso.get();
                 String postImageUrl = images.get(0);
                 holder.postImages.setVisibility(View.GONE);
                 picasso.load(postImageUrl).into(holder.postImage);
@@ -224,8 +229,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             });
         }
 
-
-
         if(!postItem.getTags().isEmpty()) {
             holder.chipGroup.removeAllViews();
             for(int i = 0; i < postItem.getTags().size(); i++){
@@ -236,6 +239,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
         }
 
+        if(postItem.getFormat().equals(PostFormat.SELL.getLabel())) {
+            Map<String, String> attributes = new AttributesConverter(postItem.getAttributes()).toMap();
+            holder.productRefWrapper.setVisibility(View.VISIBLE);
+            if(attributes.containsKey("thumbnail")) {
+                picasso
+                        .load(attributes.get("thumbnail"))
+                        .placeholder(R.drawable.placeholder_image)
+                        .error(R.drawable.placeholder_image)
+                        .into(holder.productThumbnail);
+            }
+            holder.productName.setText(attributes.get("name"));
+            NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+            numberFormat.setCurrency(Currency.getInstance("VND"));
+            numberFormat.setMaximumFractionDigits(0);
+
+            holder.productPrice.setText(numberFormat.format(Double.parseDouble(attributes.get("price"))));
+        }
     }
 
     @Override
@@ -244,10 +264,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     private void startPostDetailActivity(PostItem post) {
-        Intent intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra(Variables.POST_ID_LABEL, post.get_id());
+        String format = post.getFormat();
+        Intent intent = null;
+        if(format.equals(PostFormat.REGULAR.getLabel())) {
+            intent = new Intent(context, PostDetailActivity.class);
+            intent.putExtra(Variables.POST_ID_LABEL, post.get_id());
+        }
+        else if(format.equals(PostFormat.SELL.getLabel())) {
+            intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("productId", post.getRef());
+        }
 
-        context.startActivity(intent);
+        if(intent != null) {
+            context.startActivity(intent);
+        }
     }
 
     private void like(String postId) {
@@ -305,5 +335,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         bottomSheetDialog.show();
     }
 
-
+    @Override
+    public long getItemId(int position) {
+        return posts.get(position).get_id().hashCode();
+    }
 }

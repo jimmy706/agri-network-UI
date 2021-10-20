@@ -31,7 +31,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private final Context context;
     private final List<Product> products;
     private final Picasso picasso = Picasso.get();
-
     private final NumberFormat numberFormat;
 
 

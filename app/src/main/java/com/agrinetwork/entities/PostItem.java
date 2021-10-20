@@ -28,4 +28,8 @@ public class PostItem {
     private boolean isLiked;
 
     private List<String> tags;
+
+    private List<Attribute> attributes;
+
+    private String ref;
 }

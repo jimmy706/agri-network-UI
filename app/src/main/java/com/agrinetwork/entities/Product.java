@@ -21,4 +21,5 @@ public class Product {
     private double price;
     private int numberOfViews;
     private List<String> thumbnails;
+    private boolean isBroadCasted;
 }

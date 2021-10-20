@@ -105,7 +105,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         productCategory = findViewById(R.id.category_product);
         buttonContact = findViewById(R.id.btn_contact);
 
-
         fromOwnerProductList = findViewById(R.id.products_by_own);
         fromOwnerProductList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         fromOwnerProductList.addItemDecoration(new HorizontalProductSpacingItemDecorator(20));
@@ -119,7 +118,6 @@ public class ProductDetailActivity extends AppCompatActivity {
        avatar.setOnClickListener(v->{
            contactOwn(userId);
        });
-
 
         buttonContact.setOnClickListener(v->{
             contactOwn(userId);
@@ -149,8 +147,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                 System.out.println(productDetail);
                 ProductDetailActivity.this.runOnUiThread(()->{
                     renderData();
-
-
                 });
 
             }

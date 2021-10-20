@@ -72,6 +72,7 @@ public class HomeFragment extends Fragment {
         postService = new PostService(getContext());
 
         postAdapter = new PostAdapter(posts, getActivity());
+        postAdapter.setHasStableIds(true);
         postAdapter.setDeletePostListener(this::deletePost);
 
         getTokenFromSharedPreference();

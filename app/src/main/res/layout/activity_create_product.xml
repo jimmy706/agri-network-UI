@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -163,10 +164,9 @@
         android:orientation="vertical">
 
         <CheckBox
-            android:id="@+id/checkbox_add_product"
+            android:id="@+id/checkbox_broadcast_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:checked="true"
             android:text="@string/checkbox_add_story"
             android:textSize="16sp" />
@@ -179,7 +179,8 @@
             android:layout_marginTop="10dp"
             android:padding="10dp"
             android:text="@string/btn_add_product"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            tools:ignore="RtlHardcoded" />
     </LinearLayout>
 
 
