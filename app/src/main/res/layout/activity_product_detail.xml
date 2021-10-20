@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolbar"
-            app:title="Chi tiết sản phẩm"
+            app:title="@string/title_product_detail"
             android:background="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back"/>
     </com.google.android.material.appbar.AppBarLayout>
@@ -82,7 +82,7 @@
                     android:id="@+id/product_name_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="product name"
+                    android:text="@string/hint_product_name"
                     android:textSize="21sp"
                     android:textColor="@color/black"
                     android:textStyle="bold"
@@ -97,7 +97,7 @@
                         android:id="@+id/quantity_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Số lượng:"
+                        android:text="@string/title_quantity"
                         android:textSize="20sp"
                         android:textColor="@color/black"
                         />
@@ -107,7 +107,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toEndOf="@+id/quantity_text"
-                        android:text="Num"
                         android:textSize="20sp"
                         android:textColor="@color/black"
 
@@ -133,7 +132,6 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="5dp"
                         android:layout_toEndOf="@id/view_ic"
-                        android:text="1000"
                         android:textColor="@color/gray_600"
                         android:textSize="20sp" />
 
@@ -141,7 +139,7 @@
                         android:id="@+id/price_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Giá:"
+                        android:text="@string/title_price"
                         android:layout_below="@+id/quantity_text"
                         android:textSize="20sp"
                         android:textColor="@color/black"
@@ -153,7 +151,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/quantity_text"
                         android:layout_toEndOf="@+id/price_text"
-                        android:text="Num"
                         android:textSize="20sp"
                         android:textColor="@color/black"
 
@@ -164,10 +161,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/price_text"
-                        android:text="Ngày đăng:"
-                        android:textSize="18sp"
+                        android:text="@string/date_create"
                         android:textColor="@color/gray_600"
-                        />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/date"
@@ -175,7 +171,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/price_text"
                         android:layout_toEndOf="@+id/date_text"
-                        android:text="date"
                         android:textSize="18sp"
                         android:textColor="@color/gray_600"
 
@@ -202,9 +197,10 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
                 <Button
+                    android:id="@+id/btn_contact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Liên hệ người cung cấp sản phẩm"
+                    android:text="@string/btn_contact"
                     />
 
             </LinearLayout>
@@ -222,9 +218,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Các sản phẩm khác của người bán"
+                        android:text="@string/productsFromOwn"
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        />
 
                     <TextView
                         android:id="@+id/view_more_product_by_own"
@@ -232,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:text="Xem thêm"
+                        android:text="@string/view_more"
                         android:textColor="@color/light_blue_600" />
                 </RelativeLayout>
                 <androidx.recyclerview.widget.RecyclerView
@@ -256,9 +254,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Các sản phẩm tương tự"
+                        android:text="@string/productsRelated"
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/view_more_related_product"
@@ -266,7 +265,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentBottom="true"
-                        android:text="Xem thêm"
+                        android:text="@string/view_more"
                         android:textColor="@color/light_blue_600" />
                 </RelativeLayout>
                 <androidx.recyclerview.widget.RecyclerView

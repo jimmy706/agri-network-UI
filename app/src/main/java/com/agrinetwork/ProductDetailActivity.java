@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ import okhttp3.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(Variables.POST_DATE_FORMAT);
+    private String userId;
     private List<ProductCategory> productCategoryList = new ArrayList<>();
 
     private List<Product> productsFromOwn = new ArrayList<>();
@@ -64,12 +66,13 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private SliderView sliderView;
     private TextView productName, quantity, numView, price, dateCreate,userName;
+    private Button buttonContact;
     private View imagesWrapper;
     private CircleImageView avatar;
     private ChipGroup productCategory;
     private ImageView imageView;
     private RecyclerView fromOwnerProductList;
-    private RecyclerView fromRelatedProduct;
+    private RecyclerView fromRelatedProductList;
 
 
 
@@ -97,19 +100,27 @@ public class ProductDetailActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
         avatar = findViewById(R.id.avatar_own);
         productCategory = findViewById(R.id.category_product);
+        buttonContact = findViewById(R.id.btn_contact);
 
-        productFromOwnAdapter = new ProductAdapter(productsFromOwn,this);
+
         fromOwnerProductList = findViewById(R.id.products_by_own);
         fromOwnerProductList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        fromOwnerProductList.setAdapter(productFromOwnAdapter);
+        fromOwnerProductList.addItemDecoration(new HorizontalProductSpacingItemDecorator(20));
 
-//        fromRelatedProduct.findViewById(R.id.products_related);
-//        productRelatedAdapter = new ProductAdapter(productsRelated,this);
-//        fromRelatedProduct.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
-//        fromRelatedProduct.setAdapter(productRelatedAdapter);
+        fromRelatedProductList = findViewById(R.id.products_related);
+        fromRelatedProductList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        fromRelatedProductList.addItemDecoration(new HorizontalProductSpacingItemDecorator(20));
 
         fetchProductDetail();
 
+       avatar.setOnClickListener(v->{
+           contactOwn(userId);
+       });
+
+
+        buttonContact.setOnClickListener(v->{
+            contactOwn(userId);
+        });
 
 
     }
@@ -131,6 +142,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 System.out.println(productDetail);
                 ProductDetailActivity.this.runOnUiThread(()->{
                     renderData();
+
+
                 });
 
             }
@@ -158,12 +171,17 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         User own = productDetail.getOwner();
         String fullName = own.getFirstName() + " " + own.getLastName();
+        userId = own.get_id();
         userName.setText(fullName);
 
         String avatarUrl = own.getAvatar();
         if(avatarUrl != null && !avatarUrl.isEmpty()){
-            Picasso.get().load(avatarUrl).into(avatar);
+            Picasso.get().load(avatarUrl)
+                    .placeholder(R.drawable.avatar_placeholder)
+                    .error(R.drawable.avatar_placeholder)
+                    .into(avatar);
         }
+
 
         List<String> productImages = productDetail.getThumbnails();
         if(!productImages.isEmpty()){
@@ -212,13 +230,29 @@ public class ProductDetailActivity extends AppCompatActivity {
             productCategory.addView(chip);
         }
 
-        productsOwnResponse = productDetail.getFromOwnerProducts();
-        productsFromOwn.addAll(productsOwnResponse);
-        productFromOwnAdapter.notifyDataSetChanged();
 
-//        productsRelatedResponse = productDetail.getRelatedProducts();
-//        productsRelated.addAll(productsRelatedResponse);
-//        productRelatedAdapter.notifyDataSetChanged();
+        productsOwnResponse = productDetail.getFromOwnerProducts();
+        productsFromOwn.clear();
+        if (!productsOwnResponse.isEmpty()){
+            productsFromOwn.addAll(productsOwnResponse);
+            productFromOwnAdapter = new ProductAdapter(productsFromOwn,this);
+            fromOwnerProductList.setAdapter(productFromOwnAdapter);
+        }
+
+        productsRelatedResponse = productDetail.getRelatedProducts();
+        productsRelated.clear();
+        if(!productsRelatedResponse.isEmpty()){
+            productsRelated.addAll(productsRelatedResponse);
+            productRelatedAdapter = new ProductAdapter(productsRelated,this);
+            fromRelatedProductList.setAdapter(productRelatedAdapter);
+        }
+
+    }
+
+    private void contactOwn(String userId){
+        Intent intent = new Intent(this,UserWallActivity.class);
+        intent.putExtra("userId",userId);
+        startActivity(intent);
     }
 
 }

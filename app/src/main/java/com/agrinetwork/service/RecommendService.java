@@ -25,4 +25,13 @@ public class RecommendService {
 
         return client.newCall(request);
     }
+
+    public Call getProductsFeed(String token) {
+        Request request = new Request.Builder()
+                .header("Authorization", token)
+                .url(SERVICE_URL + "/products")
+                .build();
+
+        return client.newCall(request);
+    }
 }

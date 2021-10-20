@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation"
         android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="55dp"
         />
 
         <com.google.android.material.bottomappbar.BottomAppBar
