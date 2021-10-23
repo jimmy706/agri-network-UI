@@ -230,6 +230,7 @@ public class MainActivity extends Activity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(Variables.CURRENT_LOGIN_USER_ID, currentLoginUserId);
                 editor.putString(Variables.CURRENT_LOGIN_USER_AVATAR, avatarLink);
+                editor.putString(Variables.CURRENT_LOGIN_USER_TYPE, user.getType());
                 editor.apply();
             }
         });

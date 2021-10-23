@@ -59,6 +59,7 @@
     <string name="price_to">Đến</string>
     <string name="price_between">Giá dao động</string>
     <string name="post_request">Đăng yêu cầu</string>
+    <string name="product_info">Thông tin sản phẩm</string>
 
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>
@@ -118,11 +119,11 @@
     <string name="unit_required">Chọn đơn vị</string>
 
     <string name="title_product_detail">Chi tiết sản phẩm</string>
-    <string name="title_quantity">Số lượng:  </string>
-    <string name="title_price">Giá:  </string>
-    <string name="date_create">Ngày đăng:  </string>
-    <string name="btn_contact">Liên hệ người cung cấp sản phẩm </string>
-    <string name="productsFromOwn">Các sản phẩm khác của người bán </string>
-    <string name="productsRelated">Các sản phẩm tương tự </string>
+    <string name="title_quantity">Số lượng: </string>
+    <string name="title_price">Giá:</string>
+    <string name="date_create">Ngày đăng:</string>
+    <string name="btn_contact">Liên hệ người cung cấp</string>
+    <string name="productsFromOwn">Từ người bán</string>
+    <string name="productsRelated">Sản phẩm tương tự</string>
 
 </resources>
