@@ -27,8 +27,10 @@ import com.agrinetwork.entities.Product;
 import com.agrinetwork.entities.ProductCategory;
 import com.agrinetwork.entities.ProductDetail;
 import com.agrinetwork.entities.User;
+import com.agrinetwork.helpers.CurrencyFormatter;
 import com.agrinetwork.service.ProductService;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
@@ -47,7 +50,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat(Variables.POST_DATE_FORMAT);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(Variables.POST_DATE_FORMAT, new Locale("vi", "VN"));
     private String userId;
     private List<ProductCategory> productCategoryList = new ArrayList<>();
 
@@ -67,7 +70,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private SliderView sliderView;
     private TextView productName, quantity, numView, price, dateCreate,userName;
-    private Button buttonContact;
+    private MaterialButton buttonContact;
     private View imagesWrapper;
     private CircleImageView avatar;
     private ChipGroup productCategory;
@@ -163,8 +166,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         String quantityFormat = productDetail.getQuantity() + " "+ productDetail.getQuantityType();
         quantity.setText(quantityFormat);
 
-        String priceProduct = productDetail.getPrice()+ "VND";
-        price.setText(priceProduct);
+        String priceText = CurrencyFormatter.format(productDetail.getPrice()) + CurrencyFormatter.CURRENCY_SUFFIX;
+        price.setText(priceText);
 
         String numOfView = Integer.toString(productDetail.getNumberOfViews());
         numView.setText(numOfView);

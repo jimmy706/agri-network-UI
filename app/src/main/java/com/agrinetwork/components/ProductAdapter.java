@@ -14,32 +14,23 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.agrinetwork.PostDetailActivity;
 import com.agrinetwork.ProductDetailActivity;
 import com.agrinetwork.R;
-import com.agrinetwork.config.Variables;
-import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.entities.Product;
-import com.google.android.material.card.MaterialCardView;
+import com.agrinetwork.helpers.CurrencyFormatter;
 import com.squareup.picasso.Picasso;
 
-import java.text.NumberFormat;
-import java.util.Currency;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private final Context context;
     private final List<Product> products;
     private final Picasso picasso = Picasso.get();
-    private final NumberFormat numberFormat;
 
 
     public ProductAdapter(List<Product> products, Context context) {
         this.products = products;
         this.context = context;
-        this.numberFormat = NumberFormat.getCurrencyInstance();
-        this.numberFormat.setCurrency(Currency.getInstance("VND"));
-        this.numberFormat.setMaximumFractionDigits(0);
     }
 
     @NonNull
@@ -66,7 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.name.setText(productName);
 
         double productPrice = product.getPrice();
-        holder.price.setText(numberFormat.format(productPrice));
+        holder.price.setText(CurrencyFormatter.format(productPrice) + CurrencyFormatter.CURRENCY_SUFFIX);
 
         int productViews = product.getNumberOfViews();
         holder.views.setText(Integer.toString(productViews));

@@ -13,6 +13,8 @@ public class Variables {
     public static final String POST_DATE_FORMAT = "dd-MMM-yyyy hh:mm";
     public static final String CURRENT_LOGIN_USER_ID = "currentLoginUserId";
     public static final String CURRENT_LOGIN_USER_AVATAR = "currentLoginUserAvatar";
+    public static final String CURRENT_LOGIN_USER_TYPE = "currentLoginUserType";
+
     public static final String CURRENT_LAT_LOCATION = "CURRENT_LAT_LOCATION";
     public static final String CURRENT_LNG_LOCATION = "CURRENT_LNG_LOCATION";
 
