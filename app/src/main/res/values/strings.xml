@@ -125,4 +125,14 @@
     <string name="productsFromOwn">Các sản phẩm khác của người bán </string>
     <string name="productsRelated">Các sản phẩm tương tự </string>
 
+    <string name="tab_menu_own">Menu</string>
+    <string name="tab_own_product">Sản phẩm </string>
+    <string name="tab_own_post">Bài viết</string>
+
+    <string name="tab_own">Trang của tôi</string>
+    <string name="tab_menu_info_detail">Chi tiết thông tin</string>
+    <string name="text_no_post_own">Hiện bạn chưa có bài viết nào</string>
+    <string name="text_no_product_own">Hiện bạn chưa có đăng sản phẩm nào</string>
+
+
 </resources>

@@ -26,8 +26,8 @@
         />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.agrinetwork.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_my_profile"
+        android:name="com.agrinetwork.ui.profile.ProfileMenuFragment"
+        android:label="@string/tab_own"
+        tools:layout="@layout/fragment_profile_menu" />
 </navigation>

@@ -254,7 +254,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             numberFormat.setCurrency(Currency.getInstance("VND"));
             numberFormat.setMaximumFractionDigits(0);
 
-            holder.productPrice.setText(numberFormat.format(Double.parseDouble(attributes.get("price"))));
+            if(attributes.get("price")!= null){
+                String price = attributes.get("price").trim();
+                holder.productPrice.setText(numberFormat.format(Double.parseDouble(price)));
+            }
+           
         }
     }
 
