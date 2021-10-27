@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreatePlanActivity">
+
+    <com.stepstone.stepper.StepperLayout
+        android:id="@+id/stepper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:ms_stepperType="tabs"
+        app:ms_nextButtonText="@string/plan.creation.step.next"
+        app:ms_backButtonText="@string/plan.creation.step.prev"
+        app:ms_completeButtonText="@string/plan.creation.step.complete"/>
+</LinearLayout>
