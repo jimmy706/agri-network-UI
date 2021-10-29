@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -78,6 +79,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private RecyclerView fromOwnerProductList;
     private RecyclerView fromRelatedProductList;
     private MaterialToolbar toolbar;
+    private User own;
 
 
 
@@ -123,7 +125,8 @@ public class ProductDetailActivity extends AppCompatActivity {
        });
 
         buttonContact.setOnClickListener(v->{
-            contactOwn(userId);
+            Intent phoneCallIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + own.getPhoneNumber()));
+            startActivity(phoneCallIntent);
         });
 
         toolbar.setNavigationOnClickListener(v -> {
@@ -175,7 +178,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String postProductDate = dateFormat.format(productDetail.getCreatedDate());
         dateCreate.setText(postProductDate);
 
-        User own = productDetail.getOwner();
+         own = productDetail.getOwner();
         String fullName = own.getFirstName() + " " + own.getLastName();
         userId = own.get_id();
         userName.setText(fullName);

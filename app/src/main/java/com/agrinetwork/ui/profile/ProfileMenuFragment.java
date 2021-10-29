@@ -2,6 +2,7 @@ package com.agrinetwork.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.agrinetwork.R;
 
+import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.UserDetail;
 import com.agrinetwork.service.UserService;
@@ -74,8 +76,15 @@ public class ProfileMenuFragment extends Fragment {
         personalInformation();
 
 
+        avatar.setOnClickListener(v->{
+            Intent intent = new Intent(getActivity(), UserWallActivity.class);
+            intent.putExtra("userId",currentLoginUserId);
+            startActivity(intent);
+        });
 
         return root;
+
+
     }
 
     private class ProfileMenuPageAdapter extends FragmentStateAdapter {
