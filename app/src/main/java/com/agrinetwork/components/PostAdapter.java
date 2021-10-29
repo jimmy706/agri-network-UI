@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.PostDetailActivity;
@@ -31,7 +30,7 @@ import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PostFormat;
 import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.helpers.AttributesConverter;
-import com.agrinetwork.interfaces.DeletePostListener;
+import com.agrinetwork.interfaces.listeners.DeletePostListener;
 import com.agrinetwork.interfaces.ListItemClickListener;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;

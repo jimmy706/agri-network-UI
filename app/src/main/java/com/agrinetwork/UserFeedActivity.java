@@ -155,7 +155,7 @@ public class UserFeedActivity extends AppCompatActivity {
 
         LinearLayout addPlanningPost = bottomSheetDialog.findViewById(R.id.add_planning_post);
         addPlanningPost.setOnClickListener(v -> {
-            Toast.makeText(this, "Thêm kế hoạch sản xuất", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, CreatePlanActivity.class));
         });
 
 
