@@ -8,6 +8,7 @@
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/image_placeholder.xml" value="0.2759259259259259" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/layout_border.xml" value="0.3828125" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/outline_btn.xml" value="0.3828125" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/round_btn.xml" value="0.3769230769230769" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/search_view_theme.xml" value="0.22604166666666667" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/searchview_theme.xml" value="0.3769230769230769" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/drawable/toggle_following.xml" value="0.3828125" />
@@ -27,15 +28,20 @@
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_user_feed.xml" value="0.26268115942028986" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/activity_user_wall.xml" value="0.5" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/adapter_friend_request.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/adapter_needed_factor.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/adapter_plan_detail.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/adapter_product_item.xml" value="0.5" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/adapter_recommend_user.xml" value="0.5" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/add_post_bottom_sheet_popup.xml" value="0.2269021739130435" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/dialog_add_plan_detail.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_add_post.xml" value="0.3109375" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_dashboard.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_my_network.xml" value="0.20989583333333334" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_notifications.xml" value="0.19010416666666666" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_plan_detail_creatiom.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_plan_detail_creation.xml" value="0.33" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_plan_result.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_plan_timestamp_creation.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_products.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/fragment_profile_menu.xml" value="0.36666666666666664" />
@@ -49,6 +55,7 @@
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/request_product_form.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/sample_app_navigation.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/slider_image_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/tag_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/layout/user_item_adapter.xml" value="0.5" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/menu/add_post_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/jimda/AndroidStudioProjects/AgriNetwork/app/src/main/res/menu/bottom_nav_menu.xml" value="0.36666666666666664" />
