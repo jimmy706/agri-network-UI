@@ -150,7 +150,9 @@
     <string name="plan.creation.step.next">Tiếp theo</string>
     <string name="plan.creation.step.prev">Trở về</string>
     <string name="plan.creation.step.complete">Xong</string>
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="plan.detail.title">Kế hoạch sản xuất</string>
+    <string name="plan.detail.progress">Tiến trình</string>
+    <string name="plan.detail.intent.harvest">Thành phẩm dự kiến</string>
 
 </resources>

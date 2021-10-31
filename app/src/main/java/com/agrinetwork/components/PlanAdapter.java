@@ -2,6 +2,7 @@ package com.agrinetwork.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.agrinetwork.PlanInfoActivity;
 import com.agrinetwork.R;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.plan.Plan;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -54,6 +57,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder> {
         holder.countSteps.setText(Integer.toString(plan.getPlantDetails().size()));
 
         holder.progress.setProgress((int) (plan.getProgress() * 100));
+
+        holder.cardView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PlanInfoActivity.class);
+            intent.putExtra("planId", plan.get_id());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -65,6 +74,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder> {
 
         final TextView name, dueDate, countSteps;
         final ProgressBar progress;
+        final MaterialCardView cardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,6 +82,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder> {
             this.dueDate = itemView.findViewById(R.id.plan_duedate);
             this.countSteps = itemView.findViewById(R.id.plan_detail_count);
             this.progress = itemView.findViewById(R.id.progress);
+            this.cardView = itemView.findViewById(R.id.card_view);
         }
     }
 

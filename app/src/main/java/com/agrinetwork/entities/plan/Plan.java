@@ -17,4 +17,5 @@ public class Plan {
     private List<PlanDetail> plantDetails;
     private HarvestProduct result;
     private float progress;
+    private String status;
 }

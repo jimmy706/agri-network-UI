@@ -59,6 +59,16 @@ public class PlanService {
         return client.newCall(request);
     }
 
+    public Call getPlanById(String token, String id) {
+        Request request = new Request.Builder()
+                .url(SERVICE_URL + "/" + id)
+                .header("Authorization", token)
+                .get()
+                .build();
+
+        return client.newCall(request);
+    }
+
     @Data
     public static class SearchPlanCriteria {
         private boolean expired;
