@@ -3,6 +3,7 @@ package com.agrinetwork.components;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.RecommendUserDemand;
 import com.agrinetwork.service.RecommendService;
-import com.agrinetwork.service.UserService;
+import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -68,6 +69,10 @@ public class RecommendUserDemandAdapter extends RecyclerView.Adapter<RecommendUs
         String numberPhone = userDemand.getPhoneNumber();
         holder.textPhone.setText(numberPhone);
 
+        holder.btnCall.setOnClickListener(v->{
+            Intent phoneCallIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + userDemand.getPhoneNumber()));
+            context.startActivity(phoneCallIntent);
+        });
 
     }
 
@@ -78,16 +83,17 @@ public class RecommendUserDemandAdapter extends RecyclerView.Adapter<RecommendUs
 
     public  static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView avatar;
-        private final TextView textName,textPhone,distance;
-        private final LinearLayout distanceWrapper;
+        private final TextView textName,textPhone;
+        private final MaterialButton btnCall;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             avatar = itemView.findViewById(R.id.avatar);
             textName = itemView.findViewById(R.id.full_name);
             textPhone = itemView.findViewById(R.id.user_phone);
-            distance = itemView.findViewById(R.id.distance);
-            distanceWrapper = itemView.findViewById(R.id.distance_wrapper);
+            btnCall = itemView.findViewById(R.id.btn_contact_user_demand);
+
 
         }
     }

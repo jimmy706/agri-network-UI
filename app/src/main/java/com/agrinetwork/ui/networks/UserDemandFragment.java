@@ -35,7 +35,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -87,8 +86,8 @@ public class UserDemandFragment extends Fragment {
 
         recommendedUserDemandRecyclerView = root.findViewById(R.id.list_user_demand);
         recommendUserDemandAdapter = new RecommendUserDemandAdapter(recommendUserDemandList,getActivity());
-         LinearLayoutManager = new LinearLayoutManager(getActivity());
-         recommendedUserDemandRecyclerView.setLayoutManager(LinearLayoutManager);
+        LinearLayoutManager = new LinearLayoutManager(getActivity());
+        recommendedUserDemandRecyclerView.setLayoutManager(LinearLayoutManager);
         recommendedUserDemandRecyclerView.setAdapter(recommendUserDemandAdapter);
 
         noResult = root.findViewById(R.id.no_result_found);
@@ -116,26 +115,18 @@ public class UserDemandFragment extends Fragment {
 
                     Type userDemandType = new TypeToken<List<RecommendUserDemand>>(){}.getType();
                     List<RecommendUserDemand> userDemandList = gson.fromJson(responseUserDemand,userDemandType);
+                    getActivity().runOnUiThread(()-> {
+                        if(!userDemandList.isEmpty()) {
+                            recommendUserDemandList.addAll(userDemandList);
+                            recommendUserDemandAdapter.notifyDataSetChanged();
+                        }
+                        else{
+                            noResult.setVisibility(View.VISIBLE);
+                        }
 
-                        getActivity().runOnUiThread(()-> {
-                            if(!userDemandList.isEmpty()) {
-                                recommendUserDemandList.addAll(userDemandList);
-                                recommendUserDemandAdapter.notifyDataSetChanged();
-                            }
-                            else{
-                                noResult.setVisibility(View.VISIBLE);
-                            }
-
-                        });
-
+                    });
                 }
             }
         });
     }
-
-
-
-
-
-
 }
