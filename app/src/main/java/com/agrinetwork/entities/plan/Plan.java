@@ -16,4 +16,5 @@ public class Plan {
     private boolean expired;
     private List<PlanDetail> plantDetails;
     private HarvestProduct result;
+    private float progress;
 }

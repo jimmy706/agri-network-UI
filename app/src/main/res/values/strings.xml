@@ -135,6 +135,7 @@
     <string name="text_no_post_own">Hiện bạn chưa có bài viết nào</string>
     <string name="text_no_product_own">Hiện bạn chưa có đăng sản phẩm nào</string>
 
+    <string name="plan">Kế hoạch</string>
     <string name="needed">Nhu cầu</string>
     <string name="plan.creation.submit.btn.next">Tiếp theo</string>
     <string name="plan.creation.step.1.title">Tạo kế hoạch</string>
@@ -149,5 +150,7 @@
     <string name="plan.creation.step.next">Tiếp theo</string>
     <string name="plan.creation.step.prev">Trở về</string>
     <string name="plan.creation.step.complete">Xong</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
