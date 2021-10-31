@@ -34,4 +34,14 @@ public class RecommendService {
 
         return client.newCall(request);
     }
+
+    public Call getUserDemand(String token) {
+        Request request = new Request.Builder()
+                .header("Authorization", token)
+                .url(SERVICE_URL + "/users/on-demand")
+                .build();
+
+        return client.newCall(request);
+    }
+
 }

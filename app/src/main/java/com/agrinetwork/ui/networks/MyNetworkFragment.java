@@ -17,8 +17,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 
 public class MyNetworkFragment extends Fragment {
-    private static final int NUM_PAGES = 3;
-    private static final int[] TAB_TITLES = {R.string.recommend_users_tab_title, R.string.following_users_tab_title, R.string.follower_tab_title};
+    private static final int NUM_PAGES = 2;
+    private static final int[] TAB_TITLES = {R.string.recommend_users_tab_title, R.string.recommend_user_demand};
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
     private TabLayout tabLayout;
@@ -52,12 +52,10 @@ public class MyNetworkFragment extends Fragment {
         public Fragment createFragment(int position) {
             String title = getString(TAB_TITLES[position]);
             switch (position) {
-                case 1:
-                    return MyFollowFragment.newInstance(title, FollowTabFragmentType.FOLLOWINGS);
-                case 2:
-                    return MyFollowFragment.newInstance(title, FollowTabFragmentType.FOLLOWERS);
+                case 0:
+                    return  RecommendUsersFragment.newInstance(title);
                 default:
-                    return RecommendUsersFragment.newInstance(title);
+                    return UserDemandFragment.newInstance(title);
             }
         }
 

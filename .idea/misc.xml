@@ -64,6 +64,8 @@
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_create_post.xml" value="0.264" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_create_product.xml" value="0.24456521739130435" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_dialog_tag.xml" value="0.14130434782608695" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_follow.xml" value="0.14166666666666666" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_friends.xml" value="0.14166666666666666" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_main.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_post_detail.xml" value="0.25" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/activity_product_detail.xml" value="0.264" />
@@ -76,7 +78,9 @@
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/adapter_product_item.xml" value="0.14322916666666666" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/adapter_product_own.xml" value="0.25" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/adapter_product_own_item.xml" value="0.25" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/adapter_recommend_demand.xml" value="0.176" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/adapter_recommend_user.xml" value="0.24456521739130435" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/adapter_user_item.xml" value="0.20606884057971014" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/add_post_bottom_sheet_popup.xml" value="0.24909420289855072" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/dialog_tag_in_post.xml" value="0.22644927536231885" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/fragment_dashboard.xml" value="0.12708333333333333" />
@@ -90,6 +94,7 @@
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/fragment_own_productn.xml" value="0.23143115942028986" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/fragment_products.xml" value="0.12708333333333333" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/fragment_profile_menu.xml" value="0.23143115942028986" />
+        <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/fragment_recommend_user_demand.xml" value="0.20606884057971014" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/fragment_recommend_users.xml" value="0.25" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/loading_dialog.xml" value="0.25" />
         <entry key="..\:/source/agri-network-UI/app/src/main/res/layout/navigation_bar.xml" value="0.264" />

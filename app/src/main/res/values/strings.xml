@@ -94,6 +94,7 @@
     <string name="follow">Theo dõi</string>
     <string name="no_recommended_user">Không tìm thấy kết quả nào, quay lại sau nhé :3</string>
     <string name="no_users_found">Không tìm thấy kết quả nào</string>
+    <string name="recommend_user_demand">Người dùng có nhu cầu</string>
 
     <string name="email_required">Địa chỉ email không thể để trống</string>
     <string name="phone_required">Sđt không thể để trống</string>

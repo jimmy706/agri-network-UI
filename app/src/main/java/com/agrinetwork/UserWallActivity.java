@@ -47,12 +47,15 @@ public class UserWallActivity extends AppCompatActivity {
     private MaterialButton btnEdit, btnApproveFriendRq, btnRejectFriendRq, btnAddFriend, btnContact;
     private ToggleButton followBtn;
     private LinearLayout friendRequestWrapper, interactBtnWrapper;
-    private RelativeLayout friendCounterWrapper;
+    private RelativeLayout friendCounterWrapper,followingCounterWrapper,followerCounterWrapper;
 
     private boolean isOwner;
     private UserDetail user;
     private String token;
     private MediaService mediaService;
+
+    private final String  FOLLOWINGS = "FOLLOWINGS";
+    private final String  FOLLOWERS = "FOLLOWERS";
 
     private final ActivityResultLauncher<Intent> pickAvatarResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if(result.getResultCode() == Activity.RESULT_OK) {
@@ -130,6 +133,8 @@ public class UserWallActivity extends AppCompatActivity {
         btnRejectFriendRq = findViewById(R.id.reject_friend_rq);
         btnAddFriend = findViewById(R.id.add_friend_btn);
         btnContact = findViewById(R.id.contact_btn);
+        followingCounterWrapper = findViewById(R.id.following_wrapper);
+        followerCounterWrapper = findViewById(R.id.follower_wrapper);
 
         avatarProfile.setOnClickListener(v -> {
             if(isOwner) {
@@ -178,6 +183,21 @@ public class UserWallActivity extends AppCompatActivity {
             intentFriends.putExtra("userId", userId);
             startActivity(intentFriends);
         });
+
+        followingCounterWrapper.setOnClickListener(v ->{
+            Intent intentFollowing = new Intent(this,FollowActivity.class);
+            intentFollowing.putExtra("type",FOLLOWINGS);
+            intentFollowing.putExtra("userId", userId);
+            startActivity(intentFollowing);
+        });
+
+        followerCounterWrapper.setOnClickListener(v->{
+            Intent intentFollower = new Intent(this,FollowActivity.class);
+            intentFollower.putExtra("type",FOLLOWERS);
+            intentFollower.putExtra("userId", userId);
+            startActivity(intentFollower);
+        });
+
 
         fetchUserDetail(userId);
     }
