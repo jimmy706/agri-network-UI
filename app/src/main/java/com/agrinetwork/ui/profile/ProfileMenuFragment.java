@@ -38,8 +38,8 @@ import okhttp3.Response;
 
 
 public class ProfileMenuFragment extends Fragment {
-    private static final int NUM_PAGES = 3;
-    private static final int[] TAB_TITLES = {R.string.tab_menu_own, R.string.tab_own_product, R.string.tab_own_post};
+    private static final int NUM_PAGES = 4;
+    private static final int[] TAB_TITLES = {R.string.tab_menu_own, R.string.tab_own_product, R.string.tab_own_post, R.string.plan};
     private ViewPager2 viewPager;
     private FragmentStateAdapter pagerAdapter;
     private TabLayout tabLayout;
@@ -102,8 +102,12 @@ public class ProfileMenuFragment extends Fragment {
                     return MenuOwnFragment.newInstance(title);
                 case 1:
                     return OwnProductFragment.newInstance(title);
-                default:
+                case 2:
                     return OwnPostFragment.newInstance(title);
+                case 3:
+                    return OwnPlansFragment.newInstance();
+                default:
+                    return null;
             }
         }
 

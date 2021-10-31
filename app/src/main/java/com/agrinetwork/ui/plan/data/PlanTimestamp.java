@@ -1,4 +1,6 @@
-package com.agrinetwork.entities.plan;
+package com.agrinetwork.ui.plan.data;
+
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HarvestProduct {
+public class PlanTimestamp {
     private String name;
-    private float quantity;
-    private String quantityType;
+    private Date from;
+    private Date to;
 }

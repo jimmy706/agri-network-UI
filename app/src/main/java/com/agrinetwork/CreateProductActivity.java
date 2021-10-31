@@ -179,11 +179,6 @@ public class CreateProductActivity extends AppCompatActivity {
                     }
             }
 
-
-            System.out.println(productCategoryList);
-            System.out.println(pickedCategoryName);
-            System.out.println(idCategory);
-
             Product product = new Product();
             product.setName(name);
             product.setCategories(idCategory);
