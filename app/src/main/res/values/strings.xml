@@ -155,4 +155,8 @@
     <string name="plan.detail.progress">Tiến trình</string>
     <string name="plan.detail.intent.harvest">Thành phẩm dự kiến</string>
 
+    <string name="products.view.title">Danh sách sản phẩm</string>
+    <string name="products.navigation.toggler">Mở</string>
+    <string name="products.navigation.close">Đóng</string>
+
 </resources>
