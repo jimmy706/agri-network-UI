@@ -122,10 +122,10 @@ public class PlanInfoActivity extends AppCompatActivity {
         HarvestProduct harvestProduct = plan.getResult();
         harvestProductName.setText(harvestProduct.getName());
         quantityIntent.setText(harvestProduct.getQuantity() + " " + harvestProduct.getQuantityType());
-
-        int progress = (int)plan.getProgress() * 100;
+        System.out.println(plan);
+        int progress = (int)(plan.getProgress() * 100);
         progressBar.setProgress(progress);
-        progressPercent.setText(Integer.toString(progress) + "%");
+        progressPercent.setText(progress + "%");
 
         List<PlanDetail> planDetails = plan.getPlantDetails();
         stepCount.setText(Integer.toString(planDetails.size()));

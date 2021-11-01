@@ -160,6 +160,58 @@
                     />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginVertical="5dp"
+                android:id="@+id/plan_wrapper"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/plan_name"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="5dp"
+                    android:text="Plan name"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_clock"
+                        android:layout_alignParentStart="true"
+                        android:id="@+id/ic_clock"/>
+
+                    <TextView
+                        android:id="@+id/plan_duedate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@id/ic_clock"
+                        android:text="20-10-2021 - 21-11-2021"
+                        android:textColor="@color/gray_600"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/plan_detail_list"
+                    android:nestedScrollingEnabled="false"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Xem thêm (3+)"
+                    android:id="@+id/watch_more_plan"/>
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:id="@+id/actions_container"

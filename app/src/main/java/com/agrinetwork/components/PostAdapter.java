@@ -10,6 +10,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,8 +20,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.agrinetwork.PlanInfoActivity;
 import com.agrinetwork.PostDetailActivity;
 import com.agrinetwork.ProductDetailActivity;
 import com.agrinetwork.UserWallActivity;
@@ -29,7 +32,10 @@ import com.agrinetwork.R;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PostFormat;
 import com.agrinetwork.entities.PostItem;
+import com.agrinetwork.entities.plan.Plan;
+import com.agrinetwork.entities.plan.PlanDetail;
 import com.agrinetwork.helpers.AttributesConverter;
+import com.agrinetwork.helpers.AttributesToPlanConverter;
 import com.agrinetwork.interfaces.listeners.DeletePostListener;
 import com.agrinetwork.interfaces.ListItemClickListener;
 import com.agrinetwork.service.PostService;
@@ -46,9 +52,11 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import lombok.Getter;
@@ -86,14 +94,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         @Setter
         private ListItemClickListener itemClickListener;
 
-        private final ImageView avatar;
-        private final TextView displayName, postTag, context, commentCount, reactionCount, productName, productPrice;
-        private final ImageButton moreActionBtn;
-        private final LinearLayout imageWrapper, productRefWrapper;
-        private final ImageView commentBtn, reactionBtn, postImage, productThumbnail;
-        private final SliderView postImages;
-        private final MaterialCardView cardView;
-        private final ChipGroup chipGroup;
+        private ImageView avatar;
+        private TextView displayName, postTag, context, commentCount, reactionCount, productName, productPrice, planName, planDueDate;
+        private ImageButton moreActionBtn;
+        private LinearLayout imageWrapper, productRefWrapper, planWrapper;
+        private ImageView commentBtn, reactionBtn, postImage, productThumbnail;
+        private SliderView postImages;
+        private MaterialCardView cardView;
+        private ChipGroup chipGroup;
+        private RecyclerView planDetailList;
+        private Button viewMorePlanBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -119,6 +129,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             productThumbnail = itemView.findViewById(R.id.product_thumbnail);
             productName = itemView.findViewById(R.id.product_name);
             productPrice = itemView.findViewById(R.id.product_price);
+            planWrapper = itemView.findViewById(R.id.plan_wrapper);
+            planName = itemView.findViewById(R.id.plan_name);
+            planDueDate = itemView.findViewById(R.id.plan_duedate);
+            planDetailList = itemView.findViewById(R.id.plan_detail_list);
+            viewMorePlanBtn = itemView.findViewById(R.id.watch_more_plan);
         }
 
         @Override
@@ -239,25 +254,65 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         if(postItem.getFormat().equals(PostFormat.SELL.getLabel())) {
-            Map<String, String> attributes = new AttributesConverter(postItem.getAttributes()).toMap();
-            holder.productRefWrapper.setVisibility(View.VISIBLE);
-            if(attributes.containsKey("thumbnail")) {
-                picasso
-                        .load(attributes.get("thumbnail"))
-                        .placeholder(R.drawable.placeholder_image)
-                        .error(R.drawable.placeholder_image)
-                        .into(holder.productThumbnail);
-            }
-            holder.productName.setText(attributes.get("name"));
-            NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
-            numberFormat.setCurrency(Currency.getInstance("VND"));
-            numberFormat.setMaximumFractionDigits(0);
+            displayProductInPost(postItem, holder);
+        }
+        else if (postItem.getFormat().equals(PostFormat.PLAN.getLabel())) {
+            displayPlanInPost(postItem, holder);
+        }
+    }
 
-            if(attributes.get("price")!= null){
-                String price = attributes.get("price").trim();
-                holder.productPrice.setText(numberFormat.format(Double.parseDouble(price)));
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void displayPlanInPost(PostItem postItem, ViewHolder viewHolder) {
+        Map<String, String> attributes = new AttributesConverter(postItem.getAttributes()).toMap();
+        viewHolder.planWrapper.setVisibility(View.VISIBLE);
+        Plan plan = new AttributesToPlanConverter(attributes).toPlan();
+        System.out.println(plan);
+
+        SimpleDateFormat sdf = new SimpleDateFormat(Variables.DATE_FORMAT, new Locale("vi", "VI"));
+        viewHolder.planName.setText(plan.getName());
+        Date fromDate = plan.getFrom();
+        Date toDate = plan.getTo();
+        viewHolder.planDueDate.setText(sdf.format(fromDate) + " - " + sdf.format(toDate));
+        List<PlanDetail> planDetails = new ArrayList<>();
+        int steps = plan.getPlantDetails().size();
+        if (steps > 2) {
+            viewHolder.viewMorePlanBtn.setVisibility(View.VISIBLE);
+            viewHolder.viewMorePlanBtn.setText("Xem thêm (" + (steps - 2) + "+)");
+            viewHolder.viewMorePlanBtn.setOnClickListener(v -> startPostDetailActivity(postItem));
+        }
+        else {
+            viewHolder.viewMorePlanBtn.setVisibility(View.GONE);
+        }
+
+        for(int i = 0; i < 2; i++) {
+            PlanDetail planDetail = plan.getPlantDetails().get(i);
+            if(planDetail != null) {
+                planDetails.add(planDetail);
             }
-           
+        }
+        viewHolder.planDetailList.setAdapter(new PlanDetailAdapter(context, planDetails));
+        viewHolder.planDetailList.setLayoutManager(new LinearLayoutManager(context));
+    }
+
+    private void displayProductInPost(PostItem postItem, ViewHolder holder) {
+        Map<String, String> attributes = new AttributesConverter(postItem.getAttributes()).toMap();
+        holder.productRefWrapper.setVisibility(View.VISIBLE);
+        if(attributes.containsKey("thumbnail")) {
+            picasso
+                    .load(attributes.get("thumbnail"))
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.placeholder_image)
+                    .into(holder.productThumbnail);
+        }
+        holder.productName.setText(attributes.get("name"));
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        numberFormat.setCurrency(Currency.getInstance("VND"));
+        numberFormat.setMaximumFractionDigits(0);
+
+        if(attributes.get("price")!= null){
+            String price = attributes.get("price").trim();
+            holder.productPrice.setText(numberFormat.format(Double.parseDouble(price)));
         }
     }
 
@@ -276,6 +331,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         else if(format.equals(PostFormat.SELL.getLabel())) {
             intent = new Intent(context, ProductDetailActivity.class);
             intent.putExtra("productId", post.getRef());
+        } else if(format.equals(PostFormat.PLAN.getLabel())) {
+            intent = new Intent(context, PlanInfoActivity.class);
+            intent.putExtra("planId", post.getRef());
         }
 
         if(intent != null) {
@@ -340,6 +398,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public long getItemId(int position) {
-        return posts.get(position).get_id().hashCode();
+        return posts.get(position).getLastModified().getTime();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }

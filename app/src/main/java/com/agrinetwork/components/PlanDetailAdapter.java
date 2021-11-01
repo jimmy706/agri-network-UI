@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.R;
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.plan.Needed;
 import com.agrinetwork.entities.plan.PlanDetail;
 
 import java.text.SimpleDateFormat;
@@ -52,9 +54,14 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<PlanDetailAdapter.Vi
             e.printStackTrace();
         }
 
-        NeededFactorAdapter neededFactorAdapter = new NeededFactorAdapter(context, planDetail.getNeededFactors());
-        holder.neededList.setAdapter(neededFactorAdapter);
-        holder.neededList.setLayoutManager(new LinearLayoutManager(context));
+        List<Needed> neededFactors = planDetail.getNeededFactors();
+        if(neededFactors != null && !neededFactors.isEmpty()) {
+            NeededFactorAdapter neededFactorAdapter = new NeededFactorAdapter(context, planDetail.getNeededFactors());
+            holder.neededList.setAdapter(neededFactorAdapter);
+            holder.neededList.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            holder.neededWrapper.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -65,11 +72,13 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<PlanDetailAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, dueDate;
         private final RecyclerView neededList;
+        private final LinearLayout neededWrapper;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.plan_detail_name);
             dueDate = itemView.findViewById(R.id.plan_detail_duedate);
             neededList = itemView.findViewById(R.id.needed_list);
+            neededWrapper = itemView.findViewById(R.id.needed_wrapper);
         }
     }
 }
