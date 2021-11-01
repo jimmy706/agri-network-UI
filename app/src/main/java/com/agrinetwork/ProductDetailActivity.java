@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -130,9 +129,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         toolbar.setNavigationOnClickListener(v -> {
-            Intent startActivityIntent = new Intent(this, UserFeedActivity.class);
-            startActivityIntent.putExtra("tab", R.id.navigation_products);
-            startActivity(startActivityIntent);
+            finish();
         });
     }
 
