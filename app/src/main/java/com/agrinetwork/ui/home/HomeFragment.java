@@ -2,7 +2,6 @@ package com.agrinetwork.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -11,15 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
-
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +27,6 @@ import com.agrinetwork.components.PostAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.databinding.FragmentHomeBinding;
 import com.agrinetwork.entities.PaginationResponse;
-
 import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.button.MaterialButton;
@@ -42,7 +36,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
 import java.util.List;
 
 import okhttp3.Call;
