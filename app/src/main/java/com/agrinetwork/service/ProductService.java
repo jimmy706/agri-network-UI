@@ -63,6 +63,7 @@ public class ProductService {
         private double priceTo;
         private int page;
         private int limit;
+        private String categories;
 
         public SearchProductCriteria() {
             this.page = 1;
@@ -89,6 +90,10 @@ public class ProductService {
                 result.put("priceFrom", Double.toString(priceFrom));
                 result.put("priceTo", Double.toString(priceTo));
             }
+            if(categories != null && !categories.trim().isEmpty()){
+                result.put("categories",categories);
+            }
+
 
             return result;
         }

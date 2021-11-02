@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -12,13 +14,17 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.agrinetwork.components.ProductCategoryMenuAdapter;
 import com.agrinetwork.components.ProductOwnAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PaginationResponse;
 import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.ProductCategory;
+import com.agrinetwork.service.CategoryService;
 import com.agrinetwork.service.ProductService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
@@ -37,11 +43,15 @@ import okhttp3.Response;
 
 public class ProductsActivity extends AppCompatActivity {
     private RecyclerView allProductRecyclerView;
+    private RecyclerView categoryRecyclerView;
     private PaginationResponse<Product>  paginationResponseProduct;
     private List<Product> ListSearchProduct = new ArrayList<>();
+    private final List<ProductCategory> productCategoryList = new ArrayList<>();
     private ProductOwnAdapter searchProductAdapter;
+    private ProductCategoryMenuAdapter productCategoryMenuAdapter;
     private int page = 1;
     private int limit = 12;
+    private String category;
     private final Gson gson = new Gson();
     private boolean hasNext = false;
     private String token;
@@ -49,8 +59,8 @@ public class ProductsActivity extends AppCompatActivity {
     private ProductService.SearchProductCriteria searchProductCriteria;
     private TextInputEditText textSearch;
     private SwipeRefreshLayout refreshLayout;
-
-
+    private CategoryService categoryService;
+    private TextView noResult;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -65,6 +75,8 @@ public class ProductsActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        textSearch = findViewById(R.id.search_text);
+        noResult = findViewById(R.id.no_result_product);
 
         refreshLayout = findViewById(R.id.swiper_product);
 
@@ -87,7 +99,6 @@ public class ProductsActivity extends AppCompatActivity {
         allProductRecyclerView.setAdapter(searchProductAdapter);
 
 
-
         allProductRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -99,8 +110,14 @@ public class ProductsActivity extends AppCompatActivity {
             }
         });
 
+        categoryService = new CategoryService(this);
+        categoryRecyclerView = findViewById(R.id.product_category);
+        LinearLayoutManager layoutCategory = new LinearLayoutManager(this);
+        categoryRecyclerView.setLayoutManager(layoutCategory);
+        productCategoryMenuAdapter = new ProductCategoryMenuAdapter(productCategoryList,this);
+        categoryRecyclerView.setAdapter(productCategoryMenuAdapter);
 
-        textSearch = findViewById(R.id.search_text);
+
 
 
 
@@ -114,7 +131,17 @@ public class ProductsActivity extends AppCompatActivity {
 
 
 
+        getCategories();
+
+
+        if(getIntent().hasExtra("idCategory")){
+            category = getIntent().getStringExtra("idCategory");
+            searchProductCriteria.setCategories(category);
+        }
+
+
         fetchProductSearch();
+
 
     }
 
@@ -142,6 +169,9 @@ public class ProductsActivity extends AppCompatActivity {
                             searchProductAdapter.notifyDataSetChanged();
                             refreshLayout.setRefreshing(false);
                             hasNext = paginationResponseProduct.isHasNextPage();
+                        }
+                        else{
+                            noResult.setVisibility(View.VISIBLE);
                         }
                     });
                 }
@@ -175,11 +205,38 @@ public class ProductsActivity extends AppCompatActivity {
                             refreshLayout.setRefreshing(false);
                             hasNext = paginationResponseProduct.isHasNextPage();
                         }
+                        else{
+                            noResult.setVisibility(View.VISIBLE);
+                        }
                     });
                 }
             }
         });
 
+    }
+
+    private void getCategories(){
+        Call getProductCategory = categoryService.getCategory(token);
+        getProductCategory.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call getProductCategory, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(@NonNull Call getProductCategory, @NonNull Response response) throws IOException {
+                if(response.code() == 200){
+                    String responseCategory = response.body().string();
+                    Type categoryList = new TypeToken<List<ProductCategory>>(){}.getType();
+                    List<ProductCategory> productCategory = gson.fromJson(responseCategory,categoryList);
+
+                    productCategoryList.addAll(productCategory);
+                    productCategoryMenuAdapter.notifyDataSetChanged();
+
+                }
+            }
+        });
     }
 
 
