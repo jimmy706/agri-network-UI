@@ -80,7 +80,7 @@ public class OwnPlansFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void fetchData() {
-        PlanService.SearchPlanCriteria criteria = new PlanService.SearchPlanCriteria(false);
+        PlanService.SearchPlanCriteria criteria = new PlanService.SearchPlanCriteria();
         criteria.setOwner(currentUserId);
 
         Future<List<Plan>> futurePlans = executorService.submit(() -> {

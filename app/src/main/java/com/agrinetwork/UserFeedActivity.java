@@ -16,10 +16,12 @@ import android.os.Bundle;
 
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-
+import com.agrinetwork.components.dialog.NotifyExpiredPlanDialog;
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.plan.Plan;
+import com.agrinetwork.entities.plan.PlanStatus;
+import com.agrinetwork.service.PlanService;
 import com.agrinetwork.service.UserService;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,17 +34,22 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.agrinetwork.databinding.ActivityUserFeedBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -52,8 +59,11 @@ public class UserFeedActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_LOCATION_CODE = 99;
 
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
     private ActivityUserFeedBinding binding;
     private UserService userService;
+    private PlanService planService;
     private String token;
     private FirebaseMessaging firebaseMessaging;
     private SharedPreferences sharedPreferences;
@@ -62,6 +72,7 @@ public class UserFeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userService = new UserService(this);
+        planService = new PlanService(this);
         binding = ActivityUserFeedBinding.inflate(getLayoutInflater());
 
         sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
@@ -92,12 +103,6 @@ public class UserFeedActivity extends AppCompatActivity {
         FloatingActionButton btnAddPost = findViewById(R.id.btn_add_post);
         btnAddPost.bringToFront();
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_networks, R.id.navigation_products, R.id.navigation_my_profile)
-                .build();
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_user_feed);
         NavigationUI.setupWithNavController(navView, navController);
         if(tab != -1) {
@@ -108,6 +113,7 @@ public class UserFeedActivity extends AppCompatActivity {
             showBottomSheetAddNewPost();
         });
 
+        getMyExpiredPlans();
     }
 
     @Override
@@ -222,4 +228,43 @@ public class UserFeedActivity extends AppCompatActivity {
             });
         }
     }
+
+    private void getMyExpiredPlans() {
+        Future<List<Plan>> future = executor.submit(() -> {
+            String userId = sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID, "");
+
+            PlanService.SearchPlanCriteria criteria = new PlanService.SearchPlanCriteria(true);
+            criteria.setOwner(userId);
+            Call call = planService.searchPlan(token, criteria);
+            Response response = call.execute();
+            if(response.code() == 200) {
+                Type type = new TypeToken<List<Plan>>(){}.getType();
+                Gson gson = new Gson();
+                return gson.fromJson(response.body().string(), type);
+            }
+            return null;
+        });
+
+        try {
+            List<Plan> plans = future.get();
+            if (plans != null && !plans.isEmpty()) {
+                System.out.println(Arrays.toString(plans.toArray()));
+                int countExpiredButNotHarvest = 0;
+                for (Plan plan : plans) {
+                    if (PlanStatus.EXPIRED.getLabel().equals(plan.getStatus())) {
+                        countExpiredButNotHarvest++;
+                    }
+                }
+                if (countExpiredButNotHarvest > 0) {
+                    String message = "Bạn có " + countExpiredButNotHarvest + " kế hoạch đã xong, hãy tạo sản phẩm thu hoạch!";
+                    NotifyExpiredPlanDialog notifyExpiredPlanDialog = new NotifyExpiredPlanDialog(this, plans, message);
+                    notifyExpiredPlanDialog.show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

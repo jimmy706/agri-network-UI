@@ -1,5 +1,6 @@
 package com.agrinetwork;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
@@ -108,6 +109,7 @@ public class CreateProductActivity extends AppCompatActivity {
     });
 
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,26 +117,42 @@ public class CreateProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_product);
         sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
+
+        Intent currentIntent = getIntent();
+        Bundle bundle = currentIntent.getExtras();
+        String productNameParam = bundle.getString("name");
+        float productQuantityParam = bundle.getFloat("quantity");
+        String productQuantityTypeParam = bundle.getString("quantityType");
+        String planId = bundle.getString("planId");
+
+
         categoryService = new CategoryService(this);
         mediaService = new MediaService(this);
         productService = new ProductService(this);
 
         nameInput = findViewById(R.id.edit_text_product);
+        if (productNameParam != null) {
+            nameInput.setText(productNameParam);
+        }
         categoryInput = findViewById(R.id.edit_text_category);
         quantityInput = findViewById(R.id.edit_text_quantity);
+        quantityInput.setText(Float.toString(productQuantityParam));
+
         priceInput = findViewById(R.id.edit_text_price);
         broadcastProdCheckbox = findViewById(R.id.checkbox_broadcast_product);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(view -> {
-            startActivity(new Intent(this, UserFeedActivity.class));
+            finish();
         });
-
 
         unitInput = findViewById(R.id.edit_text_unit);
         List<String> quantityType = Arrays.stream(QuantityType.values()).map(QuantityType::getLabel).collect(Collectors.toList());
         ArrayAdapter<String> quantityTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,quantityType);
         unitInput.setAdapter(quantityTypeAdapter);
+        if (productQuantityTypeParam != null) {
+            unitInput.setText(productQuantityTypeParam);
+        }
 
 
         pickImgBtn = findViewById(R.id.picked_image_btn);
@@ -189,10 +207,13 @@ public class CreateProductActivity extends AppCompatActivity {
             product.setBroadCasted(broadcastProdCheckbox.isChecked());
 
             if(!name.isEmpty() && !idCategory.isEmpty() && !quantity.isEmpty() && !price.isEmpty() && !unit.isEmpty()){
-                requestPostProduct(product);
-            }else{
+                if (planId == null) {
+                    requestPostProduct(product);
+                } else {
+                    requestPostProductFromPlan(planId, product);
+                }
+            } else{
                 Toast.makeText(this,"Không được để trống các trường",Toast.LENGTH_SHORT).show();
-
             }
 
         });
@@ -243,6 +264,7 @@ public class CreateProductActivity extends AppCompatActivity {
             }
         }
     }
+
     private void requestUploadImages()  {
         final boolean[] uploadSuccess = {true};
         for(int i = 0; i < imageUris.size(); i++) {
@@ -279,7 +301,6 @@ public class CreateProductActivity extends AppCompatActivity {
 
     private void requestPostProduct(Product product){
         Call createProduct = productService.addProduct(token,product);
-        //System.out.println(product);
         createProduct.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -293,6 +314,24 @@ public class CreateProductActivity extends AppCompatActivity {
                     startActivity(new Intent(CreateProductActivity.this, UserFeedActivity.class));
                 });
           }
+        });
+    }
+
+    private void requestPostProductFromPlan(String planId, Product product) {
+        Call call = productService.addFromPlan(token, planId, product);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                CreateProductActivity.this.runOnUiThread(()->{
+                    Toast.makeText(CreateProductActivity.this,"Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(CreateProductActivity.this, UserFeedActivity.class));
+                });
+            }
         });
     }
 
