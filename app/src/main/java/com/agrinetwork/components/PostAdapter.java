@@ -285,12 +285,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             viewHolder.viewMorePlanBtn.setVisibility(View.GONE);
         }
 
-        for(int i = 0; i < 2; i++) {
+        int lengthStep = steps > 2 ? steps - 2 : steps;
+        for(int i = 0; i < lengthStep; i++) {
             PlanDetail planDetail = plan.getPlantDetails().get(i);
             if(planDetail != null) {
                 planDetails.add(planDetail);
             }
         }
+
         viewHolder.planDetailList.setAdapter(new PlanDetailAdapter(context, planDetails));
         viewHolder.planDetailList.setLayoutManager(new LinearLayoutManager(context));
     }

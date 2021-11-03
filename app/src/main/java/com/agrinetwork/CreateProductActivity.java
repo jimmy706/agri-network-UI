@@ -120,10 +120,19 @@ public class CreateProductActivity extends AppCompatActivity {
 
         Intent currentIntent = getIntent();
         Bundle bundle = currentIntent.getExtras();
-        String productNameParam = bundle.getString("name");
-        float productQuantityParam = bundle.getFloat("quantity");
-        String productQuantityTypeParam = bundle.getString("quantityType");
-        String planId = bundle.getString("planId");
+
+        String productNameParam = null;
+        String productQuantityTypeParam = null;
+        String planId = null;
+        float productQuantityParam = 0.0f;
+
+        if (bundle != null) {
+            productNameParam = bundle.getString("name");
+            productQuantityParam = bundle.getFloat("quantity");
+            productQuantityTypeParam = bundle.getString("quantityType");
+            planId = bundle.getString("planId");
+        }
+
 
 
         categoryService = new CategoryService(this);
@@ -176,6 +185,7 @@ public class CreateProductActivity extends AppCompatActivity {
         validateForm();
 
         submitProduct = findViewById(R.id.add_product);
+        String finalPlanId = planId;
         submitProduct.setOnClickListener(v -> {
             String name = nameInput.getText().toString();
             String quantity = quantityInput.getText().toString();
@@ -207,10 +217,10 @@ public class CreateProductActivity extends AppCompatActivity {
             product.setBroadCasted(broadcastProdCheckbox.isChecked());
 
             if(!name.isEmpty() && !idCategory.isEmpty() && !quantity.isEmpty() && !price.isEmpty() && !unit.isEmpty()){
-                if (planId == null) {
+                if (finalPlanId == null) {
                     requestPostProduct(product);
                 } else {
-                    requestPostProductFromPlan(planId, product);
+                    requestPostProductFromPlan(finalPlanId, product);
                 }
             } else{
                 Toast.makeText(this,"Không được để trống các trường",Toast.LENGTH_SHORT).show();

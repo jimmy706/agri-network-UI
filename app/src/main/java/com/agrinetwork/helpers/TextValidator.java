@@ -5,10 +5,12 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 @AllArgsConstructor
 public abstract class TextValidator implements TextWatcher {
 
+    @NonNull
     private final TextView textView;
 
     public abstract void validate(TextView textView, String value);

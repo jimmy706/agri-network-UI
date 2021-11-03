@@ -24,6 +24,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.agrinetwork.R;
 import com.agrinetwork.UserFeedActivity;
 import com.agrinetwork.components.PostAdapter;
+import com.agrinetwork.components.dialog.LoadingDialog;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.databinding.FragmentHomeBinding;
 import com.agrinetwork.entities.PaginationResponse;
@@ -154,17 +155,23 @@ public class HomeFragment extends Fragment {
     }
 
     private void fetchPosts() {
+        LoadingDialog loadingDialog = new LoadingDialog(getContext());
+
         if(token != null && !token.isEmpty()) {
+            loadingDialog.show();
             Call call = postService.getPosts(token, page, limit);
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     refreshLayout.setRefreshing(false);
+                    getActivity().runOnUiThread(loadingDialog::dismiss);
+
                 }
 
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    getActivity().runOnUiThread(loadingDialog::dismiss);
                     if(response.code() == 200) {
                         Gson gson = new Gson();
                         String responseBody = response.body().string();
@@ -187,7 +194,6 @@ public class HomeFragment extends Fragment {
                                 refreshLayout.setRefreshing(false);
 
                                 hasNext = responseData.isHasNextPage();
-
 
                             }
                         });

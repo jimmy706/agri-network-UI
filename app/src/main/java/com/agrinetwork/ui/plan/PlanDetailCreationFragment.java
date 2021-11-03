@@ -25,11 +25,13 @@ import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import lombok.Setter;
 
 public class PlanDetailCreationFragment extends Fragment implements Step {
 
-    private CategoryService categoryService;
     private final List<PlanDetail> planDetails = new ArrayList<>();
     private final SubmitPlanDetailsListener submitPlanDetailsListener;
     private PlanDetailAdapter planDetailAdapter;
@@ -37,6 +39,12 @@ public class PlanDetailCreationFragment extends Fragment implements Step {
     private ImageButton addPlanStepBtn;
     private RecyclerView planDetailList;
     private MaterialButton submitBtn;
+
+    @Setter
+    private Date startPlanDate;
+
+    @Setter
+    private Date endPlanDate;
 
     public PlanDetailCreationFragment(SubmitPlanDetailsListener submitPlanDetailsListener) {
         this.submitPlanDetailsListener = submitPlanDetailsListener;
@@ -51,12 +59,9 @@ public class PlanDetailCreationFragment extends Fragment implements Step {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plan_detail_creation, container, false);
-
-        categoryService = new CategoryService(getContext());
-
         addPlanStepBtn = view.findViewById(R.id.add_plan_step_btn);
         addPlanStepBtn.setOnClickListener(v -> {
-            CreatePlanDetailDialog dialog = new CreatePlanDetailDialog(getContext(), this::onAddNewPlanDetail);
+            CreatePlanDetailDialog dialog = new CreatePlanDetailDialog(getContext(), this::onAddNewPlanDetail, startPlanDate, endPlanDate);
             dialog.show();
         });
 
@@ -81,7 +86,6 @@ public class PlanDetailCreationFragment extends Fragment implements Step {
 
     @Override
     public void onSelected() {
-
     }
 
     @Override
