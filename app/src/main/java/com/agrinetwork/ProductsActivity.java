@@ -52,6 +52,7 @@ public class ProductsActivity extends AppCompatActivity {
     private int page = 1;
     private int limit = 12;
     private String category;
+    private String nameCategory;
     private final Gson gson = new Gson();
     private boolean hasNext = false;
     private String token;
@@ -60,7 +61,8 @@ public class ProductsActivity extends AppCompatActivity {
     private TextInputEditText textSearch;
     private SwipeRefreshLayout refreshLayout;
     private CategoryService categoryService;
-    private TextView noResult;
+    private TextView noResult,showTextResultSearchByCategory,showNameCategory;
+
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -77,7 +79,8 @@ public class ProductsActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         textSearch = findViewById(R.id.search_text);
         noResult = findViewById(R.id.no_result_product);
-
+        showTextResultSearchByCategory = findViewById(R.id.show_text_result_search_by_category);
+        showNameCategory= findViewById(R.id.show_name_category);
         refreshLayout = findViewById(R.id.swiper_product);
 
         navigationView.bringToFront();
@@ -136,7 +139,13 @@ public class ProductsActivity extends AppCompatActivity {
 
         if(getIntent().hasExtra("idCategory")){
             category = getIntent().getStringExtra("idCategory");
+            nameCategory = getIntent().getStringExtra("nameCategory");
+            showNameCategory.setText(nameCategory);
+            showTextResultSearchByCategory.setVisibility(View.VISIBLE);
+            showNameCategory.setVisibility(View.VISIBLE);
+
             searchProductCriteria.setCategories(category);
+
         }
 
 
@@ -169,6 +178,7 @@ public class ProductsActivity extends AppCompatActivity {
                             searchProductAdapter.notifyDataSetChanged();
                             refreshLayout.setRefreshing(false);
                             hasNext = paginationResponseProduct.isHasNextPage();
+
                         }
                         else{
                             noResult.setVisibility(View.VISIBLE);
@@ -204,6 +214,7 @@ public class ProductsActivity extends AppCompatActivity {
                             searchProductAdapter.notifyDataSetChanged();
                             refreshLayout.setRefreshing(false);
                             hasNext = paginationResponseProduct.isHasNextPage();
+
                         }
                         else{
                             noResult.setVisibility(View.VISIBLE);

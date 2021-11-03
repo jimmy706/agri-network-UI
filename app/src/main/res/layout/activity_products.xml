@@ -18,30 +18,36 @@
         android:layout_width="wrap_content"
         android:fitsSystemWindows="true"
         android:paddingTop="@dimen/ms_bottom_navigation_bar_height">
-
-        <RelativeLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
             android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/label_category"
+            android:layout_marginBottom="30dp">
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/product_categories"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                />
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/product_category"
-                android:layout_marginTop="8dp"
-                android:layout_below="@+id/label_category"/>
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/label_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_categories"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/product_category"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@+id/label_category"/>
+            </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
     </com.google.android.material.navigation.NavigationView>
 
     <LinearLayout
@@ -88,6 +94,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout_show_text_result_search"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kết quả tìm kiếm trong:"
+                    android:visibility="gone"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:id="@+id/show_text_result_search_by_category"
+
+                    />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:id="@+id/show_name_category"
+
+                    />
+            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +132,7 @@
                 android:id="@+id/no_result_product"
                 android:visibility="gone"
                 />
+
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
