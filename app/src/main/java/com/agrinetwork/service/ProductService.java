@@ -108,5 +108,19 @@ public class ProductService {
         return client.newCall(request);
     }
 
+    public Call addFromPlan(String token, String planId, Product product) {
+        Gson gson = new Gson();
+        String json = gson.toJson(product);
+        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+
+        Request request = new Request.Builder()
+                .header("Authorization",token)
+                .post(body)
+                .url(DOMAIN + "/fromPlan/" + planId)
+                .build();
+
+        return client.newCall(request);
+    }
+
 }
 

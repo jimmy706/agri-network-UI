@@ -63,6 +63,8 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder> {
             intent.putExtra("planId", plan.get_id());
             context.startActivity(intent);
         });
+
+        holder.status.setText(plan.getStatus());
     }
 
     @Override
@@ -72,7 +74,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView name, dueDate, countSteps;
+        final TextView name, dueDate, countSteps, status;
         final ProgressBar progress;
         final MaterialCardView cardView;
 
@@ -83,6 +85,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder> {
             this.countSteps = itemView.findViewById(R.id.plan_detail_count);
             this.progress = itemView.findViewById(R.id.progress);
             this.cardView = itemView.findViewById(R.id.card_view);
+            this.status = itemView.findViewById(R.id.plan_status);
         }
     }
 

@@ -9,16 +9,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.agrinetwork.components.PlanAdapter;
 import com.agrinetwork.components.PlanDetailAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.entities.plan.HarvestProduct;
+import com.agrinetwork.entities.plan.Plan;
 import com.agrinetwork.entities.plan.PlanDetail;
 import com.agrinetwork.entities.plan.PlanInformation;
+import com.agrinetwork.entities.plan.PlanStatus;
 import com.agrinetwork.service.PlanService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
@@ -37,6 +43,7 @@ import okhttp3.Response;
 
 public class PlanInfoActivity extends AppCompatActivity {
 
+    private String userId;
     private String token;
     private PlanService planService;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -45,6 +52,9 @@ public class PlanInfoActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private CircleImageView userAvatar;
     private RecyclerView planDetailList;
+    private Button addProductBtn;
+
+    private PlanInformation planState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +66,7 @@ public class PlanInfoActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
+        userId = sharedPref.getString(Variables.CURRENT_LOGIN_USER_ID, "");
 
         planService = new PlanService(this);
 
@@ -74,6 +85,19 @@ public class PlanInfoActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> {
             finish();
+        });
+
+        addProductBtn = findViewById(R.id.add_product_btn);
+        addProductBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CreateProductActivity.class);
+            intent.putExtra("planId", planState.get_id());
+
+            HarvestProduct harvestProduct = planState.getResult();
+
+            intent.putExtra("name", harvestProduct.getName());
+            intent.putExtra("quantity", harvestProduct.getQuantity());
+            intent.putExtra("quantityType", harvestProduct.getQuantity());
+            startActivity(intent);
         });
     }
 
@@ -104,6 +128,7 @@ public class PlanInfoActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void renderData(PlanInformation plan) {
+        planState = plan;
         planName.setText(plan.getName());
 
         User owner = plan.getOwner();
@@ -122,7 +147,6 @@ public class PlanInfoActivity extends AppCompatActivity {
         HarvestProduct harvestProduct = plan.getResult();
         harvestProductName.setText(harvestProduct.getName());
         quantityIntent.setText(harvestProduct.getQuantity() + " " + harvestProduct.getQuantityType());
-        System.out.println(plan);
         int progress = (int)(plan.getProgress() * 100);
         progressBar.setProgress(progress);
         progressPercent.setText(progress + "%");
@@ -131,5 +155,11 @@ public class PlanInfoActivity extends AppCompatActivity {
         stepCount.setText(Integer.toString(planDetails.size()));
         planDetailList.setAdapter(new PlanDetailAdapter(this, planDetails));
         planDetailList.setLayoutManager(new LinearLayoutManager(this));
+
+        if (plan.getStatus().equals(PlanStatus.EXPIRED.getLabel()) && plan.getOwner().get_id().equals(userId)) {
+            addProductBtn.setVisibility(View.VISIBLE);
+        } else {
+            addProductBtn.setVisibility(View.GONE);
+        }
     }
 }

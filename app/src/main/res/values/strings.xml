@@ -139,6 +139,8 @@
 
     <string name="plan">Kế hoạch</string>
     <string name="needed">Nhu cầu</string>
+    <string name="close">Đóng</string>
+
     <string name="plan.creation.submit.btn.next">Tiếp theo</string>
     <string name="plan.creation.step.1.title">Tạo kế hoạch</string>
     <string name="plan.creation.step.1.label.name">Tên kế hoạch</string>

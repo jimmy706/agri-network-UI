@@ -22,4 +22,5 @@ public class Product {
     private int numberOfViews;
     private List<String> thumbnails;
     private boolean isBroadCasted;
+    private String status;
 }

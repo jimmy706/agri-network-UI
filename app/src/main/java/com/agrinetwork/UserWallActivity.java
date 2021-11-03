@@ -107,8 +107,7 @@ public class UserWallActivity extends AppCompatActivity {
 
         MaterialToolbar toolbar = findViewById(R.id.back);
         toolbar.setNavigationOnClickListener(view -> {
-
-            startActivity(new Intent(this, UserFeedActivity.class));
+            finish();
         });
 
 

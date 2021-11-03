@@ -4,6 +4,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +18,11 @@ public class UrlHelper <T>{
         map.entrySet().stream().forEach(entry -> {
             String key = entry.getKey();
             T value = entry.getValue();
-            result.add(key + "=" + value.toString());
+            try {
+                result.add(key + "=" + URLEncoder.encode(value.toString(), "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         });
 
         return String.join("&", result);
