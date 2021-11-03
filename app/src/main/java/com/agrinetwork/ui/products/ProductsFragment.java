@@ -7,17 +7,17 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.agrinetwork.ProductsActivity;
 import com.agrinetwork.R;
@@ -129,6 +129,14 @@ public class ProductsFragment extends Fragment {
                             chip.setChipStrokeWidth(2);
 
                             chipGroup.addView(chip);
+
+                            chip.setOnClickListener((chipClickListener)->{
+                                Toast.makeText(getContext(), ""+ categoryName, Toast.LENGTH_SHORT).show();
+                                Intent intentSearchByCategory = new Intent(getContext(),ProductsActivity.class);
+                                intentSearchByCategory.putExtra("idCategory",category.get_id());
+                                intentSearchByCategory.putExtra("nameCategory",categoryName);
+                                getContext().startActivity(intentSearchByCategory);
+                            });
                         }
                     });
                 }

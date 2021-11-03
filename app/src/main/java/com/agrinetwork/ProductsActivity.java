@@ -2,10 +2,12 @@ package com.agrinetwork;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,6 +55,7 @@ public class ProductsActivity extends AppCompatActivity {
     private int limit = 12;
     private String category;
     private String nameCategory;
+    private String nameProduct;
     private final Gson gson = new Gson();
     private boolean hasNext = false;
     private String token;
@@ -62,6 +65,7 @@ public class ProductsActivity extends AppCompatActivity {
     private SwipeRefreshLayout refreshLayout;
     private CategoryService categoryService;
     private TextView noResult,showTextResultSearchByCategory,showNameCategory;
+
 
 
     DrawerLayout drawerLayout;
@@ -82,6 +86,7 @@ public class ProductsActivity extends AppCompatActivity {
         showTextResultSearchByCategory = findViewById(R.id.show_text_result_search_by_category);
         showNameCategory= findViewById(R.id.show_name_category);
         refreshLayout = findViewById(R.id.swiper_product);
+
 
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.products_navigation_toggler, R.string.products_navigation_close);
@@ -122,8 +127,6 @@ public class ProductsActivity extends AppCompatActivity {
 
 
 
-
-
         refreshLayout.setOnRefreshListener(()->{
             page = 1;
             searchProductCriteria.setPage(page);
@@ -133,11 +136,10 @@ public class ProductsActivity extends AppCompatActivity {
         });
 
 
-
         getCategories();
 
 
-        if(getIntent().hasExtra("idCategory")){
+        if(getIntent().hasExtra("idCategory") ){
             category = getIntent().getStringExtra("idCategory");
             nameCategory = getIntent().getStringExtra("nameCategory");
             showNameCategory.setText(nameCategory);
@@ -147,6 +149,28 @@ public class ProductsActivity extends AppCompatActivity {
             searchProductCriteria.setCategories(category);
 
         }
+        else if(getIntent().hasExtra("nameProduct")){
+            nameProduct = getIntent().getStringExtra("nameProduct");
+            textSearch.setText(nameProduct);
+
+            searchProductCriteria.setName(nameProduct);
+
+        }
+
+
+
+        textSearch.setOnEditorActionListener((textView, i, keyEvent) -> {
+            String queryName = textView.getText().toString();
+            if(i == EditorInfo.IME_ACTION_SEARCH){
+               Intent intentSearch = new Intent(this, ProductsActivity.class);
+               intentSearch.putExtra("nameProduct",queryName);
+               this.startActivity(intentSearch);
+                return true;
+            }
+            return false;
+        });
+
+
 
 
         fetchProductSearch();

@@ -51,7 +51,7 @@ public class ProductCategoryMenuAdapter extends RecyclerView.Adapter<ProductCate
         holder.category.setOnClickListener(v->{
             String idCategory = item.get_id();
             String name = item.getName();
-            Toast.makeText(context, "id:"+ idCategory, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, ""+ name, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, ProductsActivity.class);
             intent.putExtra("idCategory",idCategory);
             intent.putExtra("nameCategory",name);

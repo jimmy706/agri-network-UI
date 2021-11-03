@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -230,10 +231,19 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         productCategoryList = productDetail.getCategories();
         for(ProductCategory item: productCategoryList){
-            String categoryName = item.getName();
             final Chip chip = new Chip(this);
-            chip.setText(categoryName);
+            chip.setText(item.getName());
             productCategory.addView(chip);
+
+            chip.setOnClickListener((chipClickListener)->{
+                Toast.makeText(this, ""+ item.getName(), Toast.LENGTH_SHORT).show();
+                Intent intentSearchByCategory = new Intent(this,ProductsActivity.class);
+                intentSearchByCategory.putExtra("idCategory",item.get_id());
+                intentSearchByCategory.putExtra("nameCategory",item.getName());
+                this.startActivity(intentSearchByCategory);
+            });
+
+
         }
 
 

@@ -24,6 +24,7 @@
             android:fillViewport="true"
             android:orientation="vertical"
             android:layout_marginBottom="30dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -101,28 +102,31 @@
                 android:id="@+id/layout_show_text_result_search"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kết quả tìm kiếm trong:"
+                    android:text="@string/result_search_product_by_category"
                     android:visibility="gone"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textColor="@color/black"
                     android:id="@+id/show_text_result_search_by_category"
-
                     />
                 <TextView
                     android:layout_marginLeft="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:text="category"
                     android:textSize="17sp"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     android:textColor="@color/black"
                     android:id="@+id/show_name_category"
-
                     />
+
+
             </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,6 +141,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/swiper_product">
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
