@@ -224,7 +224,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_new_product"
-            android:id="@+id/add_product_btn" />
+            android:id="@+id/add_product_btn"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </RelativeLayout>

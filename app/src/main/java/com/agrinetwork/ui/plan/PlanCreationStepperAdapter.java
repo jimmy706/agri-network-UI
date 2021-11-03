@@ -25,6 +25,8 @@ public class PlanCreationStepperAdapter extends AbstractFragmentStepAdapter {
     private final Plan plan;
     private final OnStepDone onStepDone;
 
+    private PlanDetailCreationFragment planDetailCreationFragment = new PlanDetailCreationFragment(this::onSubmitPlanDetails);
+
     public PlanCreationStepperAdapter(@NonNull FragmentManager fm, @NonNull Context context, OnStepDone onStepDone) {
         super(fm, context);
         this.plan = new Plan();
@@ -38,7 +40,7 @@ public class PlanCreationStepperAdapter extends AbstractFragmentStepAdapter {
             case 0:
                 return new PlanTimestampCreationFragment(this::onSubmitPlanTimestamp);
             case 1:
-                return new PlanDetailCreationFragment(this::onSubmitPlanDetails);
+                return planDetailCreationFragment;
             case 2:
                 return new PlanResultFragment(this::onSubmitResult);
         }
@@ -83,6 +85,8 @@ public class PlanCreationStepperAdapter extends AbstractFragmentStepAdapter {
         plan.setTo(planTimestamp.getTo());
         plan.setName(planTimestamp.getName());
         onStepDone.onDone(0);
+        planDetailCreationFragment.setStartPlanDate(planTimestamp.getFrom());
+        planDetailCreationFragment.setEndPlanDate(planTimestamp.getTo());
     }
 
     private void onSubmitPlanDetails(List<PlanDetail> planDetails) {
@@ -94,4 +98,6 @@ public class PlanCreationStepperAdapter extends AbstractFragmentStepAdapter {
         plan.setResult(harvestProduct);
         onStepDone.onDone(2);
     }
+
+
 }

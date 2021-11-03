@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agrinetwork.R;
@@ -16,6 +17,7 @@ import com.agrinetwork.entities.Attribute;
 import com.agrinetwork.entities.Interest;
 import com.agrinetwork.entities.ProductCategory;
 import com.agrinetwork.entities.Topic;
+import com.agrinetwork.helpers.TextValidator;
 import com.agrinetwork.service.CategoryService;
 import com.agrinetwork.service.InterestService;
 import com.google.android.material.button.MaterialButton;
@@ -81,6 +83,7 @@ public class RequestProductForm extends LinearLayout {
         submitBtn.setOnClickListener(v -> addInterest());
 
         fetchCategory();
+        validateInput();
     }
 
     private void fetchCategory() {
@@ -146,5 +149,20 @@ public class RequestProductForm extends LinearLayout {
 
         Toast.makeText(context, "Tạo thành công bài đăng", Toast.LENGTH_SHORT).show();
         context.startActivity(new Intent(context, UserFeedActivity.class));
+    }
+
+    private void validateInput() {
+        textInputPriceTo.addTextChangedListener(new TextValidator(textInputPriceTo) {
+            @Override
+            public void validate(TextView textView, String value) {
+               if (!value.isEmpty() && !textInputPriceFrom.getText().toString().isEmpty()) {
+                   double priceFrom = Double.parseDouble(textInputPriceFrom.getText().toString());
+                   double priceTo = Double.parseDouble(value);
+                   if (priceTo <= priceFrom) {
+                       textView.setError("Sai giá trị!");
+                   }
+               }
+            }
+        });
     }
 }

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,6 +68,9 @@ public class CreatePlanDetailDialog extends Dialog {
     private NeededFactorAdapter neededFactorAdapter;
     private boolean isOpenNeededForm;
 
+    private Date startDate;
+    private Date endDate;
+
     public CreatePlanDetailDialog(@NonNull Context context, CreatePlanDetailDialog.OnSubmitListener onSubmitListener) {
         super(context);
         this.calendar = Calendar.getInstance();
@@ -73,6 +78,17 @@ public class CreatePlanDetailDialog extends Dialog {
         this.onSubmitListener = onSubmitListener;
         SharedPreferences sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         this.token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
+    }
+
+    public CreatePlanDetailDialog(@NonNull Context context, CreatePlanDetailDialog.OnSubmitListener onSubmitListener, Date startDate, Date endDate) {
+        super(context);
+        this.calendar = Calendar.getInstance();
+        this.sdf = new SimpleDateFormat(Variables.DATE_FORMAT, new Locale("vi", "VI"));
+        this.onSubmitListener = onSubmitListener;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
+        this.token = sharedPreferences.getString(Variables.ID_TOKEN_LABEL, "");
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     @Override
@@ -107,7 +123,13 @@ public class CreatePlanDetailDialog extends Dialog {
             updateDateText(fromDateInput);
         };
         fromDateInput.setOnClickListener(v -> {
-            new DatePickerDialog(getContext(), onFromDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), onFromDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            if (startDate != null) {
+                DatePicker datePicker = datePickerDialog.getDatePicker();
+                datePicker.setMinDate(startDate.getTime());
+                fromDateInput.setText(sdf.format(startDate));
+            }
+            datePickerDialog.show();
         });
 
         DatePickerDialog.OnDateSetListener onToDateSetListener = (datePicker, year, monthOfYear, dayOfMonth) -> {
@@ -117,7 +139,22 @@ public class CreatePlanDetailDialog extends Dialog {
             updateDateText(toDateInput);
         };
         toDateInput.setOnClickListener(v -> {
-            new DatePickerDialog(getContext(), onToDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), onToDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            DatePicker datePicker = datePickerDialog.getDatePicker();
+            datePicker.setMinDate(new Date().getTime());
+
+            try {
+                Date fromDate = sdf.parse(fromDateInput.getText().toString());
+                if (fromDate != null) {
+                    datePicker.setMinDate(fromDate.getTime());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (endDate != null) {
+                datePicker.setMaxDate(endDate.getTime());
+            }
+            datePickerDialog.show();
         });
 
         addNeededBtn.setOnClickListener(v -> {

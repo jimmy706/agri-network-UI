@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.agrinetwork.R;
@@ -20,6 +21,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,6 +59,9 @@ public class PlanTimestampCreationFragment extends Fragment implements Step {
         nameInput = view.findViewById(R.id.name_input);
         submitBtn = view.findViewById(R.id.submit_btn);
 
+        Date now = new Date();
+        fromDateInput.setText(sdf.format(now));
+
         DatePickerDialog.OnDateSetListener onFromDateSetListener = (datePicker, year, monthOfYear, dayOfMonth) -> {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, monthOfYear);
@@ -64,7 +69,10 @@ public class PlanTimestampCreationFragment extends Fragment implements Step {
             updateDateText(fromDateInput);
         };
         fromDateInput.setOnClickListener(v -> {
-            new DatePickerDialog(getContext(), onFromDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), onFromDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            datePickerDialog.getDatePicker()
+                    .setMinDate(now.getTime());
+            datePickerDialog.show();
         });
 
         DatePickerDialog.OnDateSetListener onToDateSetListener = (datePicker, year, monthOfYear, dayOfMonth) -> {
@@ -74,7 +82,19 @@ public class PlanTimestampCreationFragment extends Fragment implements Step {
             updateDateText(toDateInput);
         };
         toDateInput.setOnClickListener(v -> {
-            new DatePickerDialog(getContext(), onToDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), onToDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            DatePicker datePicker = datePickerDialog.getDatePicker();
+            datePicker.setMinDate(now.getTime());
+            try {
+                Date fromDate = sdf.parse(fromDateInput.getText().toString());
+                if (fromDate != null) {
+                    datePicker.setMinDate(fromDate.getTime());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            datePickerDialog.show();
         });
 
         submitBtn.setOnClickListener(v -> {
