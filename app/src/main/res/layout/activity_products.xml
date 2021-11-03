@@ -24,30 +24,94 @@
             android:fillViewport="true"
             android:orientation="vertical"
             android:layout_marginBottom="30dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/label_category"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/product_categories"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-                    />
-                <androidx.recyclerview.widget.RecyclerView
+                    <TextView
+                        android:id="@+id/label_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/product_categories"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/product_category"
+                        android:layout_marginTop="8dp"
+                        android:layout_below="@+id/label_category"/>
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/product_category"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@+id/label_category"/>
-            </RelativeLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_margin="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sort_product_by"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:id="@+id/sort_name"
+                        android:text="@string/sort_product_name"
+                        android:gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:id="@+id/sort_view"
+                        android:text="@string/sort_product_view"
+                        android:gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:id="@+id/sort_price"
+                        android:text="@string/sort_product_price"
+                        android:gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:id="@+id/sort_date"
+                        android:text="@string/sort_product_date"
+                        android:gravity="center_vertical"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
     </androidx.core.widget.NestedScrollView>
     </com.google.android.material.navigation.NavigationView>
 
@@ -103,29 +167,41 @@
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
+
+                <LinearLayout
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/result_search_product_by_category"
+                        android:visibility="gone"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        android:id="@+id/show_text_result_search_by_category"
+                        />
+                    <TextView
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="category"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        android:textColor="@color/black"
+                        android:id="@+id/show_name_category"
+                        />
+                </LinearLayout>
+
                 <TextView
+                    android:id="@+id/reset_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/result_search_product_by_category"
-                    android:visibility="gone"
-                    android:textSize="15sp"
-                    android:textColor="@color/black"
-                    android:id="@+id/show_text_result_search_by_category"
-                    />
-                <TextView
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="category"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    android:textColor="@color/black"
-                    android:id="@+id/show_name_category"
-                    />
+                    app:drawableRightCompat="@drawable/ic_restart_all" />
 
 
             </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"

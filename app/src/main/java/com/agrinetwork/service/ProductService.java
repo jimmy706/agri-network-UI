@@ -64,6 +64,7 @@ public class ProductService {
         private int page;
         private int limit;
         private String categories;
+        private int sort;
 
         public SearchProductCriteria() {
             this.page = 1;
@@ -92,6 +93,9 @@ public class ProductService {
             }
             if(categories != null && !categories.trim().isEmpty()){
                 result.put("categories",categories);
+            }
+            if(sort >0){
+                result.put("sort",Integer.toString(sort));
             }
 
 

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +50,7 @@ public class ProductCategoryMenuAdapter extends RecyclerView.Adapter<ProductCate
         holder.category.setOnClickListener(v->{
             String idCategory = item.get_id();
             String name = item.getName();
-            Toast.makeText(context, ""+ name, Toast.LENGTH_SHORT).show();
+
             Intent intent = new Intent(context, ProductsActivity.class);
             intent.putExtra("idCategory",idCategory);
             intent.putExtra("nameCategory",name);

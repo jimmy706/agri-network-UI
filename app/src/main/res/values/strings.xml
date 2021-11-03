@@ -61,6 +61,13 @@
     <string name="post_request">Đăng yêu cầu</string>
     <string name="product_info">Thông tin sản phẩm</string>
     <string name="result_search_product_by_category">Kết quả tìm kiếm trong:</string>
+    <string name="sort_product_by">Sắp xếp sản phẩm theo:</string>
+    <string name="sort_product_name">Tên</string>
+    <string name="sort_product_view">Lượt xem</string>
+    <string name="sort_product_price"> Đơn giá</string>
+    <string name="sort_product_date"> Ngày đăng</string>
+
+
 
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>

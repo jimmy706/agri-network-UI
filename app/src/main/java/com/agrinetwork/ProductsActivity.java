@@ -64,7 +64,9 @@ public class ProductsActivity extends AppCompatActivity {
     private TextInputEditText textSearch;
     private SwipeRefreshLayout refreshLayout;
     private CategoryService categoryService;
-    private TextView noResult,showTextResultSearchByCategory,showNameCategory;
+    private TextView noResult,showTextResultSearchByCategory,showNameCategory,iconReset;
+    private TextView sortName,sortView,sortPrice,sortDate;
+    private String numSortName,numSortView,numSortPrice,numSortDate;
 
 
 
@@ -86,6 +88,12 @@ public class ProductsActivity extends AppCompatActivity {
         showTextResultSearchByCategory = findViewById(R.id.show_text_result_search_by_category);
         showNameCategory= findViewById(R.id.show_name_category);
         refreshLayout = findViewById(R.id.swiper_product);
+        iconReset = findViewById(R.id.reset_search);
+
+        sortName = findViewById(R.id.sort_name);
+        sortView = findViewById(R.id.sort_view);
+        sortPrice = findViewById(R.id.sort_price);
+        sortDate = findViewById(R.id.sort_date);
 
 
         navigationView.bringToFront();
@@ -156,6 +164,46 @@ public class ProductsActivity extends AppCompatActivity {
             searchProductCriteria.setName(nameProduct);
 
         }
+        else if(getIntent().hasExtra("sortName")){
+            numSortName = getIntent().getStringExtra("sortName");
+            searchProductCriteria.setSort(Integer.parseInt(numSortName));
+
+            showNameCategory.setText(R.string.sort_product_name);
+            showNameCategory.setVisibility(View.VISIBLE);
+            showTextResultSearchByCategory.setText(R.string.sort_product_by);
+            showTextResultSearchByCategory.setVisibility(View.VISIBLE);
+
+        }
+        else if(getIntent().hasExtra("sortView")){
+            numSortView = getIntent().getStringExtra("sortView");
+            searchProductCriteria.setSort(Integer.parseInt(numSortView));
+
+            showNameCategory.setText(R.string.sort_product_view);
+            showNameCategory.setVisibility(View.VISIBLE);
+            showTextResultSearchByCategory.setText(R.string.sort_product_by);
+            showTextResultSearchByCategory.setVisibility(View.VISIBLE);
+
+        }
+        else if(getIntent().hasExtra("sortDate")){
+            numSortDate = getIntent().getStringExtra("sortDate");
+            searchProductCriteria.setSort(Integer.parseInt(numSortDate));
+
+            showNameCategory.setText(R.string.sort_product_date);
+            showNameCategory.setVisibility(View.VISIBLE);
+            showTextResultSearchByCategory.setText(R.string.sort_product_by);
+            showTextResultSearchByCategory.setVisibility(View.VISIBLE);
+
+        }
+        else if(getIntent().hasExtra("sortPrice")){
+            numSortPrice = getIntent().getStringExtra("sortPrice");
+            searchProductCriteria.setSort(Integer.parseInt(numSortPrice));
+
+            showNameCategory.setText(R.string.sort_product_price);
+            showNameCategory.setVisibility(View.VISIBLE);
+            showTextResultSearchByCategory.setText(R.string.sort_product_by);
+            showTextResultSearchByCategory.setVisibility(View.VISIBLE);
+
+        }
 
 
 
@@ -170,6 +218,38 @@ public class ProductsActivity extends AppCompatActivity {
             return false;
         });
 
+        sortName.setOnClickListener(v->{
+            String sort = "1";
+            Intent intentSortName = new Intent(this,ProductsActivity.class);
+            intentSortName.putExtra("sortName",sort);
+            this.startActivity(intentSortName);
+        });
+
+        sortView.setOnClickListener(v->{
+            String sort = "2";
+            Intent intentSortView = new Intent(this,ProductsActivity.class);
+            intentSortView.putExtra("sortView",sort);
+            this.startActivity(intentSortView);
+        });
+
+        sortDate.setOnClickListener(v->{
+            String sort = "3";
+            Intent intentSortDate = new Intent(this,ProductsActivity.class);
+            intentSortDate.putExtra("sortDate",sort);
+            this.startActivity(intentSortDate);
+        });
+
+        sortPrice.setOnClickListener(v->{
+            String sort = "4";
+            Intent intentSortPrice = new Intent(this,ProductsActivity.class);
+            intentSortPrice.putExtra("sortPrice",sort);
+            this.startActivity(intentSortPrice);
+        });
+
+        iconReset.setOnClickListener(v->{
+            Intent intentReset = new Intent(this,ProductsActivity.class);
+            this.startActivity(intentReset);
+        });
 
 
 
@@ -266,8 +346,12 @@ public class ProductsActivity extends AppCompatActivity {
                     Type categoryList = new TypeToken<List<ProductCategory>>(){}.getType();
                     List<ProductCategory> productCategory = gson.fromJson(responseCategory,categoryList);
 
-                    productCategoryList.addAll(productCategory);
-                    productCategoryMenuAdapter.notifyDataSetChanged();
+                    ProductsActivity.this.runOnUiThread(()->{
+                        productCategoryList.addAll(productCategory);
+                        productCategoryMenuAdapter.notifyDataSetChanged();
+                    });
+
+
 
                 }
             }

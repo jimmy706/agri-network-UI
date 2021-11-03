@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -131,7 +130,7 @@ public class ProductsFragment extends Fragment {
                             chipGroup.addView(chip);
 
                             chip.setOnClickListener((chipClickListener)->{
-                                Toast.makeText(getContext(), ""+ categoryName, Toast.LENGTH_SHORT).show();
+
                                 Intent intentSearchByCategory = new Intent(getContext(),ProductsActivity.class);
                                 intentSearchByCategory.putExtra("idCategory",category.get_id());
                                 intentSearchByCategory.putExtra("nameCategory",categoryName);
