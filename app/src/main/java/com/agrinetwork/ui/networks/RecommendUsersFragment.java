@@ -22,6 +22,7 @@ import com.agrinetwork.R;
 import com.agrinetwork.components.FriendRequestAdapter;
 import com.agrinetwork.components.RecommendUserAdapter;
 
+import com.agrinetwork.components.dialog.LoadingDialog;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.FriendRequest;
 import com.agrinetwork.entities.RecommendUser;
@@ -118,12 +119,15 @@ public class RecommendUsersFragment extends Fragment {
     }
 
     private void fetchRecommendedUsers() {
+        LoadingDialog loadingDialog = new LoadingDialog(getContext());
+        loadingDialog.show();
         Call call = recommendService.getRecommendedUsers(token);
 
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
+                getActivity().runOnUiThread(loadingDialog::dismiss);
             }
 
             @Override
@@ -141,6 +145,7 @@ public class RecommendUsersFragment extends Fragment {
                                 users.addAll(userList);
                             }
                             renderRecommendedUsers();
+                            loadingDialog.dismiss();
                         });
                     }
                 }

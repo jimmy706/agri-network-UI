@@ -20,17 +20,26 @@ import android.view.inputmethod.InputMethodManager;
 
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.agrinetwork.components.CommentAdapter;
+import com.agrinetwork.components.PlanDetailAdapter;
+import com.agrinetwork.components.PostAdapter;
 import com.agrinetwork.components.SliderAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.Comment;
 import com.agrinetwork.entities.Post;
+import com.agrinetwork.entities.PostFormat;
+import com.agrinetwork.entities.PostItem;
 import com.agrinetwork.entities.User;
+import com.agrinetwork.entities.plan.Plan;
+import com.agrinetwork.entities.plan.PlanDetail;
+import com.agrinetwork.helpers.AttributesConverter;
+import com.agrinetwork.helpers.AttributesToPlanConverter;
 import com.agrinetwork.service.PostService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
@@ -42,9 +51,14 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -52,8 +66,7 @@ import okhttp3.Response;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class PostDetailActivity extends AppCompatActivity {
-    @SuppressLint("SimpleDateFormat")
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat(Variables.POST_DATE_FORMAT);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat(Variables.POST_DATE_FORMAT, new Locale("vi", "VI"));
     private PostService postService;
 
     private final List<Comment> comments = new ArrayList<>();
@@ -64,16 +77,17 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private View postContentContainer;
-    private ImageView userAvatar, imageView;
-    private ImageButton reactionBtn;
-    private TextView userDisplayName, postTag, context, commentCount, reactionCount, noCommentMessage;
+    private ImageView userAvatar, imageView, productThumbnail;
+    private ImageView reactionBtn;
+    private TextView userDisplayName, postTag, context, commentCount, reactionCount, noCommentMessage, planName, planDueDate, productName, productPrice;
     private View imagesWrapper;
     private SliderView imageSlider;
     private ImageButton sendCommentBtn;
     private TextInputEditText commentInput;
-    private RecyclerView commentsRecyclerView;
+    private RecyclerView commentsRecyclerView, planDetailList;
     private ChipGroup chipGroup;
     private List<String> tags = new ArrayList<>();
+    private LinearLayout planWrapper, productRefWrapper;
 
 
     @Override
@@ -95,13 +109,13 @@ public class PostDetailActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progress_bar);
         postContentContainer = findViewById(R.id.post_content_container);
-        userAvatar = findViewById(R.id.user_avatar);
-        userDisplayName = findViewById(R.id.user_name);
+        userAvatar = findViewById(R.id.avatar);
+        userDisplayName = findViewById(R.id.display_name);
         postTag = findViewById(R.id.post_tag);
         imagesWrapper = findViewById(R.id.images_wrapper);
         imageView = findViewById(R.id.image_view);
         imageSlider = findViewById(R.id.image_slider);
-        context = findViewById(R.id.post_context);
+        context = findViewById(R.id.context);
         commentCount = findViewById(R.id.comment_count);
         reactionCount = findViewById(R.id.reaction_count);
         sendCommentBtn = findViewById(R.id.submit_comment);
@@ -109,12 +123,20 @@ public class PostDetailActivity extends AppCompatActivity {
         commentsRecyclerView = findViewById(R.id.comment_list);
         noCommentMessage = findViewById(R.id.no_comment_message);
         reactionBtn = findViewById(R.id.reaction_button);
+        planWrapper = findViewById(R.id.plan_wrapper);
+        productRefWrapper = findViewById(R.id.product_ref_wrapper);
+        planDetailList = findViewById(R.id.plan_detail_list);
+        planDueDate = findViewById(R.id.plan_duedate);
+        planName = findViewById(R.id.plan_name);
+        productThumbnail = findViewById(R.id.product_thumbnail);
+        productName = findViewById(R.id.product_name);
+        productPrice = findViewById(R.id.product_price);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         commentsRecyclerView.setLayoutManager(linearLayoutManager);
         commentsRecyclerView.setNestedScrollingEnabled(false);
         commentsRecyclerView.setAdapter(commentAdapter);
-        chipGroup = findViewById(R.id.tag_group);
+        chipGroup = findViewById(R.id.chip_group_feed);
 
         fetchPost();
         handleEvents();
@@ -221,6 +243,12 @@ public class PostDetailActivity extends AppCompatActivity {
         }
         else {
             reactionBtn.setImageResource(R.drawable.ic_fav_border);
+        }
+
+        if (post.getFormat().equals(PostFormat.PLAN.getLabel())) {
+            displayPlanInPost();
+        } else if (post.getFormat().equals(PostFormat.SELL.getLabel())) {
+            displayProductInPost();
         }
     }
 
@@ -353,4 +381,63 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
     }
+
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void displayPlanInPost() {
+        Map<String, String> attributes = new AttributesConverter(post.getAttributes()).toMap();
+        planWrapper.setVisibility(View.VISIBLE);
+        Plan plan = new AttributesToPlanConverter(attributes).toPlan();
+
+        SimpleDateFormat sdf = new SimpleDateFormat(Variables.DATE_FORMAT, new Locale("vi", "VI"));
+        planName.setText(plan.getName());
+        Date fromDate = plan.getFrom();
+        Date toDate = plan.getTo();
+        planDueDate.setText(sdf.format(fromDate) + " - " + sdf.format(toDate));
+        List<PlanDetail> planDetails = new ArrayList<>();
+        int steps = plan.getPlantDetails().size();
+
+        for(int i = 0; i < steps; i++) {
+            PlanDetail planDetail = plan.getPlantDetails().get(i);
+            if(planDetail != null) {
+                planDetails.add(planDetail);
+            }
+        }
+
+        planDetailList.setAdapter(new PlanDetailAdapter(this, planDetails));
+        planDetailList.setLayoutManager(new LinearLayoutManager(this));
+
+        planWrapper.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PlanInfoActivity.class);
+            intent.putExtra("planId", post.getRef());
+            startActivity(intent);
+        });
+    }
+
+    private void displayProductInPost() {
+        Map<String, String> attributes = new AttributesConverter(post.getAttributes()).toMap();
+        productRefWrapper.setVisibility(View.VISIBLE);
+        if(attributes.containsKey("thumbnail")) {
+            Picasso.get()
+                    .load(attributes.get("thumbnail"))
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.placeholder_image)
+                    .into(productThumbnail);
+        }
+        productName.setText(attributes.get("name"));
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        numberFormat.setCurrency(Currency.getInstance("VND"));
+        numberFormat.setMaximumFractionDigits(0);
+
+        if(attributes.get("price")!= null){
+            String price = attributes.get("price").trim();
+            productPrice.setText(numberFormat.format(Double.parseDouble(price)));
+        }
+        productRefWrapper.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProductDetailActivity.class);
+            intent.putExtra("productId", post.getRef());
+            startActivity(intent);
+        });
+    }
+
 }

@@ -50,158 +50,16 @@
             android:layout_marginBottom="40dp"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/user_info_wrapper"
-                android:layout_width="match_parent"
+            <include
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/user_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/avatar_placeholder" />
-
-                <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@id/user_avatar"
-                    android:text="John Doe"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/post_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/user_name"
-                    android:layout_toEndOf="@id/user_avatar"
-                    android:text="10h"
-                    android:layout_marginStart="5dp"
-                    android:textColor="#434343"
-                    android:textSize="13sp" />
-            </RelativeLayout>
-
-
-            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    android:scrollbars="none">
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:singleLine="true"
-                        android:id="@+id/tag_group"
-                        >
-                    </com.google.android.material.chip.ChipGroup>
-
-                </HorizontalScrollView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:orientation="horizontal"
-                android:id="@+id/images_wrapper">
-                <com.smarteist.autoimageslider.SliderView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/image_slider"
-                    app:sliderAnimationDuration="500"
-                    app:sliderAutoCycleEnabled="true"
-                    app:sliderIndicatorAnimationDuration="300"
-                    app:sliderIndicatorGravity="center_horizontal|bottom"
-                    app:sliderIndicatorMargin="15dp"
-                    app:sliderIndicatorOrientation="horizontal"
-                    app:sliderIndicatorPadding="3dp"
-                    app:sliderIndicatorRadius="2dp"
-                    app:sliderIndicatorSelectedColor="#ddd"
-                    app:sliderIndicatorUnselectedColor="#4A000000"
-                    app:sliderScrollTimeInSec="1"
-                    />
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/image_view"
-                    />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/post_context"
-                android:textColor="#434343"
-                android:textSize="16sp"
-                />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/actions_container"
-                android:layout_marginTop="10dp"
-                >
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:id="@+id/reaction_wrapper">
-
-                    <ImageButton
-                        android:id="@+id/reaction_button"
-                        style="@style/Widget.AppCompat.Light.ActionButton"
-                        android:layout_width="20dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_fav" />
-
-                    <TextView
-                        android:id="@+id/reaction_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/reaction_button"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/reaction_wrapper"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="10dp"
-                    >
-
-                    <ImageButton
-                        android:id="@+id/comment_button"
-                        style="@style/Widget.AppCompat.Light.ActionButton"
-                        android:layout_width="20dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="5dp"
-                        android:src="@drawable/ic_forum" />
-
-                    <TextView
-                        android:id="@+id/comment_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/comment_button"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-            </RelativeLayout>
+                layout="@layout/post_layout"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comment_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
