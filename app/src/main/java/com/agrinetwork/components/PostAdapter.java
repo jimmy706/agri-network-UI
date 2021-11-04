@@ -156,7 +156,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post_item_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_post_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -238,6 +238,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.moreActionBtn.setVisibility(View.GONE);
         }
         else {
+            holder.moreActionBtn.setVisibility(View.VISIBLE);
             holder.moreActionBtn.setOnClickListener(v -> {
                 showPostActions(postItem);
             });
@@ -324,23 +325,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     private void startPostDetailActivity(PostItem post) {
-        String format = post.getFormat();
-        Intent intent = null;
-        if(format.equals(PostFormat.REGULAR.getLabel())) {
-            intent = new Intent(context, PostDetailActivity.class);
-            intent.putExtra(Variables.POST_ID_LABEL, post.get_id());
-        }
-        else if(format.equals(PostFormat.SELL.getLabel())) {
-            intent = new Intent(context, ProductDetailActivity.class);
-            intent.putExtra("productId", post.getRef());
-        } else if(format.equals(PostFormat.PLAN.getLabel())) {
-            intent = new Intent(context, PlanInfoActivity.class);
-            intent.putExtra("planId", post.getRef());
-        }
-
-        if(intent != null) {
-            context.startActivity(intent);
-        }
+        Intent intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra(Variables.POST_ID_LABEL, post.get_id());
+        context.startActivity(intent);
     }
 
     private void like(String postId) {

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.agrinetwork.ProductsActivity;
 import com.agrinetwork.R;
 import com.agrinetwork.components.ProductAdapter;
+import com.agrinetwork.components.dialog.LoadingDialog;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.decorator.HorizontalProductSpacingItemDecorator;
 import com.agrinetwork.entities.ProductCategory;
@@ -63,6 +64,8 @@ public class ProductsFragment extends Fragment {
     private RecyclerView fromFriendsProductList;
     private RecyclerView popularProductList;
 
+    private LoadingDialog loadingDialog;
+
     List<LinearLayout> wrappers = new ArrayList<>();
 
     @Override
@@ -79,6 +82,9 @@ public class ProductsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_products, container, false);
         chipGroup = view.findViewById(R.id.category_group);
         getLayouts(view);
+
+        loadingDialog = new LoadingDialog(getContext());
+        loadingDialog.show();
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
@@ -224,6 +230,7 @@ public class ProductsFragment extends Fragment {
        else {
            wrappers.get(3).setVisibility(View.GONE);
        }
+       loadingDialog.dismiss();
     }
 
 }
