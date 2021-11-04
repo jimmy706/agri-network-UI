@@ -3,8 +3,7 @@ package com.agrinetwork;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.agrinetwork.components.SearchAdapter;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.service.UserService;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,7 +34,8 @@ public class SearchUserActivity extends AppCompatActivity {
     private List<User> users = new ArrayList<>();
     private UserService userService;
     private TextView showTextNoResult;
-
+    private MaterialToolbar btnUndo;
+    private TextInputEditText userQuery;
 
 
     @Override
@@ -46,14 +48,16 @@ public class SearchUserActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String searchUser =  intent.getExtras().getString("search");
-        EditText resultText = findViewById(R.id.result_text);
-        resultText.setText(searchUser);
-        resultText.setFocusable(false);
+        userQuery = findViewById(R.id.search_user);
+        userQuery.setText(searchUser);
 
-        Button btnBack = findViewById(R.id.btn_back);
 
-        btnBack.setOnClickListener(v->{
-            startActivity(new Intent(this, UserFeedActivity.class));
+        btnUndo = findViewById(R.id.toolbar);
+
+        btnUndo.setNavigationOnClickListener(v -> {
+            Intent intentUserFeed = new Intent(this,UserFeedActivity.class);
+            this.startActivity(intentUserFeed);
+
         });
 
 
@@ -65,6 +69,17 @@ public class SearchUserActivity extends AppCompatActivity {
         recyclerView.setAdapter(searchAdapter);
         showTextNoResult = findViewById(R.id.no_result);
 
+
+        userQuery.setOnEditorActionListener((textView, i, keyEvent) -> {
+            String query = textView.getText().toString();
+            if(i == EditorInfo.IME_ACTION_SEARCH){
+                Intent intentSearchUser = new Intent(this,SearchUserActivity.class);
+                intentSearchUser.putExtra("search",query);
+                this.startActivity(intentSearchUser);
+                return true;
+            }
+            return false;
+        });
 
         fetchResultUser(searchUser);
 
