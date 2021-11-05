@@ -2,17 +2,16 @@ package com.agrinetwork;
 
 import android.app.Activity;
 import android.app.Dialog;
-
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-
 import android.widget.Button;
 import android.widget.CheckBox;
-import androidx.appcompat.widget.SearchView;
-
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +19,6 @@ import com.agrinetwork.components.PostTagAdapter;
 import com.agrinetwork.entities.PostTagItem;
 import com.agrinetwork.interfaces.PostTagDialogSubmitListener;
 import com.agrinetwork.service.TagService;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -57,6 +55,7 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
         this.activity = activity;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,14 +78,17 @@ public class DialogTagActivity extends Dialog implements View.OnClickListener{
 
         fetchPostTag();
 
-        postTagAdapter.setCheckboxChangedListener((checked, position) -> {
-            if(checked) {
+        postTagAdapter.setCheckboxChangedListener((checked, name) -> {
+           PostTagItem pickPostTag = postTagItemList.stream().filter(tag-> tag.getName().equals(name)).findFirst().orElse(null);
+           if(pickPostTag != null){
+               if(checked){
+                   pickedPostTags.add(pickPostTag);
+               }
+               else {
+                   pickedPostTags.remove(pickPostTag);
+               }
+           }
 
-                pickedPostTags.add(postTagItemList.get(position));
-            }
-            else {
-                pickedPostTags.remove(postTagItemList.get(position));
-            }
         });
 
        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

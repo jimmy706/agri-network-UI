@@ -1,35 +1,23 @@
 package com.agrinetwork.components;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.agrinetwork.DialogTagActivity;
 import com.agrinetwork.R;
-import com.agrinetwork.UserWallActivity;
-import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PostTagItem;
 import com.agrinetwork.interfaces.CheckboxChangedListener;
 import com.agrinetwork.service.TagService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import lombok.Setter;
 
@@ -68,17 +56,7 @@ public class PostTagAdapter extends RecyclerView.Adapter<PostTagAdapter.ViewHold
 
         holder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if(checkboxChangedListener != null) {
-              Toast.makeText(context,compoundButton.getText(),Toast.LENGTH_SHORT).show();
-
-//                for(int index = 0; index < postTagItemsList.size(); index++){
-//                    if(compoundButton.getText() == postTagItemsList.get(index).getName()){
-//                        Toast.makeText(context,"vi tri thu"+ index ,Toast.LENGTH_SHORT).show();
-//                        checkboxChangedListener.onChange(checked, index);
-//
-//                    }
-//                }
-
-              checkboxChangedListener.onChange(checked, position);
+              checkboxChangedListener.onChange(checked, tagName);
             }
         });
 
