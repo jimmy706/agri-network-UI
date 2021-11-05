@@ -27,12 +27,15 @@ import com.agrinetwork.entities.plan.PlanInformation;
 import com.agrinetwork.entities.plan.PlanStatus;
 import com.agrinetwork.service.PlanService;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -48,11 +51,12 @@ public class PlanInfoActivity extends AppCompatActivity {
     private PlanService planService;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private TextView planName, userDisplayName, harvestProductName, quantityIntent, stepCount, progressPercent;
+
+    private TextView planName, userDisplayName, harvestProductName, quantityIntent, stepCount, progressPercent, dueDate;
     private ProgressBar progressBar;
     private CircleImageView userAvatar;
     private RecyclerView planDetailList;
-    private Button addProductBtn;
+    private MaterialButton addProductBtn;
 
     private PlanInformation planState;
 
@@ -79,6 +83,8 @@ public class PlanInfoActivity extends AppCompatActivity {
         progressPercent = findViewById(R.id.progress_percent);
         progressBar = findViewById(R.id.progress);
         planDetailList = findViewById(R.id.plan_details);
+        dueDate = findViewById(R.id.plan_duedate);
+        addProductBtn = findViewById(R.id.add_product_btn);
 
         fetchPlanDetail(planId);
 
@@ -87,18 +93,7 @@ public class PlanInfoActivity extends AppCompatActivity {
             finish();
         });
 
-        addProductBtn = findViewById(R.id.add_product_btn);
-        addProductBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CreateProductActivity.class);
-            intent.putExtra("planId", planState.get_id());
 
-            HarvestProduct harvestProduct = planState.getResult();
-
-            intent.putExtra("name", harvestProduct.getName());
-            intent.putExtra("quantity", harvestProduct.getQuantity());
-            intent.putExtra("quantityType", harvestProduct.getQuantity());
-            startActivity(intent);
-        });
     }
 
     private void fetchPlanDetail(String planId) {
@@ -128,6 +123,8 @@ public class PlanInfoActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void renderData(PlanInformation plan) {
+        SimpleDateFormat sdf = new SimpleDateFormat(Variables.DATE_FORMAT, new Locale("vi", "VI"));
+
         planState = plan;
         planName.setText(plan.getName());
 
@@ -151,13 +148,29 @@ public class PlanInfoActivity extends AppCompatActivity {
         progressBar.setProgress(progress);
         progressPercent.setText(progress + "%");
 
+        String startDate = sdf.format(plan.getFrom());
+        String endDate = sdf.format(plan.getTo());
+        dueDate.setText(startDate + " - " + endDate);
+
         List<PlanDetail> planDetails = plan.getPlantDetails();
         stepCount.setText(Integer.toString(planDetails.size()));
         planDetailList.setAdapter(new PlanDetailAdapter(this, planDetails));
         planDetailList.setLayoutManager(new LinearLayoutManager(this));
 
-        if (plan.getStatus().equals(PlanStatus.EXPIRED.getLabel()) && plan.getOwner().get_id().equals(userId)) {
+        boolean isExpired = plan.getStatus().equals(PlanStatus.EXPIRED.getLabel());
+        boolean isOwner = plan.getOwner().get_id().equals(userId);
+
+        if (isExpired && isOwner) {
             addProductBtn.setVisibility(View.VISIBLE);
+            addProductBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(this, CreateProductActivity.class);
+                intent.putExtra("planId", planState.get_id());
+
+                intent.putExtra("name", harvestProduct.getName());
+                intent.putExtra("quantity", harvestProduct.getQuantity());
+                intent.putExtra("quantityType", harvestProduct.getQuantity());
+                startActivity(intent);
+            });
         } else {
             addProductBtn.setVisibility(View.GONE);
         }

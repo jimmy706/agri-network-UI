@@ -126,7 +126,6 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="5dp"
                         android:layout_toEndOf="@id/ic_clock"
-                        android:text="20-10-2021 - 21-11-2021"
                         android:textColor="@color/gray_600"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -220,12 +219,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:paddingHorizontal="10dp">
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_new_product"
-            android:id="@+id/add_product_btn"
-            android:visibility="gone"/>
+            android:id="@+id/add_product_btn" />
     </LinearLayout>
 
 </RelativeLayout>
