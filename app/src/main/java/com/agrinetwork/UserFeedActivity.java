@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.agrinetwork.components.dialog.NotifyExpiredPlanDialog;
+import com.agrinetwork.components.dialog.PickCreatePlanSourceDialog;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.plan.Plan;
 import com.agrinetwork.entities.plan.PlanStatus;
@@ -161,7 +162,7 @@ public class UserFeedActivity extends AppCompatActivity {
 
         LinearLayout addPlanningPost = bottomSheetDialog.findViewById(R.id.add_planning_post);
         addPlanningPost.setOnClickListener(v -> {
-            startActivity(new Intent(this, CreatePlanActivity.class));
+            new PickCreatePlanSourceDialog(this).show();
         });
 
 

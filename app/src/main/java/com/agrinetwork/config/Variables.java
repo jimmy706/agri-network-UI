@@ -4,7 +4,7 @@ public class Variables {
 
 
 
-    public static final String SERVICE_DOMAIN = "http://192.168.3.102:3000/api";
+    public static final String SERVICE_DOMAIN = "http://192.168.1.4:3000/api";
 
 
     public static final String COUNTRY_SERVICE_DOMAIN = "https://provinces.open-api.vn/api";
@@ -16,6 +16,7 @@ public class Variables {
     public static final String POST_ID_LABEL = "postId";
     public static final String POST_DATE_FORMAT = "dd-MMM-yyyy hh:mm";
     public static final String DATE_FORMAT = "dd-MMM-yyyy";
+    public static final String DATE_FORMAT_US = "yyyy-MM-dd";
     public static final String CURRENT_LOGIN_USER_ID = "currentLoginUserId";
     public static final String CURRENT_LOGIN_USER_AVATAR = "currentLoginUserAvatar";
     public static final String CURRENT_LOGIN_USER_TYPE = "currentLoginUserType";

@@ -18,6 +18,7 @@ import java.util.Map;
 
 import lombok.Data;
 import okhttp3.Call;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -64,6 +65,38 @@ public class PlanService {
                 .url(SERVICE_URL + "/" + id)
                 .header("Authorization", token)
                 .get()
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call getPlanSamples() {
+        Request request = new Request.Builder()
+                .get()
+                .url(SERVICE_URL + "/sample")
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call getPlanSampleById(String token, String id) {
+        Request request = new Request.Builder()
+                .get()
+                .url(SERVICE_URL + "/sample/" + id)
+                .header("Authorization", token)
+                .build();
+
+        return client.newCall(request);
+    }
+
+    public Call addPlanFromSample(String token, String sampleId, Date startDate) {
+        RequestBody body = new FormBody.Builder().build();
+        SimpleDateFormat sdf = new SimpleDateFormat(Variables.DATE_FORMAT_US, Locale.US);
+
+        Request request = new Request.Builder()
+                .post(body)
+                .url(SERVICE_URL + "/sample/" + sampleId + "/create-plan?startDate=" + sdf.format(startDate))
+                .header("Authorization", token)
                 .build();
 
         return client.newCall(request);

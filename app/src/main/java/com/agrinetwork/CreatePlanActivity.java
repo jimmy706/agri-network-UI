@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.plan.Plan;
+import com.agrinetwork.helpers.SessionStatusRetriever;
 import com.agrinetwork.service.PlanService;
 import com.agrinetwork.ui.plan.PlanCreationStepperAdapter;
 import com.stepstone.stepper.StepperLayout;
@@ -48,7 +49,6 @@ public class CreatePlanActivity extends AppCompatActivity implements StepperLayo
 
     @Override
     public void onCompleted(View completeButton) {
-
     }
 
     @Override

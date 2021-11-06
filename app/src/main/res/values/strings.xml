@@ -68,7 +68,6 @@
     <string name="sort_product_date"> Ngày đăng</string>
 
 
-
     <string name="post_title">Bài đăng</string>
     <string name="write_comment_acction_hint">Nhập bình luận</string>
     <string name="empty_comment">Chưa có bình luận nào tại đây</string>
@@ -162,6 +161,10 @@
     <string name="plan.creation.step.next">Tiếp theo</string>
     <string name="plan.creation.step.prev">Trở về</string>
     <string name="plan.creation.step.complete">Xong</string>
+    <string name="plan.creation.sample.step.1.title">Chọn mẫu</string>
+    <string name="plan.creation.sample.step.1.startDate.label">Ngày bắt đầu</string>
+    <string name="plan.creation.sample.step.1.pickSample.label">Mẫu kế hoạch</string>
+    <string name="plan.creation.sample.step.2.title">Thông tin kế hoạch</string>
 
     <string name="plan.detail.title">Kế hoạch sản xuất</string>
     <string name="plan.detail.progress">Tiến trình</string>
@@ -170,5 +173,11 @@
     <string name="products.view.title">Danh sách sản phẩm</string>
     <string name="products.navigation.toggler">Mở</string>
     <string name="products.navigation.close">Đóng</string>
+
+    <string name="dialog.pick_create_plan.title">Chọn nguồn tạo kế hoạch sản xuất</string>
+    <string name="dialog.pick_create_plan.my_source">Tạo mới hoàn toàn</string>
+    <string name="dialog.pick_create_plan.from_sample">Từ mẫu sẵn</string>
+    <string name="dialog.action.done">Xong</string>
+    <string name="title_activity_create_plan_from_sample">CreatePlanFromSampleActivity</string>
 
 </resources>

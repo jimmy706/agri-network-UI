@@ -21,6 +21,9 @@
         android:theme="@style/Theme.AgriNetwork"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".CreatePlanFromSampleActivity"
+            android:exported="true" />
+        <activity
             android:name=".PlanInfoActivity"
             android:exported="true" />
         <activity
@@ -72,7 +75,6 @@
         <activity
             android:name=".ProductDetailActivity"
             android:exported="true" />
-
         <activity
             android:name=".FollowActivity"
             android:exported="true" />
