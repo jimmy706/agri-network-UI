@@ -70,5 +70,6 @@ public class PlanCreationFromSampleStepperAdapter extends AbstractFragmentStepAd
 
         this.pickedSampleId = sampleId;
         this.startDate = startDate;
+        onStepDoneListener.onDone(0);
     }
 }

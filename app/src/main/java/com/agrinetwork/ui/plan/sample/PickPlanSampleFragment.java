@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.agrinetwork.R;
 import com.agrinetwork.components.PlanSampleAdapter;
@@ -121,7 +122,12 @@ public class PickPlanSampleFragment extends Fragment implements Step {
     @Nullable
     @Override
     public VerificationError verifyStep() {
-        return null;
+        String startDate = startDatePicker.getText().toString();
+        if (!startDate.isEmpty() && pickedPlanSampleId != null && !pickedPlanSampleId.isEmpty()) {
+            return null;
+        }
+
+        return new VerificationError("Vui lòng chọn ngày và kế hoạch mẫu");
     }
 
     @Override
@@ -131,7 +137,7 @@ public class PickPlanSampleFragment extends Fragment implements Step {
 
     @Override
     public void onError(@NonNull VerificationError error) {
-
+        Toast.makeText(getContext(), "Vui lòng chọn ngày và kế hoạch mẫu", Toast.LENGTH_SHORT).show();
     }
 
     private void fetchSamples() {
@@ -149,10 +155,8 @@ public class PickPlanSampleFragment extends Fragment implements Step {
         try {
             List<PlanSample> planSamplesResponse = future.get();
             if (planSamplesResponse != null && !planSamplesResponse.isEmpty()) {
-                pickedPlanSampleId = planSamplesResponse.get(0).get_id();
                 planSamples.addAll(planSamplesResponse);
                 planSampleAdapter.notifyDataSetChanged();
-                onPickPlanSampleListener.onPick(pickedPlanSampleId, now);
             }
         } catch (Exception e) {
             e.printStackTrace();
