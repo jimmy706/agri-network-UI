@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -230,7 +231,7 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
         String content = post.getContent();
-        context.setText(content);
+        context.setText(Html.fromHtml(content));
 
         String numberOfComments = Integer.toString(post.getNumberOfComments());
         String numberOfReactions = Integer.toString(post.getNumberOfReactions());

@@ -23,6 +23,7 @@ import com.agrinetwork.R;
 import com.agrinetwork.components.RecommendUserDemandAdapter;
 
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.entities.InterestTopic;
 import com.agrinetwork.entities.RecommendUserDemand;
 
 import com.agrinetwork.service.RecommendService;
@@ -45,7 +46,7 @@ public class UserDemandFragment extends Fragment {
     private static final String ARG_TITLE = "title";
     private final Gson gson = new Gson();
 
-    private final List<RecommendUserDemand> recommendUserDemandList = new ArrayList<>();
+    private final List<InterestTopic> recommendUserDemandList = new ArrayList<>();
     private RecommendUserDemandAdapter recommendUserDemandAdapter;
     private RecommendService recommendService;
     private String token;
@@ -111,10 +112,9 @@ public class UserDemandFragment extends Fragment {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if(response.code()==200){
                     String responseUserDemand = response.body().string();
-                    System.out.println(responseUserDemand);
 
-                    Type userDemandType = new TypeToken<List<RecommendUserDemand>>(){}.getType();
-                    List<RecommendUserDemand> userDemandList = gson.fromJson(responseUserDemand,userDemandType);
+                    Type userDemandType = new TypeToken<List<InterestTopic>>(){}.getType();
+                    List<InterestTopic> userDemandList = gson.fromJson(responseUserDemand,userDemandType);
                     getActivity().runOnUiThread(()-> {
                         if(!userDemandList.isEmpty()) {
                             recommendUserDemandList.addAll(userDemandList);
