@@ -179,5 +179,7 @@
     <string name="dialog.pick_create_plan.from_sample">Từ mẫu sẵn</string>
     <string name="dialog.action.done">Xong</string>
     <string name="title_activity_create_plan_from_sample">CreatePlanFromSampleActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -22,13 +22,23 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.UserDetail;
 import com.agrinetwork.service.MediaService;
 import com.agrinetwork.service.UserService;
+import com.agrinetwork.ui.profile.MenuOwnFragment;
+import com.agrinetwork.ui.profile.OwnPlansFragment;
+import com.agrinetwork.ui.profile.OwnPostFragment;
+import com.agrinetwork.ui.profile.OwnProductFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +48,11 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+
 public class UserWallActivity extends AppCompatActivity {
+    private static final int[] TAB_TITLES = {R.string.tab_own_post, R.string.tab_own_product, R.string.plan};
+    private static final int NUM_PAGES = 3;
+
     private UserService userService;
     private SharedPreferences sharedPreferences;
 
@@ -48,6 +62,11 @@ public class UserWallActivity extends AppCompatActivity {
     private ToggleButton followBtn;
     private LinearLayout friendRequestWrapper, interactBtnWrapper;
     private RelativeLayout friendCounterWrapper,followingCounterWrapper,followerCounterWrapper;
+    private ViewPager2 viewPager;
+    private TabLayout tabLayout;
+    private FragmentStateAdapter stateAdapter;
+    private String userId;
+
 
     private boolean isOwner;
     private UserDetail user;
@@ -77,7 +96,7 @@ public class UserWallActivity extends AppCompatActivity {
         mediaService = new MediaService(this);
 
         Intent intent = getIntent();
-        String userId =  intent.getExtras().getString("userId");
+        userId =  intent.getExtras().getString("userId");
 
         sharedPreferences = getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         String userIdLogin =  sharedPreferences.getString(Variables.CURRENT_LOGIN_USER_ID,"");
@@ -95,7 +114,6 @@ public class UserWallActivity extends AppCompatActivity {
         });
 
         btnEdit = findViewById(R.id.btn_edit);
-
         interactBtnWrapper = findViewById(R.id.interact_buttons_wrapper);
         if (isOwner) {
             btnEdit.setVisibility(View.VISIBLE);
@@ -197,6 +215,19 @@ public class UserWallActivity extends AppCompatActivity {
             startActivity(intentFollower);
         });
 
+        viewPager = findViewById(R.id.pager);
+        tabLayout = findViewById(R.id.tab);
+        stateAdapter = new UserWallPageAdapter(this);
+        viewPager.setAdapter(stateAdapter);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            tab.setText(getString(TAB_TITLES[position]));
+        }).attach();
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+            }
+        });
 
         fetchUserDetail(userId);
     }
@@ -470,6 +501,34 @@ public class UserWallActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private class UserWallPageAdapter extends FragmentStateAdapter {
+
+        public UserWallPageAdapter(@NonNull FragmentActivity fragment) {
+            super(fragment);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            String title = getString(TAB_TITLES[position]);
+            switch (position) {
+                case 0:
+                    return OwnPostFragment.newInstance(title, userId);
+                case 1:
+                    return OwnProductFragment.newInstance(title, userId);
+                case 2:
+                    return OwnPlansFragment.newInstance(userId);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return NUM_PAGES;
+        }
     }
 
 }

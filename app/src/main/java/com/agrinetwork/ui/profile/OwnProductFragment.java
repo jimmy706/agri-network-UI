@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.R;
-import com.agrinetwork.components.ProductAdapter;
 import com.agrinetwork.components.ProductOwnAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PaginationResponse;
@@ -37,13 +36,14 @@ import okhttp3.Response;
 
 public class OwnProductFragment extends Fragment {
     private static final String ARG_TITLE = "title";
+    private static final String ARG_USER_ID = "userId";
     private ProductService productService;
     private PaginationResponse<Product> productPaginationResponse;
     private List<Product>productList = new ArrayList<>();
     private ProductOwnAdapter productAdapter;
     private String title;
     private String token;
-    private String currentLoginUserId;
+    private String userWallId;
     private ProductService.SearchProductCriteria idOwn;
     private int page = 1;
     private final Gson gson = new Gson();
@@ -55,10 +55,11 @@ public class OwnProductFragment extends Fragment {
 
     }
 
-    public static OwnProductFragment newInstance(String title){
+    public static OwnProductFragment newInstance(String title, String userId){
         OwnProductFragment ownProductFragment = new OwnProductFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
+        args.putString(ARG_USER_ID, userId);
         ownProductFragment.setArguments(args);
         return ownProductFragment;
     }
@@ -67,7 +68,9 @@ public class OwnProductFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.title = getArguments().getString(ARG_TITLE);
+            Bundle bundle = getArguments();
+            this.title = bundle.getString(ARG_TITLE);
+            this.userWallId = bundle.getString(ARG_USER_ID);
         }
     }
 
@@ -78,10 +81,9 @@ public class OwnProductFragment extends Fragment {
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
-        currentLoginUserId = sharedPref.getString(Variables.CURRENT_LOGIN_USER_ID, "");
         productService = new ProductService(getContext());
         idOwn = new ProductService.SearchProductCriteria();
-        idOwn.setOwner(currentLoginUserId);
+        idOwn.setOwner(userWallId);
         idOwn.setPage(page);
 
         showTextNoProduct = root.findViewById(R.id.no_product);

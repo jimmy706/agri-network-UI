@@ -21,7 +21,6 @@ import com.agrinetwork.components.PostAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PaginationResponse;
 import com.agrinetwork.entities.PostItem;
-import com.agrinetwork.entities.Product;
 import com.agrinetwork.service.PostService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,7 +29,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,6 +36,7 @@ import okhttp3.Response;
 
 public class OwnPostFragment extends Fragment {
     private static final String ARG_TITLE = "title";
+    private  static final String ARG_USER_ID = "userId";
     private String title;
     private PostService postService;
     private int page = 1;
@@ -45,7 +44,7 @@ public class OwnPostFragment extends Fragment {
     private boolean hasNext = false;
     private  List<PostItem> postList = new ArrayList<>();
     private int limit = Variables.DEFAULT_LIMIT_POST;
-    private String currentLoginUserId;
+    private String userWallId;
     private RecyclerView postFromOwn;
     private final Gson gson = new Gson();
     private PaginationResponse<PostItem> postPaginationResponse;
@@ -55,10 +54,11 @@ public class OwnPostFragment extends Fragment {
 
     }
 
-    public static OwnPostFragment newInstance(String title){
+    public static OwnPostFragment newInstance(String title, String userId) {
         OwnPostFragment ownPostFragment = new OwnPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, title);
+        args.putString(ARG_USER_ID, userId);
         ownPostFragment.setArguments(args);
         return ownPostFragment;
     }
@@ -67,7 +67,9 @@ public class OwnPostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.title = getArguments().getString(ARG_TITLE);
+            Bundle bundle = getArguments();
+            this.title = bundle.getString(ARG_TITLE);
+            this.userWallId = bundle.getString(ARG_USER_ID);
         }
     }
 
@@ -78,7 +80,6 @@ public class OwnPostFragment extends Fragment {
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
-        currentLoginUserId = sharedPref.getString(Variables.CURRENT_LOGIN_USER_ID, "");
 
         postService = new PostService(getContext());
         postFromOwn = root.findViewById(R.id.list_post_own);
@@ -110,7 +111,7 @@ public class OwnPostFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void fetchPostFromOwn(){
-        Call getPostFromOwn = postService.getPostsFromUser(token,currentLoginUserId,page,limit);
+        Call getPostFromOwn = postService.getPostsFromUser(token, userWallId,page,limit);
         getPostFromOwn.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -148,7 +149,7 @@ public class OwnPostFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadMorePostsOwn(){
         page += 1;
-        Call getPostFromOwn = postService.getPostsFromUser(token,currentLoginUserId,page,limit);
+        Call getPostFromOwn = postService.getPostsFromUser(token, userWallId,page,limit);
         getPostFromOwn.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {

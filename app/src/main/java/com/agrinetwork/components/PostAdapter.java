@@ -268,7 +268,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         Map<String, String> attributes = new AttributesConverter(postItem.getAttributes()).toMap();
         viewHolder.planWrapper.setVisibility(View.VISIBLE);
         Plan plan = new AttributesToPlanConverter(attributes).toPlan();
-        System.out.println(plan);
 
         SimpleDateFormat sdf = new SimpleDateFormat(Variables.DATE_FORMAT, new Locale("vi", "VI"));
         viewHolder.planName.setText(plan.getName());
