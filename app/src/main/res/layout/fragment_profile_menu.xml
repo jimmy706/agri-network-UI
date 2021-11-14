@@ -126,14 +126,7 @@
 
             </RelativeLayout>
         </LinearLayout>
-
-
-
-
-
-
     </RelativeLayout>
-
 
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"

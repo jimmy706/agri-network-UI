@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:id="@+id/app_bar">
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/back"
@@ -27,7 +27,6 @@
             android:id="@+id/user_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/app_bar"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -172,15 +171,17 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/email_wrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/contact_wrapper"
-                android:id="@+id/email_wrapper">
+                android:layout_below="@+id/contact_wrapper">
+
                 <ImageView
                     android:layout_width="14dp"
                     android:layout_height="20dp"
                     android:layout_marginEnd="5dp"
                     android:src="@drawable/ic_mail" />
+
                 <TextView
                     android:id="@+id/email"
                     android:layout_width="wrap_content"
@@ -305,10 +306,14 @@
 
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/user_posts"
+        <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/user_info" />
-    </RelativeLayout>
-</ScrollView>
+            android:layout_height="match_parent"
+            android:id="@+id/tab"
+            />
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/pager"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

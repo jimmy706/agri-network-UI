@@ -99,13 +99,13 @@ public class ProfileMenuFragment extends Fragment {
             String title = getString(TAB_TITLES[position]);
             switch (position) {
                 case 0:
-                    return MenuOwnFragment.newInstance(title);
+                    return MenuOwnFragment.newInstance(title, currentLoginUserId);
                 case 1:
-                    return OwnProductFragment.newInstance(title);
+                    return OwnProductFragment.newInstance(title, currentLoginUserId);
                 case 2:
-                    return OwnPostFragment.newInstance(title);
+                    return OwnPostFragment.newInstance(title, currentLoginUserId);
                 case 3:
-                    return OwnPlansFragment.newInstance();
+                    return OwnPlansFragment.newInstance(currentLoginUserId);
                 default:
                     return null;
             }

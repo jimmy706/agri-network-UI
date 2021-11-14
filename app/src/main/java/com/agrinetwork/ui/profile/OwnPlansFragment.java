@@ -35,9 +35,9 @@ import okhttp3.Response;
 
 
 public class OwnPlansFragment extends Fragment {
-
+    private static final String USER_ID_ARG = "userId";
+    private String userWallId;
     private String token;
-    private String currentUserId;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private PlanService planService;
     private final List<Plan> plans = new ArrayList<>();
@@ -48,13 +48,21 @@ public class OwnPlansFragment extends Fragment {
     }
 
 
-    public static OwnPlansFragment newInstance() {
-        return new OwnPlansFragment();
+    public static OwnPlansFragment newInstance(String userId) {
+        OwnPlansFragment ownPlansFragment = new OwnPlansFragment();
+        Bundle args = new Bundle();
+        args.putString(USER_ID_ARG, userId);
+        ownPlansFragment.setArguments(args);
+        return ownPlansFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            Bundle bundle = getArguments();
+            this.userWallId = bundle.getString(USER_ID_ARG);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -63,7 +71,6 @@ public class OwnPlansFragment extends Fragment {
                              Bundle savedInstanceState) {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(Variables.SHARED_TOKENS, Context.MODE_PRIVATE);
         token = sharedPref.getString(Variables.ID_TOKEN_LABEL, "");
-        currentUserId = sharedPref.getString(Variables.CURRENT_LOGIN_USER_ID, "");
 
         View view = inflater.inflate(R.layout.fragment_own_plans, container, false);
         planService = new PlanService(getContext());
@@ -81,7 +88,7 @@ public class OwnPlansFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void fetchData() {
         PlanService.SearchPlanCriteria criteria = new PlanService.SearchPlanCriteria();
-        criteria.setOwner(currentUserId);
+        criteria.setOwner(userWallId);
 
         Future<List<Plan>> futurePlans = executorService.submit(() -> {
             Call call = planService.searchPlan(token, criteria);
