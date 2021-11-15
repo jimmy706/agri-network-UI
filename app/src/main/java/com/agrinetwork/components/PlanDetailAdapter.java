@@ -43,12 +43,12 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<PlanDetailAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PlanDetail planDetail = planDetails.get(position);
-
         holder.name.setText(planDetail.getName());
 
         try {
             String startDate = sdf.format(planDetail.getFrom());
             String endDate = sdf.format(planDetail.getTo());
+
             holder.dueDate.setText(startDate + " - " + endDate);
         } catch (Exception e) {
             e.printStackTrace();
