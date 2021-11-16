@@ -4,20 +4,16 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.plan.Plan;
 import com.agrinetwork.entities.plan.PlanDetail;
-import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class AttributesToPlanConverter {
@@ -27,7 +23,6 @@ public class AttributesToPlanConverter {
     private static final String PLAN_DETAILS_FIELD = "planDetails";
     private static final String DOT = ".";
     private static final String COUNT_STEP_FIELD = "countStep";
-    private final Gson gson = new Gson();
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     private Map<String, String> attributes;
@@ -37,9 +32,6 @@ public class AttributesToPlanConverter {
     }
 
     public Plan toPlan() {
-        for(Map.Entry<String, String> entry : attributes.entrySet()) {
-            System.out.println("key: " + entry.getKey() + ", value: " + entry.getValue());
-        }
         Plan plan = new Plan();
         plan.setName(attributes.getOrDefault(NAME_FIELD, ""));
         if (attributes.containsKey(FROM_FIELD) && attributes.containsKey(TO_FIELD)) {
@@ -74,7 +66,7 @@ public class AttributesToPlanConverter {
         result.setName(attributes.getOrDefault(PLAN_DETAILS_FIELD + DOT + index + DOT + NAME_FIELD, ""));
         try {
             result.setFrom(sdf.parse(attributes.get(PLAN_DETAILS_FIELD + DOT + index + DOT + FROM_FIELD)));
-            result.setFrom(sdf.parse(attributes.get(PLAN_DETAILS_FIELD + DOT + index + DOT + TO_FIELD)));
+            result.setTo(sdf.parse(attributes.get(PLAN_DETAILS_FIELD + DOT + index + DOT + TO_FIELD)));
         } catch (Exception e) {
             e.printStackTrace();
         }

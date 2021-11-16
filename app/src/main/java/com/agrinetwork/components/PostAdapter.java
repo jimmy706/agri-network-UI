@@ -23,9 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.agrinetwork.PlanInfoActivity;
 import com.agrinetwork.PostDetailActivity;
-import com.agrinetwork.ProductDetailActivity;
 import com.agrinetwork.UserWallActivity;
 import com.agrinetwork.R;
 
