@@ -6,7 +6,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.agrinetwork.config.Variables;
-import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.product.Product;
 import com.agrinetwork.helpers.UrlHelper;
 import com.google.gson.Gson;
 

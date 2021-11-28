@@ -1,5 +1,7 @@
 package com.agrinetwork.entities.plan;
 
+import com.agrinetwork.entities.product.SampleProduct;
+
 import java.util.Date;
 import java.util.List;
 
@@ -18,4 +20,5 @@ public class Plan {
     private HarvestProduct result;
     private float progress;
     private String status;
+    private List<SampleProduct> sampleResults;
 }

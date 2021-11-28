@@ -1,4 +1,8 @@
-package com.agrinetwork.entities;
+package com.agrinetwork.entities.product;
+import com.agrinetwork.entities.ProductCategory;
+import com.agrinetwork.entities.User;
+import com.agrinetwork.entities.product.Product;
+
 import java.util.Date;
 import java.util.List;
 

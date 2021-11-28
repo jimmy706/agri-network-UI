@@ -4,13 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 
 import com.agrinetwork.R;
-import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.product.Product;
 
 import java.util.List;
 

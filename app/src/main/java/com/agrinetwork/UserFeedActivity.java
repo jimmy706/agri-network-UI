@@ -249,7 +249,6 @@ public class UserFeedActivity extends AppCompatActivity {
         try {
             List<Plan> plans = future.get();
             if (plans != null && !plans.isEmpty()) {
-                System.out.println(Arrays.toString(plans.toArray()));
                 int countExpiredButNotHarvest = 0;
                 for (Plan plan : plans) {
                     if (PlanStatus.EXPIRED.getLabel().equals(plan.getStatus())) {

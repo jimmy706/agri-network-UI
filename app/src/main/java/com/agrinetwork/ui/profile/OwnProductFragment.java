@@ -20,7 +20,7 @@ import com.agrinetwork.R;
 import com.agrinetwork.components.ProductOwnAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PaginationResponse;
-import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.product.Product;
 import com.agrinetwork.service.ProductService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

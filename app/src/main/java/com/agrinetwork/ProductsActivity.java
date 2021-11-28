@@ -24,7 +24,7 @@ import com.agrinetwork.components.ProductCategoryMenuAdapter;
 import com.agrinetwork.components.ProductOwnAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.entities.PaginationResponse;
-import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.product.Product;
 import com.agrinetwork.entities.ProductCategory;
 import com.agrinetwork.service.CategoryService;
 import com.agrinetwork.service.ProductService;

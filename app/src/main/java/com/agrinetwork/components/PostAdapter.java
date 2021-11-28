@@ -311,8 +311,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         numberFormat.setMaximumFractionDigits(0);
 
         if(attributes.get("price")!= null){
-            String price = attributes.get("price").trim();
-            holder.productPrice.setText(numberFormat.format(Double.parseDouble(price)));
+            double price = Double.parseDouble(attributes.get("price").trim());
+            if (price > 0) {
+                holder.productPrice.setText(numberFormat.format(price));
+            } else {
+                holder.productPrice.setVisibility(View.GONE);
+            }
         }
     }
 
