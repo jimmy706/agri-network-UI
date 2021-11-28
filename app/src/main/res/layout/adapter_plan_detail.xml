@@ -14,6 +14,11 @@
             android:orientation="vertical"
             android:padding="10dp">
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giai đoạn"
+                android:id="@+id/step_title"/>
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/plan_detail_name"

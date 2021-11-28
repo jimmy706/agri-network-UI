@@ -45,6 +45,8 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<PlanDetailAdapter.Vi
         PlanDetail planDetail = planDetails.get(position);
         holder.name.setText(planDetail.getName());
 
+        holder.stepTitle.setText("Giai đoạn " + (position + 1) +":");
+
         try {
             String startDate = sdf.format(planDetail.getFrom());
             String endDate = sdf.format(planDetail.getTo());
@@ -70,7 +72,7 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<PlanDetailAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView name, dueDate;
+        private final TextView name, dueDate, stepTitle;
         private final RecyclerView neededList;
         private final LinearLayout neededWrapper;
         public ViewHolder(@NonNull View itemView) {
@@ -79,6 +81,7 @@ public class PlanDetailAdapter extends RecyclerView.Adapter<PlanDetailAdapter.Vi
             dueDate = itemView.findViewById(R.id.plan_detail_duedate);
             neededList = itemView.findViewById(R.id.needed_list);
             neededWrapper = itemView.findViewById(R.id.needed_wrapper);
+            stepTitle = itemView.findViewById(R.id.step_title);
         }
     }
 }

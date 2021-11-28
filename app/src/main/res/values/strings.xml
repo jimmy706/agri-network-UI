@@ -154,6 +154,7 @@
     <string name="plan.creation.step.1.label.fromDate">Từ ngày</string>
     <string name="plan.creation.step.1.label.toDate">Đến ngày</string>
     <string name="plan.creation.step.2.title">Giai đoạn sản xuất</string>
+    <string name="plan.creation.step.2.sample_product">Sản phẩm mẫu dự kiến thu được</string>
     <string name="plan.creation.step.2.plan_detail.name">Tên giai đoạn</string>
     <string name="plan.creation.step.2.add_plan_detail">Thêm giai đoạn</string>
     <string name="plan.creation.step.2.add_needed">Thêm nhu cầu</string>
@@ -177,9 +178,11 @@
     <string name="dialog.pick_create_plan.title">Chọn nguồn tạo kế hoạch sản xuất</string>
     <string name="dialog.pick_create_plan.my_source">Tạo mới hoàn toàn</string>
     <string name="dialog.pick_create_plan.from_sample">Từ mẫu sẵn</string>
+    <string name="dialog.pick_create_prod_method.title">Chọn phương pháp tạo sản phẩm</string>
+    <string name="dialog.pick_create_prod_method.my_source">Tạo mới hoàn toàn</string>
+    <string name="dialog.pick_create_prod_method.from_sample">Từ mẫu sẵn</string>
     <string name="dialog.action.done">Xong</string>
     <string name="title_activity_create_plan_from_sample">CreatePlanFromSampleActivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

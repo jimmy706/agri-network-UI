@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.agrinetwork.ProductDetailActivity;
 import com.agrinetwork.R;
-import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.product.Product;
 import com.agrinetwork.helpers.CurrencyFormatter;
 import com.squareup.picasso.Picasso;
 
@@ -57,7 +57,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.name.setText(productName);
 
         double productPrice = product.getPrice();
-        holder.price.setText(CurrencyFormatter.format(productPrice) + CurrencyFormatter.CURRENCY_SUFFIX);
+        if (productPrice > 0) {
+            holder.price.setText(CurrencyFormatter.format(productPrice) + CurrencyFormatter.CURRENCY_SUFFIX);
+        } else {
+            holder.price.setVisibility(View.GONE);
+        }
 
         int productViews = product.getNumberOfViews();
         holder.views.setText(Integer.toString(productViews));

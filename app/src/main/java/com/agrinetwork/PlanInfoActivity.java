@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,19 +13,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.agrinetwork.components.PlanAdapter;
 import com.agrinetwork.components.PlanDetailAdapter;
+import com.agrinetwork.components.SampleProductAdapter;
+import com.agrinetwork.components.dialog.PickCreateProductFromPlanMethodDialog;
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.decorator.HorizontalProductSpacingItemDecorator;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.entities.plan.HarvestProduct;
 import com.agrinetwork.entities.plan.Plan;
 import com.agrinetwork.entities.plan.PlanDetail;
 import com.agrinetwork.entities.plan.PlanInformation;
 import com.agrinetwork.entities.plan.PlanStatus;
+import com.agrinetwork.entities.product.SampleProduct;
 import com.agrinetwork.service.PlanService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -51,12 +57,12 @@ public class PlanInfoActivity extends AppCompatActivity {
     private PlanService planService;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-
     private TextView planName, userDisplayName, harvestProductName, quantityIntent, stepCount, progressPercent, dueDate;
     private ProgressBar progressBar;
     private CircleImageView userAvatar;
-    private RecyclerView planDetailList;
+    private RecyclerView planDetailList, sampleProductList;
     private MaterialButton addProductBtn;
+    private LinearLayout sampleProductWrapper;
 
     private PlanInformation planState;
 
@@ -83,6 +89,8 @@ public class PlanInfoActivity extends AppCompatActivity {
         progressPercent = findViewById(R.id.progress_percent);
         progressBar = findViewById(R.id.progress);
         planDetailList = findViewById(R.id.plan_details);
+        sampleProductList = findViewById(R.id.sample_products);
+        sampleProductWrapper = findViewById(R.id.sample_product_wrapper);
         dueDate = findViewById(R.id.plan_duedate);
         addProductBtn = findViewById(R.id.add_product_btn);
 
@@ -163,16 +171,34 @@ public class PlanInfoActivity extends AppCompatActivity {
         if (isExpired && isOwner) {
             addProductBtn.setVisibility(View.VISIBLE);
             addProductBtn.setOnClickListener(v -> {
-                Intent intent = new Intent(this, CreateProductActivity.class);
-                intent.putExtra("planId", planState.get_id());
+                Dialog pickCreateProdMethodDialog = new PickCreateProductFromPlanMethodDialog(this, (pickedMethod)-> {
+                    Intent intent;
+                    if (pickedMethod.equals(PickCreateProductFromPlanMethodDialog.PickCreateProductMethods.FROM_SOURCE)) {
+                        intent = new Intent(this, CreateProductActivity.class);
+                        intent.putExtra("planId", planState.get_id());
 
-                intent.putExtra("name", harvestProduct.getName());
-                intent.putExtra("quantity", harvestProduct.getQuantity());
-                intent.putExtra("quantityType", harvestProduct.getQuantity());
-                startActivity(intent);
+                        intent.putExtra("name", harvestProduct.getName());
+                        intent.putExtra("quantity", harvestProduct.getQuantity());
+                        intent.putExtra("quantityType", harvestProduct.getQuantity());
+                    } else {
+                        intent = new Intent(this, CreateProductFromSampleActivity.class);
+                        intent.putExtra("planId", planState.get_id());
+                    }
+                    startActivity(intent);
+                });
+                pickCreateProdMethodDialog.show();
             });
         } else {
             addProductBtn.setVisibility(View.GONE);
+        }
+
+        List<SampleProduct> sampleProducts = plan.getSampleResults();
+        if (sampleProducts != null && !sampleProducts.isEmpty()) {
+            sampleProductList.setAdapter(new SampleProductAdapter(this, sampleProducts));
+            sampleProductList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            sampleProductList.addItemDecoration(new HorizontalProductSpacingItemDecorator(20));
+        } else {
+            sampleProductWrapper.setVisibility(View.GONE);
         }
     }
 }

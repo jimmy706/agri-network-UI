@@ -1,6 +1,6 @@
 package com.agrinetwork.entities.response;
 
-import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.product.Product;
 
 import java.util.List;
 

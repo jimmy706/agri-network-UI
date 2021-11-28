@@ -431,8 +431,12 @@ public class PostDetailActivity extends AppCompatActivity {
         numberFormat.setMaximumFractionDigits(0);
 
         if(attributes.get("price")!= null){
-            String price = attributes.get("price").trim();
-            productPrice.setText(numberFormat.format(Double.parseDouble(price)));
+            double price = Double.parseDouble(attributes.get("price").trim());
+            if (price > 0) {
+                productPrice.setText(numberFormat.format(price));
+            } else {
+                productPrice.setVisibility(View.GONE);
+            }
         }
         productRefWrapper.setOnClickListener(v -> {
             Intent intent = new Intent(this, ProductDetailActivity.class);

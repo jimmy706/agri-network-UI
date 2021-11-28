@@ -23,9 +23,9 @@ import com.agrinetwork.components.ProductAdapter;
 import com.agrinetwork.components.SliderAdapter;
 import com.agrinetwork.config.Variables;
 import com.agrinetwork.decorator.HorizontalProductSpacingItemDecorator;
-import com.agrinetwork.entities.Product;
+import com.agrinetwork.entities.product.Product;
 import com.agrinetwork.entities.ProductCategory;
-import com.agrinetwork.entities.ProductDetail;
+import com.agrinetwork.entities.product.ProductDetail;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.helpers.CurrencyFormatter;
 import com.agrinetwork.service.ProductService;
@@ -166,8 +166,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         String quantityFormat = productDetail.getQuantity() + " "+ productDetail.getQuantityType();
         quantity.setText(quantityFormat);
 
-        String priceText = CurrencyFormatter.format(productDetail.getPrice()) + CurrencyFormatter.CURRENCY_SUFFIX;
-        price.setText(priceText);
+        double productPrice = productDetail.getPrice();
+        if (productPrice > 0) {
+            String priceText = CurrencyFormatter.format(productPrice) + CurrencyFormatter.CURRENCY_SUFFIX;
+            price.setText(priceText);
+        }
 
         String numOfView = Integer.toString(productDetail.getNumberOfViews());
         numView.setText(numOfView);
@@ -175,7 +178,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String postProductDate = dateFormat.format(productDetail.getCreatedDate());
         dateCreate.setText(postProductDate);
 
-         own = productDetail.getOwner();
+        own = productDetail.getOwner();
         String fullName = own.getFirstName() + " " + own.getLastName();
         userId = own.get_id();
         userName.setText(fullName);

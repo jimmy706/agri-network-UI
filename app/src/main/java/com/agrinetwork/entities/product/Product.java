@@ -1,4 +1,4 @@
-package com.agrinetwork.entities;
+package com.agrinetwork.entities.product;
 
 import java.util.Date;
 

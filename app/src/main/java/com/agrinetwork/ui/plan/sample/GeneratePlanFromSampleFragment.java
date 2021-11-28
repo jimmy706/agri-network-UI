@@ -20,11 +20,14 @@ import android.widget.Toast;
 
 import com.agrinetwork.R;
 import com.agrinetwork.components.PlanDetailAdapter;
+import com.agrinetwork.components.SampleProductAdapter;
 import com.agrinetwork.config.Variables;
+import com.agrinetwork.decorator.HorizontalProductSpacingItemDecorator;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.entities.plan.HarvestProduct;
 import com.agrinetwork.entities.plan.Plan;
 import com.agrinetwork.entities.plan.PlanDetail;
+import com.agrinetwork.entities.product.SampleProduct;
 import com.agrinetwork.service.PlanService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -63,7 +66,7 @@ public class GeneratePlanFromSampleFragment extends Fragment implements Step {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private TextView planName, harvestProductName, quantityIntent, stepCount, dueDate;
-    private RecyclerView planDetailList;
+    private RecyclerView planDetailList, productSampleList;
 
     public GeneratePlanFromSampleFragment() {
     }
@@ -90,6 +93,7 @@ public class GeneratePlanFromSampleFragment extends Fragment implements Step {
         stepCount = view.findViewById(R.id.plan_detail_count);
         planDetailList = view.findViewById(R.id.plan_details);
         dueDate = view.findViewById(R.id.plan_duedate);
+        productSampleList = view.findViewById(R.id.sample_products);
 
         return view;
     }
@@ -132,7 +136,6 @@ public class GeneratePlanFromSampleFragment extends Fragment implements Step {
 
     @SuppressLint("SetTextI18n")
     private void renderOverview() {
-        System.out.println(plan);
         if (plan != null) {
             SimpleDateFormat sdf = new SimpleDateFormat(Variables.DATE_FORMAT, new Locale("vi", "VI"));
             planName.setText(plan.getName());
@@ -149,6 +152,11 @@ public class GeneratePlanFromSampleFragment extends Fragment implements Step {
             stepCount.setText(Integer.toString(planDetails.size()));
             planDetailList.setAdapter(new PlanDetailAdapter(getContext(), planDetails));
             planDetailList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            List<SampleProduct> sampleProducts = plan.getSampleResults();
+            productSampleList.setAdapter(new SampleProductAdapter(getContext(), sampleProducts));
+            productSampleList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            productSampleList.addItemDecoration(new HorizontalProductSpacingItemDecorator(20));
         }
     }
 
