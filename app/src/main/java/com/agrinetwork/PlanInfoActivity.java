@@ -171,22 +171,20 @@ public class PlanInfoActivity extends AppCompatActivity {
         if (isExpired && isOwner) {
             addProductBtn.setVisibility(View.VISIBLE);
             addProductBtn.setOnClickListener(v -> {
-                Dialog pickCreateProdMethodDialog = new PickCreateProductFromPlanMethodDialog(this, (pickedMethod)-> {
-                    Intent intent;
-                    if (pickedMethod.equals(PickCreateProductFromPlanMethodDialog.PickCreateProductMethods.FROM_SOURCE)) {
-                        intent = new Intent(this, CreateProductActivity.class);
-                        intent.putExtra("planId", planState.get_id());
-
-                        intent.putExtra("name", harvestProduct.getName());
-                        intent.putExtra("quantity", harvestProduct.getQuantity());
-                        intent.putExtra("quantityType", harvestProduct.getQuantity());
-                    } else {
-                        intent = new Intent(this, CreateProductFromSampleActivity.class);
-                        intent.putExtra("planId", planState.get_id());
-                    }
-                    startActivity(intent);
-                });
-                pickCreateProdMethodDialog.show();
+                if (!plan.getSampleResults().isEmpty()) {
+                    Dialog pickCreateProdMethodDialog = new PickCreateProductFromPlanMethodDialog(this, (pickedMethod)-> {
+                        if (pickedMethod.equals(PickCreateProductFromPlanMethodDialog.PickCreateProductMethods.FROM_SOURCE)) {
+                           startCreateProductActivity();
+                        } else {
+                            Intent intent = new Intent(this, CreateProductFromSampleActivity.class);
+                            intent.putExtra("planId", planState.get_id());
+                            startActivity(intent);
+                        }
+                    });
+                    pickCreateProdMethodDialog.show();
+                } else  {
+                    startCreateProductActivity();
+                }
             });
         } else {
             addProductBtn.setVisibility(View.GONE);
@@ -200,5 +198,16 @@ public class PlanInfoActivity extends AppCompatActivity {
         } else {
             sampleProductWrapper.setVisibility(View.GONE);
         }
+    }
+
+    private void startCreateProductActivity() {
+        Intent intent = new Intent(this, CreateProductActivity.class);
+        intent.putExtra("planId", planState.get_id());
+
+        HarvestProduct harvestProduct = planState.getResult();
+
+        intent.putExtra("name", harvestProduct.getName());
+        intent.putExtra("quantity", harvestProduct.getQuantity());
+        intent.putExtra("quantityType", harvestProduct.getQuantity());
     }
 }
