@@ -5,7 +5,7 @@ public class Variables {
 
 
 
-    public static final String SERVICE_DOMAIN = "http://192.168.3.101:3000/api";
+    public static final String SERVICE_DOMAIN = "http://192.168.3.100:3000/api";
 
 
 
