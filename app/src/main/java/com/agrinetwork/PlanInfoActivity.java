@@ -1,9 +1,5 @@
 package com.agrinetwork;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -11,14 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.agrinetwork.components.PlanAdapter;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.agrinetwork.components.PlanDetailAdapter;
 import com.agrinetwork.components.SampleProductAdapter;
 import com.agrinetwork.components.dialog.PickCreateProductFromPlanMethodDialog;
@@ -26,7 +22,6 @@ import com.agrinetwork.config.Variables;
 import com.agrinetwork.decorator.HorizontalProductSpacingItemDecorator;
 import com.agrinetwork.entities.User;
 import com.agrinetwork.entities.plan.HarvestProduct;
-import com.agrinetwork.entities.plan.Plan;
 import com.agrinetwork.entities.plan.PlanDetail;
 import com.agrinetwork.entities.plan.PlanInformation;
 import com.agrinetwork.entities.plan.PlanStatus;
@@ -209,5 +204,6 @@ public class PlanInfoActivity extends AppCompatActivity {
         intent.putExtra("name", harvestProduct.getName());
         intent.putExtra("quantity", harvestProduct.getQuantity());
         intent.putExtra("quantityType", harvestProduct.getQuantity());
+
     }
 }
