@@ -171,7 +171,8 @@ public class PlanInfoActivity extends AppCompatActivity {
         if (isExpired && isOwner) {
             addProductBtn.setVisibility(View.VISIBLE);
             addProductBtn.setOnClickListener(v -> {
-                if (!plan.getSampleResults().isEmpty()) {
+                List<SampleProduct> sampleProducts = plan.getSampleResults();
+                if (sampleProducts != null && !sampleProducts.isEmpty()) {
                     Dialog pickCreateProdMethodDialog = new PickCreateProductFromPlanMethodDialog(this, (pickedMethod)-> {
                         if (pickedMethod.equals(PickCreateProductFromPlanMethodDialog.PickCreateProductMethods.FROM_SOURCE)) {
                            startCreateProductActivity();
@@ -209,5 +210,6 @@ public class PlanInfoActivity extends AppCompatActivity {
         intent.putExtra("name", harvestProduct.getName());
         intent.putExtra("quantity", harvestProduct.getQuantity());
         intent.putExtra("quantityType", harvestProduct.getQuantity());
+        startActivity(intent);
     }
 }

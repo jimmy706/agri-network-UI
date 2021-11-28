@@ -141,9 +141,8 @@ public class CreateProductFromSampleActivity extends AppCompatActivity {
            Call call = productService.addFromPlan(token, planId, product);
                Response response = call.execute();
                if (response.code() == 201) {
-                   Gson gson = new Gson();
-                   Type type = new TypeToken<Product>(){}.getType();
-                   return gson.fromJson(response.body().string(), type);
+                   response.close();
+                   return new Product();
                }
            return null;
         });
