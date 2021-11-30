@@ -115,7 +115,7 @@ public class CreateProductFromSampleActivity extends AppCompatActivity {
         adapter.setClickListener(sampleProduct -> {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this)
                     .setCancelable(true)
-                    .setTitle("Chọn sản phầm này?")
+                    .setTitle("Chọn sản phẩm " + sampleProduct.getName() + "?")
                     .setPositiveButton(R.string.accept, (dialogInterface, i) -> {
                         SampleProductConverter converter = new SampleProductConverter(sampleProduct);
                         Product product = converter.toProduct(plan);

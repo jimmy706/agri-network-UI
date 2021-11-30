@@ -14,7 +14,7 @@ import com.google.android.material.button.MaterialButton;
 
 public class PickCreateProductFromPlanMethodDialog extends Dialog {
 
-    private OnSubmitListener onSubmitListener;
+    private final OnSubmitListener onSubmitListener;
 
     public PickCreateProductFromPlanMethodDialog(@NonNull Context context, OnSubmitListener onSubmitListener) {
         super(context);
