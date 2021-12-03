@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import android.widget.ArrayAdapter;
@@ -57,15 +58,12 @@ public class RegisterActivity extends AppCompatActivity {
     private ProvinceService provinceService;
     private CountryService countryService;
 
-
-
     private final List<Province>  provinces = new ArrayList<>();
     private final List<District> districts = new ArrayList<>();
     private final List<Ward> wards = new ArrayList<>();
 
     private TextInputEditText emailInput, phoneNumberInput, passwordInput, firstNameInput, lastNameInput;
     private MaterialAutoCompleteTextView provinceInput, userTypeInput, districtInput, wardInput;
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -107,44 +105,48 @@ public class RegisterActivity extends AppCompatActivity {
 
         MaterialButton registerButton = findViewById(R.id.register_btn);
         registerButton.setOnClickListener(v -> {
-            String email = emailInput.getText().toString();
-            String phoneNumber = phoneNumberInput.getText().toString();
-            String firstName = firstNameInput.getText().toString();
-            String lastName = lastNameInput.getText().toString();
-            String password = passwordInput.getText().toString();
-            String userType = userTypeInput.getText().toString();
-            String province = provinceInput.getText().toString();
-            String district = districtInput.getText().toString();
-            String ward = wardInput.getText().toString();
+            if (isValid()) {
+                String email = emailInput.getText().toString();
+                String phoneNumber = phoneNumberInput.getText().toString();
+                String firstName = firstNameInput.getText().toString();
+                String lastName = lastNameInput.getText().toString();
+                String password = passwordInput.getText().toString();
+                String userType = userTypeInput.getText().toString();
+                String province = provinceInput.getText().toString();
+                String district = districtInput.getText().toString();
+                String ward = wardInput.getText().toString();
 
-            User user = new User();
-            user.setEmail(email);
-            user.setPhoneNumber(phoneNumber);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setType(userType);
-            user.setProvince(province);
-            user.setDistrict(district);
-            user.setWard(ward);
+                User user = new User();
+                user.setEmail(email);
+                user.setPhoneNumber(phoneNumber);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                user.setType(userType);
+                user.setProvince(province);
+                user.setDistrict(district);
+                user.setWard(ward);
 
-            requestAddUser(user);
+                requestAddUser(user);
 
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if(task.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Tạo tài khoản thành công, đăng nhập để tiếp tục",
-                                    Toast.LENGTH_SHORT).show();
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(task -> {
+                            if(task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, "Tạo tài khoản thành công, đăng nhập để tiếp tục",
+                                        Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                            firebaseAuth.signOut(); // Require user login
-                            startActivity(intent);
-                        }
-                        else {
-                            Log.w("RegisterFailed", "signUpWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                firebaseAuth.signOut(); // Require user login
+                                startActivity(intent);
+                            }
+                            else {
+                                Log.w("RegisterFailed", "signUpWithEmail:failure", task.getException());
+                                Toast.makeText(RegisterActivity.this, task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            } else {
+                Toast.makeText(this, "Vui lòng điền đầy đủ các trường", Toast.LENGTH_SHORT).show();
+            }
         });
 
         TextView signInLink = findViewById(R.id.move_to_sign_in);
@@ -317,5 +319,14 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean isValid() {
+        return !TextUtils.isEmpty(emailInput.getText())
+                && !TextUtils.isEmpty(passwordInput.getText())
+                && !TextUtils.isEmpty(firstNameInput.getText())
+                && !TextUtils.isEmpty(lastNameInput.getText())
+                && !TextUtils.isEmpty(userTypeInput.getText())
+                && !TextUtils.isEmpty(provinceInput.getText());
     }
 }

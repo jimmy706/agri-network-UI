@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -102,7 +103,6 @@ public class CreatePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
-
         postService = new PostService(this);
         mediaService = new MediaService(this);
 
@@ -132,48 +132,54 @@ public class CreatePostActivity extends AppCompatActivity {
         });
 
         toolbar.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            if(id == R.id.add_post_action) {
+            TextInputEditText contentInput = findViewById(R.id.input_content);
+            if (isValid(contentInput)) {
+                int id = item.getItemId();
+                if (id == R.id.add_post_action) {
 
-                showLoading();
-                TextInputEditText contentInput = findViewById(R.id.input_content);
-                String content = contentInput.getText().toString();
-                String format = PostFormat.REGULAR.getLabel();
+                    showLoading();
 
-                PostItem postItem = new PostItem();
-                postItem.setContent(content);
-                postItem.setImages(pickedImageUrls);
-                postItem.setTags(requestTags);
+                    String content = contentInput.getText().toString();
+                    String format = PostFormat.REGULAR.getLabel();
 
-                postItem.setFormat(format);
+                    PostItem postItem = new PostItem();
+                    postItem.setContent(content);
+                    postItem.setImages(pickedImageUrls);
+                    postItem.setTags(requestTags);
 
-                Call call = postService.addPost(token, postItem);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        e.printStackTrace();
-                        CreatePostActivity.this.runOnUiThread(()-> {
-                            closeLoading();
-                            onCreatePostFailed();
-                        });
-                    }
+                    postItem.setFormat(format);
 
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        CreatePostActivity.this.runOnUiThread(()-> {
-                            closeLoading();
-                            if(response.code() == 201) {
-                                onCreatePostSuccess();
-                            }
-                            else {
+                    Call call = postService.addPost(token, postItem);
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            e.printStackTrace();
+                            CreatePostActivity.this.runOnUiThread(()-> {
+                                closeLoading();
                                 onCreatePostFailed();
-                            }
-                        });
+                            });
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            CreatePostActivity.this.runOnUiThread(()-> {
+                                closeLoading();
+                                if(response.code() == 201) {
+                                    onCreatePostSuccess();
+                                }
+                                else {
+                                    onCreatePostFailed();
+                                }
+                            });
 
+                        }
+                    });
+
+                }
+            } else {
+                Toast.makeText(this, "Vui lòng nhập nội dung bài viết", Toast.LENGTH_SHORT).show();
             }
+
             return false;
         });
 
@@ -296,5 +302,9 @@ public class CreatePostActivity extends AppCompatActivity {
 
             chipGroup.addView(chip);
         }
+    }
+
+    private boolean isValid(TextInputEditText editText) {
+        return !TextUtils.isEmpty(editText.getText());
     }
 }
