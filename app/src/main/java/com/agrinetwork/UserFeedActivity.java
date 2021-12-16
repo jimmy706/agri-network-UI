@@ -130,7 +130,7 @@ public class UserFeedActivity extends AppCompatActivity {
     private void getCurrentLocation() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if(location != null) {
                 double lng = location.getLongitude();
                 double lat = location.getLatitude();
